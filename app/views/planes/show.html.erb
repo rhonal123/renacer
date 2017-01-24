@@ -1,0 +1,41 @@
+<div class="col-md-12 panel-body">
+  <%= link_to 'Regresar', planes_path, class: "btn btn-default" %>
+  <%= link_to 'Editar', edit_plan_path(@plan), class: "btn btn-default"  %> 
+</div>
+
+<div class="col-md-12  panel-body">
+  <p id="notice"><%= notice %></p>
+
+	<p>
+	  <strong>Nombre:</strong>
+	  <%= @plan.nombre %>
+	</p>
+
+	<p>
+	  <strong>Monto Semanal:</strong>
+	  <%= number_to_currency(@plan.monto ) %>
+	</p>
+
+	<p>
+	  <strong>Monto Mensual:</strong>
+	  <%= number_to_currency( @plan.monto * 4 ) %>
+	</p>
+
+	<p>
+	  <strong>Monto Semestral:</strong>
+	  <%= number_to_currency(@plan.monto * 26 ) %>
+	</p>
+
+	<p>
+	  <strong>Monto Anual:</strong>
+	  <%= number_to_currency(@plan.monto * 52 )  %>
+	</p>
+
+	<p>
+	  <strong>Componentes:</strong>
+	  <%= @plan.componentes %>
+	</p>
+
+</div>
+
+

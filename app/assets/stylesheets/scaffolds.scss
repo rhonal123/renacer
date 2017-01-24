@@ -1,0 +1,260 @@
+
+
+$font-size-base: 11px;
+$table-cell-padding: 0.9%;
+$form-group-margin-bottom: 5px;
+$pager-border-radius: 5px;
+
+$grid-gutter-width:40px;
+$container-desktop: (1220px + $grid-gutter-width);
+//$dropdown-caret-color: #f0f0f0f;
+$nav-link-padding: 10px 10px;
+
+$gray-lighter: darken(#428bca, 6.5%);
+$gray-light: darken(#428bca, 6.5%);
+
+//$navbar-default-bg: darken(#428bca, 6.5%);
+
+//$navbar-default-link-hover-color: white;
+//$navbar-default-link-active-color: white;
+//$navbar-default-link-color: white;
+//$nav-link-padding: 10px 10px;
+//$navbar-default-link-active-bg: white;
+//$nav-link-padding: 7px 10px;
+//$panel-footer-bg:#cf010e;
+//$panel-default-heading-bg:#cf010e;
+//$brand-primary: darken(#cf010e, 6.5%);
+//$modal-inner-padding: 5px; 
+//$modal-title-padding: 5px;
+//$panel-heading-padding: 5px 10px;
+//$panel-body-padding: 5px;
+
+//$navbar-default-toggle-hover-bg: white;
+//$navbar-default-toggle-border-color: white;
+ 
+$nav-pills-border-radius: 0px;
+
+
+$alert-padding: 5px 15px;
+ 
+$alert-padding: 0px;
+$alert-border-radius: 0px;
+ 
+$popover-max-width:350px;
+
+
+$link-hover-color: white;
+//$link-color: black;
+
+$navbar-default-color: white;
+$navbar-border-radius: 0px; 
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+
+h2,h1{
+    color:  $brand-primary;
+}
+
+.modal-header {
+    padding: 5px  15px  5px  15px;
+}
+
+.modal-footer {
+    padding: 5px  15px  5px  15px;
+}
+
+.navbar-header{
+    width:15%;
+    text-align:  center;
+    padding-top: 15px;
+}
+
+
+.pagination{
+    margin: 0px;
+}
+
+.panel-body2
+{
+  @extend .panel-body;
+  padding: 5px;
+
+}
+
+.panel-body2 > :first-child {
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom:5px;
+}
+
+.panel-body2 > .row > :first-child {
+    padding-left: 0;
+}
+
+.panel-body2 > .row > :last-child {
+    padding-right: 0;
+}
+
+.page-header2{
+  @extend .page-header;
+  margin: 10px 0 10px;
+  color: $brand-primary;
+  font-weight: bold;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    font-size: 14px;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu > a:after {
+    display: block;
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: $brand-primary;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: $brand-primary;
+}
+
+
+.btn-group
+{
+    margin-right: 3px;
+}
+
+
+.nav-pills > li {
+  font-size: 16px;
+  text-align: center;
+}
+
+.dropdown-toggle
+.dropdown-menu {
+    font-size: 14px;
+    text-align: center;
+}
+
+
+.contenedor
+{
+    height:90%;
+}
+
+
+/*
+.container-fluid
+{
+    height:90%;
+}
+*/
+html,body { 
+    height: 100%;
+    margin: 0; 
+    background-color: darken(#428bca, 6.5%);
+}
+
+.eliminar {
+    background-color: #fff;
+    border-color: #ccc;
+    color: #333;
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    color: #333333;
+    padding: 3px 20px;
+    font-size:  $font-size-base;
+    list-style: outside none none;
+    text-align: left;
+    border-collapse: collapse;
+    border-spacing: 0;
+    white-space: nowrap;
+}
+
+.botonera {
+    background: white;
+    bottom: 20px;
+    position: static;
+    width: 100%;
+    text-align: right;
+}
+
+
+.navbar-header > a {
+    font-size: 20px;
+    color:  $brand-primary;
+    text-decoration: none;
+}
+
+.navbar-header > a:hover 
+{
+     color: $brand-primary; 
+     text-decoration:none; 
+     cursor:pointer;  
+}
+
+.sidebar{
+    background-color: white;
+    text-align: center;
+    font-size: 16px;
+    height: 100%;
+    border-right: 5px solid;
+    border-color:darken(#428bca, 6.5%);
+}
+
+.main{
+    overflow-x: auto;
+    height:100%;
+    display:table;
+    background-color: white;
+}
+  
+
+blockquote {
+    font-size: $font-size-base;
+    border-color: $brand-primary
+}
+
+blockquote>p>strong {
+    font-size: $font-size-base+1;
+    color: $brand-primary;
+    margin-right: 5px;
+}
+
+.modal-title {
+  color: $brand-primary;
+  text-align: center;
+  font-weight: bold;
+}
+
+.alert {
+    margin-bottom: 0px;
+}
+
+
+.navbar-right {
+    margin-right: 0;
+}

@@ -1,0 +1,39 @@
+<div class="col-md-12 panel-body">
+  <%= link_to 'Regresar', clientes_path, class: "btn btn-default" %>
+  <%= link_to 'Editar', edit_cliente_path(@cliente), class: "btn btn-default"  %> 
+</div>
+
+<div class="col-md-12  panel-body">
+  <p id="notice"><%= notice %></p>
+  <p>
+    <strong>Identidad:</strong>
+    <%= @cliente.identidad %>
+  </p>
+
+  <p>
+    <strong>Apellidos:</strong>
+    <%= @cliente.apellidos %>
+  </p>
+
+  <p>
+    <strong>Nombres:</strong>
+    <%= @cliente.nombres %>
+  </p>
+
+  <p>
+    <strong>Fecha:</strong>
+    <%= @cliente.fecha %>
+  </p>
+
+  <p>
+    <strong>Direccion:</strong>
+    <%= @cliente.direccion %>
+  </p>
+
+  <p>
+    <strong>Telefono:</strong>
+    <%= @cliente.telefono %>
+  </p>
+</div>
+
+

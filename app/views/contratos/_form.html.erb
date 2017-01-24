@@ -1,0 +1,108 @@
+<%= form_for(contrato,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+  <h4 class="page-header2">Datos</h4>
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:cliente_id)  %>">
+    <%= f.label :cliente_id, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+     <%= f.select :cliente_id,options_from_collection_for_select([],"id", "identidad",contrato.cliente_id),{},class: "form-control input-sm"%> 
+     <% if contrato.errors.has_key?(:cliente_id) %>
+     <span class="help-block"><%= contrato.errors.messages[:cliente_id].join(',') %></span>
+     <% end %>
+    </div>
+    <%= f.label :desde,"Desde", class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= f.text_field :desde, class: "form-control input-sm" %>
+      <% if contrato.errors.has_key?(:desde) %>
+      <span class="help-block"><%= contrato.errors.messages[:desde].join(',') %></span>
+      <% end %>
+    </div>
+    <%= f.label :hasta,"Hasta", class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= f.text_field :hasta,class: "form-control input-sm" %>
+      <% if contrato.errors.has_key?(:hasta) %>
+      <span class="help-block"><%= contrato.errors.messages[:hasta].join(',') %></span>
+      <% end %>
+    </div>
+  </div> 
+
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+    <%= f.label :plan_id, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <% 
+        if contrato.plan.nil?
+          planes = []
+        else 
+          planes = [contrato.plan]
+        end 
+      %>
+      <%= f.select :plan_id,options_from_collection_for_select(planes,"id", "nombre_monto",contrato.plan_id),{},class: "form-control input-sm"%> 
+      <% if contrato.errors.has_key?(:plan_id) %>
+      <span class="help-block"><%= contrato.errors.messages[:plan_id].join(',') %></span>
+      <% end %>
+    </div>
+  </div> 
+
+  <div class="col-md-12">
+    <div class="col-md-6" style="height: 300px; overflow: scroll;">
+      <h4 class="page-header2">Pagos</h4>
+      <ul id="listadoPago" class="list-group">
+
+      </ul>
+    </div>
+    <div class="col-md-6" style="height: 300px; overflow: scroll;">
+      <h4 class="page-header2">Plan</h4>
+      <p>
+        <strong>Monto Semanal:</strong>
+        <label id="plan_monto"><%= number_to_currency(contrato.plan.monto) unless contrato.plan.nil? %><label>
+      </p>
+      <p>
+        <strong>Monto Mensual:</strong>
+        <label id="plan_mensual"><%= number_to_currency(contrato.plan.monto * 4 ) unless contrato.plan.nil? %><label> 
+      </p>
+      <p>
+        <strong>Monto Semestral:</strong>
+        <label id="plan_semestral"><%= number_to_currency(contrato.plan.monto * 26 )  unless contrato.plan.nil? %><label>
+      </p>
+      <p>
+        <strong>Monto Anual:</strong>
+        <label id="plan_anual"><%= number_to_currency(contrato.plan.monto * 52 )  unless contrato.plan.nil? %><label> 
+      </p>
+      <p>
+        <strong>Componentes:</strong>
+        <label id="plan_componentes"><%= contrato.plan.componentes unless contrato.plan.nil? %>
+      </p>
+
+    </div>
+    <div class="col-md-12">
+      <h3 class="pull-right" id="total">Total 0.0 Bs</h3>
+    </div>
+
+    <div class="form-group form-group-sm">
+      <div class="col-md-12 " align="right">
+        <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+      </div>
+    </div>
+
+
+
+    </div>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+  <% if contrato.plan.nil? %>
+    plan = null;
+  <% else %>
+    plan ='<%= contrato.plan.to_json.html_safe %>';
+  <% end %>
+  formContrato.inciarFormulario(JSON.parse(plan));
+</script>
+
+
+
+
+  
+
+ 
+
+

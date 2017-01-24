@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Renacer</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+  <header>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header"  align="center">
+        <%= link_to "Funeraria Renacer",root_path  %>
+        </div>
+        <div class="navbar-right ">
+          <%= informacion_usuario if usuario_signed_in? %>
+        </div>
+      </div>
+    </nav> 
+  </header>
+
+
+
+  <section class="contenedor">
+    <%= content_menu :div, class: "col-sm-3 col-md-2 sidebar" do %>
+    <br>
+      <%= menu if usuario_signed_in? %> 
+    <% end %>
+    <%= content_accion :div, id: "acion", class: "col-sm-9 col-md-10 main"  do %>
+      <%= yield %> 
+    <% end %>
+  </section>
+
+
+  </body>
+</html>
+
+

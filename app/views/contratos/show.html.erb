@@ -1,0 +1,54 @@
+
+<div class="col-md-12 panel-body">
+  <%= link_to 'Regresar', contratos_path, class: "btn btn-default" %>
+  <%= link_to 'Editar', edit_contrato_path(@contrato), class: "btn btn-default"  %> 
+</div>
+
+<div class="col-md-12  panel-body">
+  <p id="notice"><%= notice %></p>
+  <%= detalle "Cliente : ", @contrato.cliente.nombre_completo %>
+  <%= detalle "Plan : ", @contrato.plan.nombre %>
+  <%= detalle "Desde : ", @contrato.desde %>
+  <%= detalle "Estado : ", @contrato.estado %>
+</div>
+
+
+<div class="col-md-12">
+  <div class="col-md-6" style="height: 600px; overflow: scroll;">
+    <h4 class="page-header2">Pagos</h4>
+     <div class="list-group">
+      <% @contrato.pagos.each do |pago| %>
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Semana <%= pago.semana %></h4>
+          <p class="list-group-item-text"> 
+              Monto :<%= number_to_currency(pago.monto) %> estado : <%= pago.estado %>
+          </p>
+          <div class="btn-group" role="group" >
+            <%= button_to('Pagar', contrato_pagar_path(@contrato,pago), method: "patch",
+                      class:"btn btn-info", data: { confirm: "Quieres Pagar la semana Nro #{pago.semana}" }) if @contrato.estado == "ACTIVO" and pago.estado == "pendiente" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="col-md-6" style="height: 600px; overflow: scroll;">
+    <h4 class="page-header2">Totales</h4>
+    <p>
+      <strong>Monto Semanal :</strong>
+      <label id="plan_monto"><%= number_to_currency(@contrato.plan.monto) %></label>
+    </p>
+    <p>
+      <strong>Monto Pendiente :</strong>
+      <label id="plan_monto"><%= number_to_currency(@contrato.monto) %></label>
+    </p>
+    <p>
+      <strong>Total Contrato :</strong>
+      <label id="plan_mensual"><%= number_to_currency(@contrato.total )  %></label> 
+    </p>
+  </div>
+</div>
+
+
+
+

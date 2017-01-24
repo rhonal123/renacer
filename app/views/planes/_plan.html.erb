@@ -1,0 +1,21 @@
+<tr>
+    <td><%= plan.nombre %></td>
+    <td><%= plan.monto %></td>
+    <td><%= plan.monto * 4 %></td>
+    <td><%= plan.monto * 26 %></td>
+    <td><%= plan.monto * 52 %></td>
+    <td align="right">
+    <div class="btn-group">
+  	    <span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+	    </span>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', plan  %></li>
+    		<li><%= link_to 'Editar',edit_plan_path(plan) %></li>
+            <li><%= button_to('Eliminar', plan_path(plan), method: "delete", class:"eliminar", data: { confirm: "Quieres Eliminar el plan con nombre #{plan.nombre }" }) %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+
+

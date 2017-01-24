@@ -1,0 +1,19 @@
+<tr>
+    <td><%= cliente.identidad %></td>
+    <td><%= cliente.nombres %></td>
+    <td><%= cliente.apellidos %></td>
+    <td><%= cliente.telefono %></td>
+    <td align="right">
+    <div class="btn-group">
+  	    <span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+	    </span>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', cliente  %></li>
+    		<li><%= link_to 'Editar',edit_cliente_path(cliente) %></li>
+            <li><%= button_to('Eliminar', cliente_path(cliente), method: "delete", class:"eliminar", data: { confirm: "Quieres Eliminar el cliente con nombre #{cliente.nombres }" }) %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+

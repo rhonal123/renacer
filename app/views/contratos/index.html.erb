@@ -1,0 +1,15 @@
+<%= titulo("Contratos") %> 
+<p id="notice"><%= notice %></p>
+<div class="panel-body2"  style="height: 95%;">
+    <div class="row">
+        <div class="col-md-4" >
+          <%= link_to 'Nuevo', new_contrato_path,
+            class: "btn btn-default btn-sm"  %>
+        </div>
+        <div class="col-md-8" align="right">
+           <%= buscar(clientes_path,["cliente","plan","estado"]) %>
+        </div>
+    </div>
+    <%= tabla_panel_responsive(["Numero","Cliente","Plan","Desde","Hasta","Monto","Total","Estado"],@contratos)%>
+    <%= paginador(@contratos) %>
+</div>

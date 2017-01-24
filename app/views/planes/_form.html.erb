@@ -1,0 +1,67 @@
+<%= form_for(plan,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+  <h4 class="page-header2">Datos</h4>
+
+  <div class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:nombres)  %>">
+   <%=f.label :nombre,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :nombre, class: "form-control input-sm", rows:"4", placeholder:" nombre apellido ó razon social "  %>
+     <% if plan.errors.has_key?(:nombre) %>
+     <span class="help-block"><%= plan.errors.messages[:nombre].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:nombres)  %>">
+   <%=f.label :monto,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :monto, {class: "form-control input-sm",onkeyup: "formPlan.calcularMontoPlan()"} %>
+     <% if plan.errors.has_key?(:monto) %>
+     <span class="help-block"><%= plan.errors.messages[:monto].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+
+
+  <div id="componentes" class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:componentes)  %>">
+    <%= f.label :componentes, class:"col-md-2 control-label" %>
+    <div class="col-md-10">
+       <%= f.text_area :componentes, class: "form-control input-sm" %>
+       <% if plan.errors.has_key?(:componentes) %>
+       <span class="help-block"><%= plan.errors.messages[:componentes].join(',') %></span>
+       <% end %>
+    </div>
+  </div>
+
+  <div class="form-group col-md-12" >
+    <div class="col-md-5 pull-right" >
+      <h4 class="page-header"><strong>Totales :</strong></h4>
+      <table class="table table-hover">
+        <tr>
+          <td style="text-align: right;"><strong> Mensual : </strong></td>
+          <td style="text-align: left;"> <strong id="mensual"><%= number_to_currency(plan.monto * 4 ) %></strong></td>
+        </tr>
+        <tr>
+          <td style="text-align: right;"><strong> Semestral : </strong></td>
+          <td style="text-align: left;"> <strong id="semestral"><%= number_to_currency(plan.monto * 26 ) %></strong></td>
+        </tr>
+        <tr>
+          <td style="text-align: right;"><strong> Anual : </strong></td>
+          <td style="text-align: left;"><strong id="anual"><%= number_to_currency(plan.monto * 52 ) %></strong></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-12" align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>  
+<% end %>
+
+ 
+
+
+
+
+  
+
+ 
+

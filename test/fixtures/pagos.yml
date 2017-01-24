@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contrato: one
+  semana: 1
+  monto: 1.5
+  estado: MyString
+
+two:
+  contrato: two
+  semana: 1
+  monto: 1.5
+  estado: MyString
