@@ -17,8 +17,17 @@ class Plan < ApplicationRecord
   validates :nombre,
     presence: {message: 'Ingrese nombre '},
     length: {maximum: 120, too_long:"%{count} caracteres es el maximo  "}
+
   self.per_page = 12 
 
+  def update(attr)
+    puts "-------------------------------------------"
+    Plan.transaction do 
+      super(attr)
+      Pago.joins(:contrato).where(contratos:{plan_id:self.id},estado: "pendiente").update_all(monto: self.monto) if errors.empty?
+      errors.empty?
+    end 
+  end 
 
   def nombre_monto 
     "#{nombre.capitalize} #{monto} Bs"

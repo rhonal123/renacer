@@ -69,7 +69,7 @@ module ApplicationHelper
         contenido = []
         titulos.each  do |title| 
           if title.instance_of?(Hash)
-            contenido.append(content_tag(:th,title[:title], style: "width: 10%;")) 
+            contenido.append(content_tag(:th,title[:title], style: "width: #{title[:width]};")) 
           else 
             contenido.append(content_tag(:th,title, style: "width: #{width}%;"))
           end 

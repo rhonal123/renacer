@@ -1,6 +1,14 @@
-<h1>Editing Contrato</h1>
+<div class="col-md-12 panel-body">
+	<%= link_to 'Regresar', contratos_path, class: "btn btn-default" %>
+	<%= link_to 'Mostrar',@contrato, class: "btn btn-default" %>
 
-<%= render 'form', contrato: @contrato %>
+</div>
 
-<%= link_to 'Show', @contrato %> |
-<%= link_to 'Back', contratos_path %>
+<div class="col-md-12  panel-body">
+	<% if @error %>
+		<div class="alert alert-danger" role="alert"><%= @error%></div>
+	<% end %>
+	<%= render 'form', contrato: @contrato %>
+</div>
+
+

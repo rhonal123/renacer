@@ -3,21 +3,30 @@
   <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:cliente_id)  %>">
     <%= f.label :cliente_id, class:"col-md-1 control-label" %>
     <div class="col-md-3">
-     <%= f.select :cliente_id,options_from_collection_for_select([],"id", "identidad",contrato.cliente_id),{},class: "form-control input-sm"%> 
+      <% 
+        if contrato.cliente.nil?
+          clientes = []
+        else 
+          clientes = [contrato.cliente]
+        end 
+      %>
+     <%= f.select :cliente_id,options_from_collection_for_select(clientes,"id", "nombre_completo",contrato.cliente_id),{},class: "form-control input-sm"%> 
      <% if contrato.errors.has_key?(:cliente_id) %>
      <span class="help-block"><%= contrato.errors.messages[:cliente_id].join(',') %></span>
      <% end %>
     </div>
     <%= f.label :desde,"Desde", class:"col-md-1 control-label" %>
     <div class="col-md-3">
-      <%= f.text_field :desde, class: "form-control input-sm" %>
+      <% desde = contrato.desde.strftime("%d/%m/%Y") unless contrato.desde.nil?%>
+      <%= text_field_tag "contrato[desde]",desde, class: "form-control input-sm" %>
       <% if contrato.errors.has_key?(:desde) %>
       <span class="help-block"><%= contrato.errors.messages[:desde].join(',') %></span>
       <% end %>
     </div>
     <%= f.label :hasta,"Hasta", class:"col-md-1 control-label" %>
     <div class="col-md-3">
-      <%= f.text_field :hasta,class: "form-control input-sm" %>
+      <% hasta = contrato.hasta.strftime("%d/%m/%Y") unless contrato.hasta.nil?%>
+      <%= text_field_tag "contrato[hasta]",hasta,class: "form-control input-sm" %>
       <% if contrato.errors.has_key?(:hasta) %>
       <span class="help-block"><%= contrato.errors.messages[:hasta].join(',') %></span>
       <% end %>
@@ -42,7 +51,7 @@
   </div> 
 
   <div class="col-md-12">
-    <div class="col-md-6" style="height: 300px; overflow: scroll;">
+    <div class="col-md-6" style="height: 350px; overflow: scroll;">
       <h4 class="page-header2">Pagos</h4>
       <ul id="listadoPago" class="list-group">
 
@@ -81,9 +90,6 @@
         <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
       </div>
     </div>
-
-
-
     </div>
   </div>
 
@@ -93,9 +99,14 @@
   <% if contrato.plan.nil? %>
     plan = null;
   <% else %>
-    plan ='<%= contrato.plan.to_json.html_safe %>';
+    plan ={
+      id: <%= contrato.plan.id %>,
+      nombre: '<%= contrato.plan.nombre %>',
+      monto: <%= contrato.plan.monto %>,
+      componentes: '<%= escape_javascript contrato.plan.componentes %>',
+    };
   <% end %>
-  formContrato.inciarFormulario(JSON.parse(plan));
+  formContrato.inciarFormulario(plan);
 </script>
 
 

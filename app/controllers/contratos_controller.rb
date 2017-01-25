@@ -28,7 +28,7 @@ class ContratosController < ApplicationController
     @contrato = Contrato.new(contrato_params)
     respond_to do |format|
       if @contrato.guardarContrato
-        format.html { redirect_to @contrato, notice: 'Contrato was successfully created.' }
+        format.html { redirect_to @contrato, notice: 'Contrato fue correctamente creado.' }
         format.json { render :show, status: :created, location: @contrato }
       else
         format.html { render :new }
@@ -41,13 +41,18 @@ class ContratosController < ApplicationController
   # PATCH/PUT /contratos/1.json
   def update
     respond_to do |format|
-      if @contrato.update(contrato_params)
-        format.html { redirect_to @contrato, notice: 'Contrato was successfully updated.' }
-        format.json { render :show, status: :ok, location: @contrato }
+      if @contrato.estado == "CREADO"
+        if @contrato.update(contrato_params)
+          format.html { redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' }
+          format.json { render :show, status: :ok, location: @contrato }
+        else
+          format.html { render :edit }
+          format.json { render json: @contrato.errors, status: :unprocessable_entity }
+        end
       else
+        @error = "Este Contrato no puede ser Editado se encuentra #{@contrato.estado}"
         format.html { render :edit }
-        format.json { render json: @contrato.errors, status: :unprocessable_entity }
-      end
+      end 
     end
   end
 
@@ -56,7 +61,7 @@ class ContratosController < ApplicationController
   def destroy
     @contrato.anular()
     respond_to do |format|
-      format.html { redirect_to contratos_url, notice: 'Contrato was successfully destroyed.' }
+      format.html { redirect_to contratos_url, notice: 'Contrato fue correctamente anulado' }
       format.json { head :no_content }
     end
   end
@@ -84,7 +89,12 @@ class ContratosController < ApplicationController
     end 
   end 
 
-
+  def catulina 
+    @contrato = Contrato.find(params[:contrato_id])
+    @monto = @contrato.plan.monto
+      pdf = ContratoPdf.new @contrato
+      send_data pdf.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.

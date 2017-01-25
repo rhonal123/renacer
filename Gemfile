@@ -68,12 +68,6 @@ gem 'pg'
 gem 'select2-rails'
 
 
-#gem 'prawn'
-
-#gem 'prawn-table'
-
-#gem 'prawn_rails'
-
 #gem 'bootbox-rails', '~>0.4'
  
 gem 'arel'
@@ -84,3 +78,9 @@ gem 'week_of_month'
 gem 'momentjs-rails'
 
 gem 'rails_12factor', group: :production 
+
+gem 'prawn'
+
+gem 'prawn-table'
+
+gem 'prawn_rails'

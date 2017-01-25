@@ -15,8 +15,19 @@ class Cliente < ApplicationRecord
     end 
   end     
 
+  def nombre_corto
+    _nombre = self.nombres.split()[0]
+    _apellido = self.apellidos.split()[0]
+    "#{_nombre} #{_apellido} #{self.identidad}"
+  end 
+
+
   def nombre_completo
     "#{self.nombres} #{self.identidad}"
+  end 
+ 
+  def direcion_corta
+    "#{self.direccion[0..130]}"
   end 
 
   validates :identidad, 
@@ -25,7 +36,7 @@ class Cliente < ApplicationRecord
       length: {maximum: 16 , too_long:"%{count} caracteres es el maximo  "}
     
     validates :nombres,
-      presence: {message: 'Ingrese nombre '},
+      presence: {message: 'Ingrese.'},
       length: {maximum: 180, too_long:"%{count} caracteres es el maximo  "}
 
     validates :apellidos,

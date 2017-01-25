@@ -1,23 +1,19 @@
-
 <div class="col-md-12 panel-body">
   <%= link_to 'Regresar', contratos_path, class: "btn btn-default" %>
-  <%= link_to 'Editar', edit_contrato_path(@contrato), class: "btn btn-default"  %> 
+  <%= link_to 'Editar', edit_contrato_path(@contrato), class: "btn btn-default" if @contrato.estado == "CREADO"  %> 
 </div>
-
 <div class="col-md-12  panel-body">
   <p id="notice"><%= notice %></p>
-  <%= detalle "Cliente : ", @contrato.cliente.nombre_completo %>
+  <%= detalle "Cliente : ", @contrato.cliente.nombre_corto %>
   <%= detalle "Plan : ", @contrato.plan.nombre %>
   <%= detalle "Desde : ", @contrato.desde %>
   <%= detalle "Estado : ", @contrato.estado %>
 </div>
-
-
 <div class="col-md-12">
   <div class="col-md-6" style="height: 600px; overflow: scroll;">
     <h4 class="page-header2">Pagos</h4>
      <div class="list-group">
-      <% @contrato.pagos.each do |pago| %>
+      <% @contrato.pagos.order(:id).each do |pago| %>
         <div class="list-group-item">
           <h4 class="list-group-item-heading">Semana <%= pago.semana %></h4>
           <p class="list-group-item-text"> 
@@ -31,7 +27,6 @@
       <% end %>
     </div>
   </div>
-  
   <div class="col-md-6" style="height: 600px; overflow: scroll;">
     <h4 class="page-header2">Totales</h4>
     <p>
@@ -40,7 +35,7 @@
     </p>
     <p>
       <strong>Monto Pendiente :</strong>
-      <label id="plan_monto"><%= number_to_currency(@contrato.monto) %></label>
+      <label id="plan_monto"><%= number_to_currency(@contrato.monto_pendiente) %></label>
     </p>
     <p>
       <strong>Total Contrato :</strong>
@@ -48,7 +43,3 @@
     </p>
   </div>
 </div>
-
-
-
-

@@ -41,7 +41,6 @@ class FormContrato
       $("#plan_anual").append _plan.monto * 52
       $("#plan_componentes").append _plan.componentes
     );
-
     this.pagos()
 
   pagos: () -> 

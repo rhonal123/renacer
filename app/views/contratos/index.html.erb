@@ -7,9 +7,18 @@
             class: "btn btn-default btn-sm"  %>
         </div>
         <div class="col-md-8" align="right">
-           <%= buscar(clientes_path,["cliente","plan","estado"]) %>
+           <%= buscar(contratos_path,["cliente","plan","estado"]) %>
         </div>
     </div>
-    <%= tabla_panel_responsive(["Numero","Cliente","Plan","Desde","Hasta","Monto","Total","Estado"],@contratos)%>
+    <%= tabla_panel_responsive([ 
+            { title: "Numero", width: "5%"},
+            { title: "Cliente", width: "20%"},
+            { title: "Plan", width: "20%"},
+            { title: "Desde", width: "10%"},
+            { title: "Hasta", width: "10%"},
+            { title: "Monto", width: "10%"},
+            { title: "Total", width: "10%"},
+            { title: "Estado" , width: "10%"},
+        ],@contratos)%>
     <%= paginador(@contratos) %>
 </div>

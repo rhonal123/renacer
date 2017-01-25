@@ -1,6 +1,6 @@
 <tr>
   <td><%= contrato.id %></td>
-  <td><%= contrato.cliente.nombre_completo %></td>
+  <td><%= contrato.cliente.nombre_corto %></td>
   <td><%= contrato.plan.nombre %></td>
   <td><%= contrato.desde %></td>
   <td><%= contrato.hasta %></td>
@@ -14,7 +14,8 @@
 	    </span>
   		<ul class="dropdown-menu dropdown-menu-right">
     		<li><%= link_to 'Mostrar', contrato  %></li>
-        <li><%= link_to 'Cartulina', contrato  %></li>
+        <li><%= link_to 'Editar', edit_contrato_path(contrato) if contrato.estado == "CREADO" %></li>
+        <li><%= link_to 'Cartulina', contrato_catulina_path(contrato) ,target: "_blank"  %></li>
     		<li><%= button_to('Activar', contrato_activar_path(contrato), method: "patch", class:"eliminar", data: { confirm: "Quieres ACTIVAR el contrato Nro #{contrato.id }" }) %></li>
 	  	</ul>
 	</div>

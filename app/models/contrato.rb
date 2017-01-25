@@ -80,7 +80,6 @@ class Contrato < ApplicationRecord
         pendiente = 0.0 
         pagos.each do |pago|
           if(pago.id == pago_id.to_i)
-            puts "entrooo"
             pago.estado = "pagado"
             pago.save()
           else 
@@ -93,6 +92,10 @@ class Contrato < ApplicationRecord
     end 
   end 
 
+
+  def monto_pendiente
+    self.pagos.where(estado: "pendiente").sum(:monto)
+  end 
 
   validates :cliente_id, 
       presence: {message: 'Seleccione'}

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :contratos do 
     patch  "pagar/:pago_id", action: "pagar", as: :pagar
     patch  "activar", action: "activar", as: :activar
+    get    "catulina", action: "catulina", as: :catulina
   end 
 
 
