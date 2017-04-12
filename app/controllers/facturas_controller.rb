@@ -35,11 +35,10 @@ class FacturasController < ApplicationController
   # POST /facturas.json
   def create
     @factura = Factura.factura_nueva(factura_params)
-    if @factura.save
-      if @factura.cliente_fiscal.direccion != @factura.direccion
-        @factura.cliente_fiscal.direccion = @factura.direccion
-        @factura.cliente_fiscal.save()
-      end 
+    if @factura.save()
+      @factura.cliente_fiscal.direccion = @factura.direccion
+      @factura.cliente_fiscal.telefono = @factura.telefono
+      @factura.cliente_fiscal.save()
       redirect_to @factura, notice: 'Factura fue creado correctamente.'
     else
       render :new
@@ -75,6 +74,7 @@ class FacturasController < ApplicationController
           :tipo,
           :observacion,
           :cliente_fiscal_id,
+          :telefono,
           :direccion,
           :impuesto_id,
           detalles_attributes:[:producto_id, :cantidad ])

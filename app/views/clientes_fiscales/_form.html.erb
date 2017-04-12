@@ -22,7 +22,15 @@
    </div>
  </div>
 
-
+  <div class="form-group form-group-sm <%= "has-error" if cliente_fiscal.errors.has_key?(:telefono)  %>">
+   <%=f.label :telefono,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :telefono, class: "form-control input-sm", rows:"4", placeholder:" N° telefonico." %>
+     <% if cliente_fiscal.errors.has_key?(:telefono) %>
+     <span class="help-block"><%= cliente_fiscal.errors.messages[:telefono].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
 
   <div id="direccion" class="form-group form-group-sm <%= "has-error" if cliente_fiscal.errors.has_key?(:direccion)  %>">
     <%= f.label :direccion, class:"col-md-2 control-label" %>

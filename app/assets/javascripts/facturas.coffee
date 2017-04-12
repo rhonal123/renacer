@@ -22,7 +22,8 @@ class FormFactura
     select_cliente = seleccionadores.clienteFiscal("factura_cliente_fiscal_id")
     select_cliente.on('select2:select',(evt)->
       _cliente = evt.params.data
-      $("#factura_direccion").val(_cliente.direccion)
+      $("#factura_direccion").val(_cliente.direccion) if _cliente.direccion?
+      $("#factura_telefono").val(_cliente.telefono) if _cliente.telefono?
     );
 
   cargar_catalogo: (e, page = 1) -> 

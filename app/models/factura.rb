@@ -8,7 +8,6 @@ class Factura < ApplicationRecord
 
   accepts_nested_attributes_for :detalles 
 
-
   #accepts_nested_attributes_for :detalles #, :reject_if => lambda { |a| puts("--->",a) } 
   #before_validation :remove_whitespaces
   def detalles_attributes=(detalles)
@@ -134,16 +133,40 @@ class Factura < ApplicationRecord
     pendiente? and libro.nil?
   end 
 
+  validates :base,      
+    presence: { message: 'Ingrese Base.' }
+  
+  validates :total,
+    presence: { message: 'Ingrese Total.'}
+  
+  validates :saldo,
+    presence: { message: 'Ingrese Saldo'}
+  
+  validates :direccion,
+   presence: { message: 'Ingrese Estado'}
 
-  validates :base,      presence: {message: 'Ingrese Base.'}
-  validates :total,     presence: {message: 'Ingrese Total.'}
-  validates :saldo,     presence: {message: 'Ingrese Saldo'}
-  validates :direccion, presence: {message: 'Ingrese Estado'}
-  validates :estado,    presence: {message: 'Ingrese Estado'}
-  validates :tipo,      presence: {message: 'Ingrese Tipo'}
-  validates :fecha,     presence: {message: 'Ingrese Fecha'}
-  validates :cliente_fiscal, presence: {message: 'Ingrese Cliente Fiscal'}
-  validates :detalles,     presence: {message: 'Ingrese Productos'}
+  validates :estado,
+    presence: { message: 'Ingrese Estado'}
+
+  validates :tipo,
+    presence: { message: 'Ingrese Tipo'}
+
+  validates :fecha,
+    presence: { message: 'Ingrese Fecha'}
+
+  validates :cliente_fiscal,
+    presence: { message: 'Ingrese Cliente Fiscal'}
+
+  validates :detalles,
+    presence: { message: 'Ingrese Productos'}
+
+  validates :direccion,
+      length: { maximum: 400, too_long:"%{count} caracteres es el maximo"}
+
+  validates :telefono,
+      length: { maximum: 35, too_long:"%{count} caracteres es el maximo"}
+
+
   validates_associated :detalles
   self.per_page = 12 
 

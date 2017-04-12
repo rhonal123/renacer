@@ -28,14 +28,19 @@ class ClienteFiscal < ApplicationRecord
   validates :identidad, 
       presence: {message: 'Ingrese Rif ó cedula de identidad '},
       uniqueness: {message: 'Identidad Registrada ', on: :create },
-      length: {maximum: 16 , too_long:"%{count} caracteres es el maximo  "}
+      length: {maximum: 16 , too_long:"%{count} caracteres es el maximo"}
     
     validates :nombres,
       presence: {message: 'Ingrese.'},
-      length: {maximum: 180, too_long:"%{count} caracteres es el maximo  "}
+      length: {maximum: 180, too_long:"%{count} caracteres es el maximo"}
 
     validates :direccion,
-      length: {maximum: 400, too_long:"%{count} caracteres es el maximo  "}
+      length: {maximum: 400, too_long:"%{count} caracteres es el maximo"}
+
+
+    validates :telefono,
+      length: {maximum: 35, too_long:"%{count} caracteres es el maximo"}
+
 
   self.per_page = 12 
 end

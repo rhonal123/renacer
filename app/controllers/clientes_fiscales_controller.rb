@@ -63,6 +63,6 @@ class ClientesFiscalesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_fiscal_params
-      params.require(:cliente_fiscal).permit(:identidad, :nombres, :direccion)
+      params.require(:cliente_fiscal).permit(:identidad, :nombres, :direccion, :telefono)
     end
 end

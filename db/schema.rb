@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227213108) do
+ActiveRecord::Schema.define(version: 20170412135658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 20170227213108) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.index ["contrato_id"], name: "index_beneficiarios_on_contrato_id", using: :btree
+  end
+
+  create_table "cliente_fiscals", force: :cascade do |t|
+    t.string   "identidad",  limit: 16
+    t.string   "nombres",    limit: 120
+    t.text     "direccion"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "clientes", force: :cascade do |t|
@@ -44,6 +52,7 @@ ActiveRecord::Schema.define(version: 20170227213108) do
     t.text     "direccion"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "telefono",   limit: 35
   end
 
   create_table "contratos", force: :cascade do |t|
@@ -76,7 +85,7 @@ ActiveRecord::Schema.define(version: 20170227213108) do
 
   create_table "facturas", force: :cascade do |t|
     t.date     "fecha"
-    t.string   "tipo",              default: "contado"
+    t.string   "tipo"
     t.string   "estado"
     t.float    "base"
     t.float    "total"
@@ -84,10 +93,11 @@ ActiveRecord::Schema.define(version: 20170227213108) do
     t.text     "observacion"
     t.integer  "cliente_fiscal_id"
     t.text     "direccion"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "impuesto_id"
     t.integer  "libro_id"
+    t.string   "telefono",          limit: 35
     t.index ["cliente_fiscal_id"], name: "index_facturas_on_cliente_fiscal_id", using: :btree
     t.index ["impuesto_id"], name: "index_facturas_on_impuesto_id", using: :btree
     t.index ["libro_id"], name: "index_facturas_on_libro_id", using: :btree
@@ -110,6 +120,16 @@ ActiveRecord::Schema.define(version: 20170227213108) do
     t.float    "porcentaje"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "libro_venta", force: :cascade do |t|
+    t.integer  "mes"
+    t.integer  "ano"
+    t.float    "base"
+    t.float    "total"
+    t.boolean  "declarado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "libros", force: :cascade do |t|
@@ -140,6 +160,7 @@ ActiveRecord::Schema.define(version: 20170227213108) do
     t.text     "componentes"
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
+    t.text     "convenio"
     t.string   "reporte_file_name"
     t.string   "reporte_content_type"
     t.integer  "reporte_file_size"
