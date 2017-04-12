@@ -18,7 +18,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -67,11 +67,7 @@ gem 'pg'
 
 gem 'select2-rails'
 
-
-#gem 'bootbox-rails', '~>0.4'
- 
 gem 'arel'
-
 
 gem 'week_of_month'
 
@@ -84,3 +80,11 @@ gem 'prawn'
 gem 'prawn-table'
 
 gem 'prawn_rails'
+
+gem 'bootstrap-wysihtml5-rails'
+
+gem 'combine_pdf'
+
+gem "paperclip", "~> 5.0.0"
+
+gem 'chart-js-rails'

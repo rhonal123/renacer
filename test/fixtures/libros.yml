@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mes: 1
+  ano: 1
+  base: 1.5
+  total: 
+  declarado: false
+
+two:
+  mes: 1
+  ano: 1
+  base: 1.5
+  total: 
+  declarado: false

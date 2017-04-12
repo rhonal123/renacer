@@ -1,5 +1,5 @@
 <tr>
-  <td><%= contrato.id %></td>
+  <td><%= codigo_contrato contrato.id %></td>
   <td><%= contrato.cliente.nombre_corto %></td>
   <td><%= contrato.plan.nombre %></td>
   <td><%= contrato.desde %></td>
@@ -9,14 +9,28 @@
   <td><%= contrato.estado %></td>
     <td align="right">
     <div class="btn-group">
-  	    <span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+  	  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-	    </span>
+	    </button>
   		<ul class="dropdown-menu dropdown-menu-right">
     		<li><%= link_to 'Mostrar', contrato  %></li>
-        <li><%= link_to 'Editar', edit_contrato_path(contrato) if contrato.estado == "CREADO" %></li>
-        <li><%= link_to 'Cartulina', contrato_catulina_path(contrato) ,target: "_blank"  %></li>
-    		<li><%= button_to('Activar', contrato_activar_path(contrato), method: "patch", class:"eliminar", data: { confirm: "Quieres ACTIVAR el contrato Nro #{contrato.id }" }) %></li>
+        <li><%= link_to 'Editar',
+            edit_contrato_path(contrato) if contrato.estado == "CREADO" %></li>
+        <li><%= button_to('Anular',
+            contrato_path(contrato),
+            method: "delete",
+            class:"eliminar",
+            data: { 
+              confirm: "Quieres Anular el contrato Nro #{contrato.id }"
+              }) if contrato.no_anulado? %>                
+        </li>
+    		<li><%= button_to('Activar',
+            contrato_activar_path(contrato),
+            method: "patch",
+            class:"eliminar",
+            data: {
+             confirm: "Quieres ACTIVAR el contrato Nro #{contrato.id }"
+            })  if contrato.estado == "CREADO"  %></li>
 	  	</ul>
 	</div>
 	</td>

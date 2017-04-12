@@ -1,0 +1,26 @@
+<%= form_for(contrato,as: :contrato,
+  remote: false,
+  url: contrato_fecha_registro_path(contrato),
+  method: :post,
+  authenticity_token: true,
+  html: {class:'form-horizontal', role:'form'}
+  ) do |f| %>
+
+
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+   <%= f.label :fecha_registro, class:"col-md-1 control-label" %>
+   <div class="col-md-3">
+     <%= f.date_select :fecha_registro, start_year: 1990,use_month_names: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre", "Noviembre", "Dicimebre"], class: "form-control input-sm" %>
+
+     <% if contrato.errors.has_key?(:fecha_registro) %>
+     <span class="help-block"><%= contrato.errors.messages[:fecha_registro].join(',') %></span>
+     <% end %>
+   </div>
+  </div> 
+
+   <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>

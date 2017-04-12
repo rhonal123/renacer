@@ -24,7 +24,6 @@ class Usuario < ApplicationRecord
     end 
   end 
   
-
   validates :username , 
       presence: {message: ' Ingrese un username '},
       uniqueness: {message: 'ya Registrado', on: :create },
@@ -37,7 +36,6 @@ class Usuario < ApplicationRecord
   validates :nombres,
       presence: {message: 'Ingrese Su Nombre '},
       length: {maximum: 150, too_long:"%{count} caracteres es el maximo  "}
-
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

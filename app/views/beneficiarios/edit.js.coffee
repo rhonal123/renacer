@@ -1,0 +1,1 @@
+formBeneficiario.inciarFormulario "<%= escape_javascript(render('form', beneficiario: @beneficiario)) %>"

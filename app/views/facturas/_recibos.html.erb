@@ -1,0 +1,55 @@
+<div class="col-md-12 panel-body"  style="border: 1px solid #ddd; border-bottom-color: transparent;">
+  <%= link_to "Agregar",new_factura_recibo_path(factura), class: "btn btn-default btn-sm" if factura.pendiente? %>
+  <table class="table table-body" >
+    <thead>
+    	<tr><th>ID</th><th>FECHA</th><th>CONCEPTO</th><th>MONTO</th><th>ESTADO</th><th></th></tr>
+    </thead>
+    <tbody style="height: 200px;">
+      <% factura.recibos.each do |recibo| %>
+        <tr class="pagos" align="center">
+          <td><%= recibo.id %></td>
+	        <td><%= recibo.fecha %></td>
+	        <td><%= recibo.concepto %></td>
+	        <td><%= moneda_venezuela recibo.monto %></td>
+	        <td><%= recibo.estado %></td>
+          <td align="right">
+            <div class="btn-group">
+              <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><%= button_to 'Mostrar',factura_recibo_path(factura,recibo),method: :get, remote: true,class: "eliminar"  %></li>
+                <li>
+                  <%= button_to('Anular', factura_recibo_anular_path(factura,recibo), 
+                    method: "delete", 
+                    class: "eliminar",
+                    data: { confirm: "Quieres Anular el recibo #{recibo.id }" }, 
+                    form: {style: 'display:inline-block;'}) if recibo.factura.pendiente? and recibo.activo? %></li>
+                <li><%= link_to 'Imprimir',   factura_recibo_imprimir_path(factura,recibo), target: "_blank"%></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>    
+</div>
+
+<div id="mostrar_recibo_modal" class="modal fade mostrar_recibo_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Detalle Recibo</h4>
+      </div>
+
+      <div class="modal-body">
+
+      </div>
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

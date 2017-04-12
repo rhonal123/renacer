@@ -1,11 +1,8 @@
-<div class="col-md-12 panel-body">
+<%= editar_titulo %> 
+<div class="panel-body2">
 	<%= link_to 'Regresar', clientes_path, class: "btn btn-default" %>
 	<%= link_to 'Mostrar',@cliente, class: "btn btn-default" %>
-
 </div>
-
-<div class="col-md-12  panel-body">
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
 	<%= render 'form', cliente: @cliente %>
 </div>
-
-

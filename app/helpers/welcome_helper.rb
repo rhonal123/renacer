@@ -1,6 +1,5 @@
 module WelcomeHelper
 
-
 	def informacion_usuario
 		botonname = content_tag(:button,"Usuario : #{current_usuario.nombres} ", class: "btn btn-default")
 		caret = content_tag(:span,"",class: "caret")
@@ -35,9 +34,6 @@ module WelcomeHelper
  	end 
 
 
-
-
-
   def sub_menu(title)
     content_tag :li,class: "dropdown-submenu" do
       elementos = []
@@ -53,19 +49,26 @@ module WelcomeHelper
     end
   end 
 
-
   def menu 
-    #if  usuario_signed_in? 
+    if  usuario_signed_in? 
       nav_bar class: "menu" do |nav|
         nav.append(nav_link("Renacer",root_path,"renacer"))
-        nav.append(nav_link("Clientes",clientes_path,"clientes"))
+        clientes = sub_menu "Clientes" do |e|
+          e.append(nav_link("Clientes",clientes_path,"clientes"))
+          e.append(nav_link("Clientes Fiscales",clientes_fiscales_path,"clientes_fiscales"))
+        end 
+        nav.append(clientes) 
+        
         nav.append(nav_link("Planes",planes_path,"planes"))
         nav.append(nav_link("Contratos",contratos_path,"contratos"))
+
+        nav.append(nav_link("Prodcutos",productos_path,"productos"))
+        nav.append(nav_link("Facturas",facturas_path,"facturas"))
+        nav.append(nav_link("Libro ventas",libros_path,"libros"))
+
+        nav.append(nav_link("Cuentas por Cobrar", cuenta_por_cobrar_index_path ,"cuenta_por_cobrar"))
       end 
-    #end 
+    end 
   end 
-
-
-
 
 end

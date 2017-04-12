@@ -1,0 +1,18 @@
+<%= form_for @plan, url: plan_reporte_path, html: { multipart: true, class:'form-horizontal', role:'form'} do |form| %>
+  <div id="reporte" class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:reporte)  %>">
+    <div class="col-md-4">
+      <span class="btn btn-default btn-file">
+          <%= form.file_field :reporte %>
+      </span>
+       <% if plan.errors.has_key?(:reporte) %>
+       <span class="help-block"><%= plan.errors.messages[:reporte].join(',') %></span>
+       <% end %>  
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+  <% end %>
+  
+
+ 
+

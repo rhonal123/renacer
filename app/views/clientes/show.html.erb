@@ -1,17 +1,15 @@
-<div class="col-md-12 panel-body">
+<%= titulo("Cliente  #{@cliente.id}") %> 
+<div class="panel-body2"  >
   <%= link_to 'Regresar', clientes_path, class: "btn btn-default" %>
   <%= link_to 'Editar', edit_cliente_path(@cliente), class: "btn btn-default"  %> 
 </div>
-
-
-<div class="col-md-12  panel-body">
-  <p id="notice"><%= notice %></p>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
   <%= detalle "Identidad : ", @cliente.identidad %>
   <%= detalle "Apellidos : ", @cliente.apellidos %>
   <%= detalle "Nombres : ", @cliente.nombres %>
   <%= detalle "Fecha : ", @cliente.fecha %>
   <%= detalle "Telefono : ", @cliente.telefono %>
-  <%= detalle "Direccion : ", @cliente.direccion , "col-md-8"%>
-
+  <%= detalle "Dirección : ", @cliente.direccion , "col-md-8"%>
 </div>
  

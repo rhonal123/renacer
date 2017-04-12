@@ -1,7 +1,20 @@
 module ApplicationHelper
 
+  def bootstrap_class_for flash_type
+    case flash_type.to_s
+      when "success"
+        "alert-success" # Green
+      when "error"
+        "alert-danger" # Red
+      when "alert"
+        "alert-warning" # Yellow
+      when "notice"
+        "alert-info" # Blue
+      else
+        flash_type.to_s
+    end
+  end
 
- 
   def detalle(campo,texto,ancho = nil)
     ancho = "col-md-4" if ancho.nil?
     content_tag :div , class: ancho do 
@@ -14,7 +27,6 @@ module ApplicationHelper
     end 
   end  
   
-  
   def titulo(text ,text2="")
     content_tag :div, class: "page-header2" do 
       content_tag :h4 do
@@ -23,12 +35,21 @@ module ApplicationHelper
     end 
   end 
 
+  def index_titulo
+    titulo(controller.controller_name.humanize.capitalize)    
+  end 
+
+  def nuevo_titulo
+    titulo(controller.controller_name.humanize.capitalize,"Nuevo")    
+  end 
+
+  def editar_titulo
+    titulo(controller.controller_name.humanize.capitalize,"Editar")    
+  end 
 
   def active(nombre)
     "active" if (nombre.is_a? String and nombre == action_name) or (nombre.is_a? Array and nombre.include?(action_name))
   end 
-
-
 
   def buscar(url,columnas,classform = "",elements=[])
     form_tag url,remote: false, class: "navbar-form navbar-right #{classform} buscar",method: 'get',role: "search",
@@ -45,16 +66,36 @@ module ApplicationHelper
   end 
 
 
+  def buscar_rango_fecha(url,columnas,classform = "",elements=[])
+    form_tag url,remote: false,
+      id: "form_buscar",
+      class: "navbar-form navbar-right #{classform} buscar",
+      method: 'get',
+      role: "search",
+      style: 'margin: 0px'  do     
+      content_tag :div , class: "form-group form-group-sm " do |div|
+        array = [] 
+        array = array + elements 
+        array << text_field_tag(:desde, params[:desde], class:"form-control",style:"width:inherid",placeholder: "Desde")  
+        array << text_field_tag(:hasta, params[:hasta], class:"form-control",style:"width:inherid",placeholder: "Hasta")  
+        array << text_field_tag(:search, params[:search], class:"form-control", style:"width:inherid",placeholder: "Buscar")  
+        array << select_tag(:sort ,options_for_select(columnas,params[:sort]), class: "form-control",style: "width:100px;")
+        array << submit_tag("Buscar",class: 'btn btn-default btn-sm', :name => nil)  
+        array.join.html_safe
+      end 
+    end 
+  end 
+
 
   def tabla_panel_responsive(titulos,contenido,parametros={})
     tbody = "table-#{controller_name}" if parametros[:tbody].nil? 
     partial = parametros[:partial] 
     style = parametros[:style]
-    content_tag :div, class: "panel panel-default ", style: style do
-      content_tag :table, class: "table table-hover"  do 
-        contenido = content_tag(:tbody, 
-          render(collection:contenido, partial: partial, 
-              locals: { parametros: parametros }),id:"#{tbody}")
+    content_tag :div, class: "panel panel-default table-responsive", style: "min-height: 70%; height: 480px" do
+      content_tag :table, class: "table table-hover", style: "text-align: center;"  do 
+        contenido = content_tag(
+          :tbody, 
+          render(collection:contenido, partial: partial,locals: { parametros: parametros }),id:"#{tbody}")
           [table_head(titulos),contenido].join.html_safe 
         end 
       end 
@@ -69,9 +110,9 @@ module ApplicationHelper
         contenido = []
         titulos.each  do |title| 
           if title.instance_of?(Hash)
-            contenido.append(content_tag(:th,title[:title], style: "width: #{title[:width]};")) 
+            contenido.append(content_tag(:th,title[:title], style: "text-align: center; width: #{title[:width]};")) 
           else 
-            contenido.append(content_tag(:th,title, style: "width: #{width}%;"))
+            contenido.append(content_tag(:th,title, style: "text-align: center; width: #{width}%;"))
           end 
         end 
         contenido.append(colspan)
@@ -89,9 +130,6 @@ module ApplicationHelper
       content_tag(:p,page_entries_info(lista,parametros)) 
     end 
   end 
-
-
-
 
   def nav_link(text, path=nil,controlador =nil,parametros={})
       options = controller.controller_name ==controlador ? { class: "active" } : {}
@@ -112,7 +150,6 @@ module ApplicationHelper
 		content_tag symbol,capture(&block),options
 	end 
 
-
   def nav_bar parametros = {}
     elementos = []
     parametros[:class] = "nav nav-pills nav-stacked #{parametros[:class]}"
@@ -121,7 +158,6 @@ module ApplicationHelper
         elementos.join.html_safe
     end
   end
-
 
   def content_li_a title,params={},params_li={}
     content_li content_boton_a(title,params),params_li      
@@ -135,7 +171,6 @@ module ApplicationHelper
   def contenedor_row  &block
        content_tag :div,capture(&block),class: "row"
   end 
-
 
   def content_boton_a(element,params={})
     url = params[:url]
@@ -168,6 +203,8 @@ module ApplicationHelper
     end
   end
 
-
+  def moneda_venezuela(monto)
+    number_to_currency(monto,unit: "Bs", format: "%n %u")
+  end 
 
 end

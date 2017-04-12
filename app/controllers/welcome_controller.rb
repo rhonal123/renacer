@@ -1,6 +1,12 @@
 class WelcomeController < ApplicationController
   def index
   	@usuario = Usuario.new
+    today = Date.today
+    hasta = Date.new(today.year,today.month,today.last_day_of_month)
+    desde = Date.new(today.year,today.month,1)
+    
+    @cobrado = Pago.pagados(desde,hasta).sum(:monto)
+    @porCobrar = View::CuentaPorCobrar.sum(:porcobrar)
   end
 
   def cambiar_contrasena_edit

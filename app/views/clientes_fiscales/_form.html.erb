@@ -1,0 +1,53 @@
+
+<%= form_for(cliente_fiscal,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+  <h4 class="page-header2">Datos</h4>
+
+  <div class="form-group form-group-sm <%= "has-error" if cliente_fiscal.errors.has_key?(:identidad)  %>">
+   <%= f.label :identidad, class:"col-md-2 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :identidad, class: "form-control input-sm" , placeholder:"V-0000000" %>
+     <% if cliente_fiscal.errors.has_key?(:identidad) %>
+     <span class="help-block"><%= cliente_fiscal.errors.messages[:identidad].join(',') %></span>
+     <% end %>
+   </div>
+ </div> 
+
+  <div class="form-group form-group-sm <%= "has-error" if cliente_fiscal.errors.has_key?(:nombres)  %>">
+   <%=f.label :nombres,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :nombres, class: "form-control input-sm", rows:"4", placeholder:" nombre apellido ó razon social "  %>
+     <% if cliente_fiscal.errors.has_key?(:nombres) %>
+     <span class="help-block"><%= cliente_fiscal.errors.messages[:nombres].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+
+
+
+  <div id="direccion" class="form-group form-group-sm <%= "has-error" if cliente_fiscal.errors.has_key?(:direccion)  %>">
+    <%= f.label :direccion, class:"col-md-2 control-label" %>
+    <div class="col-md-10">
+       <%= f.text_area :direccion, class: "form-control input-sm" %>
+       <% if cliente_fiscal.errors.has_key?(:direccion) %>
+       <span class="help-block"><%= cliente_fiscal.errors.messages[:direccion].join(',') %></span>
+       <% end %>
+    </div>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+<% end %>
+
+ 
+
+
+
+
+  
+
+ 
+

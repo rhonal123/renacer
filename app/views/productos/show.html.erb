@@ -1,0 +1,13 @@
+<%= titulo("Producto ") %> 
+<div class="panel-body2">
+  <%= link_to 'Regresar', productos_path, class: "btn btn-default btn-sm" %>
+  <%= link_to 'Editar', edit_producto_path(@producto), class: "btn btn-default btn-sm"  %> 
+</div>
+
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
+  <%= detalle "Id : ",@producto.id %>
+  <%= detalle "Descripción : ",@producto.descripcion %>
+  <%= detalle "Precio : ", moneda_venezuela( @producto.precio) %>
+</div>
+

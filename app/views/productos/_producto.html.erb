@@ -1,0 +1,17 @@
+<tr>
+    <td><%= producto.id %></td>
+    <td><%= producto.descripcion %></td>
+    <td><%= moneda_venezuela(producto.precio) %></td>
+    <td align="right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', producto  %></li>
+    		<li><%= link_to 'Editar',edit_producto_path(producto) %></li>
+            <li><%= button_to('Eliminar', producto_path(producto), method: "delete", class:"eliminar", data: { confirm: "Quieres Eliminar el producto #{producto.descripcion }" }) %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>

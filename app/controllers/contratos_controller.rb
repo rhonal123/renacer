@@ -1,6 +1,7 @@
 class ContratosController < ApplicationController
   before_action :set_contrato, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_usuario!
+  include ContratosHelper
 
   # GET /contratos
   # GET /contratos.json
@@ -26,75 +27,151 @@ class ContratosController < ApplicationController
   # POST /contratos.json
   def create
     @contrato = Contrato.new(contrato_params)
-    respond_to do |format|
-      if @contrato.guardarContrato
-        format.html { redirect_to @contrato, notice: 'Contrato fue correctamente creado.' }
-        format.json { render :show, status: :created, location: @contrato }
-      else
-        format.html { render :new }
-        format.json { render json: @contrato.errors, status: :unprocessable_entity }
-      end
+    @contrato.hasta =  Date.new(Date.today.year,12,31)
+    if @contrato.guardarContrato
+      redirect_to @contrato, notice: 'Contrato fue correctamente creado.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /contratos/1
   # PATCH/PUT /contratos/1.json
   def update
-    respond_to do |format|
-      if @contrato.estado == "CREADO"
-        if @contrato.update(contrato_params)
-          format.html { redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' }
-          format.json { render :show, status: :ok, location: @contrato }
-        else
-          format.html { render :edit }
-          format.json { render json: @contrato.errors, status: :unprocessable_entity }
-        end
+    unless @contrato.estado ==  "ANULADO"
+      if @contrato.update(contrato_params)
+        redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.'
       else
-        @error = "Este Contrato no puede ser Editado se encuentra #{@contrato.estado}"
-        format.html { render :edit }
-      end 
+       render :edit
+      end
+    else
+      @error = "Este Contrato no puede ser Editado se encuentra #{@contrato.estado}"
+      render :edit
     end
   end
 
   # DELETE /contratos/1
   # DELETE /contratos/1.json
   def destroy
+    #@contrato.destroy
     @contrato.anular()
-    respond_to do |format|
-      format.html { redirect_to contratos_url, notice: 'Contrato fue correctamente anulado' }
-      format.json { head :no_content }
-    end
+    redirect_to contratos_url, notice: 'Contrato fue correctamente anulado'
   end
 
+  def pagos
+    @contrato = Contrato.find(params[:contrato_id])
+  end 
 
   def pagar 
     @contrato = Contrato.find(params[:contrato_id])
     @contrato.pagar(params[:pago_id])
-    respond_to do |format|
-      format.html { redirect_to @contrato, notice: 'Contrato Actualizado' }
-    end 
+    redirect_to @contrato, notice: 'Contrato Actualizado'
   end 
-
-
 
   def activar 
     @contrato = Contrato.find(params[:contrato_id])
     @contrato.activar()
-    respond_to do |format|
-      if @contrato.estado == "ACTIVO"
-        format.html { redirect_to @contrato, notice: 'Contrato Activado' }
-      else 
-        format.html { redirect_to @contrato, notice: 'Error al activar el contrato' }
-      end 
+    if @contrato.estado == "ACTIVO"
+      redirect_to @contrato, notice: 'Contrato Activado'
+    else 
+      redirect_to @contrato, notice: 'Error al activar el contrato'
+    end 
+  end 
+
+  def cobrador
+    @contrato = Contrato.find(params[:contrato_id])
+    if @contrato.update(cobrador_params)
+       redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
+    else
+      render :cobrador_edit
+    end
+  end 
+
+  def cobrador_edit
+    @contrato = Contrato.find(params[:contrato_id])
+  end 
+
+  def propietario_edit
+    @contrato = Contrato.find(params[:contrato_id])
+  end 
+
+  def propietario
+    @contrato = Contrato.find(params[:contrato_id])
+    if @contrato.update(propietario_params)
+       redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
+    else
+      render :cobrador_edit
+    end
+  end 
+  
+  
+
+  def fecha_registro
+    @contrato = Contrato.find(params[:contrato_id])
+    if @contrato.update(fecha_registro_params)
+       redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
+    else
+      render :fecha_registro_edit
+    end
+  end 
+
+  def fecha_registro_edit
+    @contrato = Contrato.find(params[:contrato_id])
+  end 
+
+  def contrato 
+    @contrato = Contrato.find(params[:contrato_id])
+    @monto = @contrato.plan.monto
+    pdfcontra = ContratoPdf.new @contrato
+    if @contrato.plan.reporte.path.nil?
+      return send_data(pdfcontra.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline')
+    else
+      pdf = CombinePDF.new
+      pdf << CombinePDF.parse(pdfcontra.render)
+      pdf << CombinePDF.load(@contrato.plan.reporte.path)
+      pdf.number_pages number_format: "CONTRATO: #{codigo_contrato @contrato.id} -- pagina: %s",
+        number_location:  [:top_right],
+        margin_from_height: 25,
+        font_size: 10 
+      return send_data(pdf.to_pdf,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline')
     end 
   end 
 
   def catulina 
     @contrato = Contrato.find(params[:contrato_id])
     @monto = @contrato.plan.monto
-      pdf = ContratoPdf.new @contrato
-      send_data pdf.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
+    pdf = CartulinaPdf.new @contrato
+    send_data pdf.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
   end 
+
+  def carnet 
+    @contrato = Contrato.find(params[:contrato_id])
+    pdf = CarnetPdf.new [@contrato]
+    send_data pdf.render,filename: "carnet_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
+  end 
+
+  def generar_pagos
+    @contrato = Contrato.find(params[:contrato_id])
+    @contrato.generar_pagos(Date.today.year)
+    if(@contrato.errors.empty?)
+      redirect_to @contrato, notice: "Pagos Generados del ano #{Date.today.year}"
+    else
+      flash[:error] = @contrato.errors.full_messages 
+      redirect_to @contrato  
+    end 
+  end 
+
+  def pagos_cobrados 
+    datos = pagos_cobrados_params()
+    @desde = datos[:desde]
+    @hasta = datos[:hasta]
+    @pagos = Pago.pagados(@desde,@hasta)
+    pdf = PagosPdf.new @pagos, @desde,@hasta
+    send_data pdf.render,filename: "pagos", type: 'application/pdf',disposition: 'inline'
+  end 
+  
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -104,6 +181,24 @@ class ContratosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contrato_params
-      params.require(:contrato).permit(:cliente_id, :plan_id, :desde, :hasta, :deuda, :monto, :total)
+      params.require(:contrato).permit(:cliente_id, :plan_id, :desde, :deuda, :monto, :total,:cobrador,:fecha_registro)
     end
+
+    def pagos_cobrados_params()
+      params.permit(:desde, :hasta)
+    end
+
+    def propietario_params
+      params.require(:contrato).permit(:cliente_id)
+    end
+    
+    def fecha_registro_params
+      params.require(:contrato).permit(:fecha_registro)
+    end
+
+
+    def cobrador_params
+      params.require(:contrato).permit(:cobrador)
+    end
+
 end

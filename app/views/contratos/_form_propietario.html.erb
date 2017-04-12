@@ -1,0 +1,36 @@
+<%= form_for(contrato,as: :contrato,
+  remote: false,
+  url: contrato_propietario_path(contrato),
+  method: :post,
+  authenticity_token: true,
+  html: {class:'form-horizontal', role:'form'}
+  ) do |f| %>
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+   <%= f.label :cliente_id, class:"col-md-1 control-label" %>
+   <div class="col-md-6">
+    <% 
+        if contrato.cliente.nil?
+          clientes = []
+        else 
+          clientes = [contrato.cliente]
+        end 
+      %>
+     <%= f.select :cliente_id,options_from_collection_for_select(clientes,"id", "nombre_completo",contrato.cliente_id),{},class: "form-control input-sm", style:" width: 300px" %> 
+     <% if contrato.errors.has_key?(:cobrador) %>
+     <span class="help-block"><%= contrato.errors.messages[:cobrador].join(',') %></span>
+     <% end %>
+   </div>  
+  </div> 
+
+   <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right" >
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>
+ 
+<script type="text/javascript">
+
+  formContrato.inciarFormularioCambiarPropietario();
+</script>
+

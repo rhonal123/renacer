@@ -1,5 +1,4 @@
 <%= form_for(plan,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
-  <h4 class="page-header2">Datos</h4>
 
   <div class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:nombres)  %>">
    <%=f.label :nombre,class:"col-md-2 control-label" %>
@@ -21,14 +20,13 @@
    </div>
  </div>
 
-
   <div id="componentes" class="form-group form-group-sm <%= "has-error" if plan.errors.has_key?(:componentes)  %>">
     <%= f.label :componentes, class:"col-md-2 control-label" %>
     <div class="col-md-10">
-       <%= f.text_area :componentes, class: "form-control input-sm", rows: 10%>
+       <%= f.text_area :componentes, class: "form-control input-sm wysihtml5", rows: 12 %>
        <% if plan.errors.has_key?(:componentes) %>
        <span class="help-block"><%= plan.errors.messages[:componentes].join(',') %></span>
-       <% end %>
+       <% end %>  
     </div>
   </div>
 
@@ -38,15 +36,15 @@
       <table class="table table-hover">
         <tr>
           <td style="text-align: right;"><strong> Mensual : </strong></td>
-          <td style="text-align: left;"> <strong id="mensual"><%= number_to_currency(plan.monto * 4 ) %></strong></td>
+          <td style="text-align: left;"> <strong id="mensual"><%= moneda_venezuela(plan.monto * 4 ) %></strong></td>
         </tr>
         <tr>
           <td style="text-align: right;"><strong> Semestral : </strong></td>
-          <td style="text-align: left;"> <strong id="semestral"><%= number_to_currency(plan.monto * 26 ) %></strong></td>
+          <td style="text-align: left;"> <strong id="semestral"><%= moneda_venezuela(plan.monto * 26 ) %></strong></td>
         </tr>
         <tr>
           <td style="text-align: right;"><strong> Anual : </strong></td>
-          <td style="text-align: left;"><strong id="anual"><%= number_to_currency(plan.monto * 52 ) %></strong></td>
+          <td style="text-align: left;"><strong id="anual"><%= moneda_venezuela(plan.monto * 52 ) %></strong></td>
         </tr>
       </table>
     </div>
@@ -56,7 +54,23 @@
   </div>  
 <% end %>
 
- 
+<script type="text/javascript">
+  $("#plan_componentes").wysihtml5({
+  toolbar: {
+    "font-styles": true, // Font styling, e.g. h1, h2, etc.
+    "emphasis": true, // Italics, bold, etc.
+    "lists": true, // (Un)ordered lists, e.g. Bullets, Numbers.
+    "html": true, // Button which allows you to edit the generated HTML.
+    "link": false, // Button to insert a link.
+    "image": false, // Button to insert an image.
+    "color": true, // Button to change color of font
+    "blockquote": true, // Blockquote
+    "size": "sm" // options are xs, sm, lg
+  }
+});
+
+</script>
+
 
 
 

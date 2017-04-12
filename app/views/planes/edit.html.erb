@@ -1,11 +1,9 @@
-
-<div class="col-md-12 panel-body">
-	<%= link_to 'Regresar', planes_path, class: "btn btn-default" %>
-	<%= link_to 'Mostrar',@plan, class: "btn btn-default" %>
-
+<%= editar_titulo %> 
+<div class="panel-body2">
+	<%= link_to 'Regresar', planes_path, class: "btn btn-default btn-sm" %>
+	<%= link_to 'Mostrar',@plan, class: "btn btn-default btn-sm" %>
 </div>
-
-<div class="col-md-12  panel-body">
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
 	<%= render 'form', plan: @plan %>
 </div>
 

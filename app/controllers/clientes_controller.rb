@@ -26,29 +26,20 @@ class ClientesController < ApplicationController
   # POST /clientes.json
   def create
     @cliente = Cliente.new(cliente_params)
-
-    respond_to do |format|
-      if @cliente.save
-        format.html { redirect_to @cliente, notice: 'Cliente was successfully created.' }
-        format.json { render :show, status: :created, location: @cliente }
-      else
-        format.html { render :new }
-        format.json { render json: @cliente.errors, status: :unprocessable_entity }
-      end
+    if @cliente.save
+      redirect_to @cliente, notice: 'Cliente fue creado correctamente.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /clientes/1
   # PATCH/PUT /clientes/1.json
   def update
-    respond_to do |format|
-      if @cliente.update(cliente_params)
-        format.html { redirect_to @cliente, notice: 'Cliente was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cliente }
-      else
-        format.html { render :edit }
-        format.json { render json: @cliente.errors, status: :unprocessable_entity }
-      end
+    if @cliente.update(cliente_params)
+      redirect_to @cliente, notice: 'Cliente fue actualizado correctamente.'
+    else
+      render :edit
     end
   end
 
@@ -56,10 +47,12 @@ class ClientesController < ApplicationController
   # DELETE /clientes/1.json
   def destroy
     @cliente.destroy
-    respond_to do |format|
-      format.html { redirect_to clientes_url, notice: 'Cliente was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    if @cliente.destroyed? 
+      redirect_to clientes_url, notice: "El cliente #{@cliente.nombres} fue Eliminado."
+    else 
+      flash[:error]  ="El cliente  #{@cliente.nombres} no puede ser elmininado posee #{@cliente.contratos.size} contratos"
+      redirect_to clientes_url  
+    end 
   end
 
   private

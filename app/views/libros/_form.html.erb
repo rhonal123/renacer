@@ -1,0 +1,97 @@
+
+<%= form_for(libro,remote: false,html: {
+  class:'form-horizontal formulario-libro', role:'form'}) do |f| %>
+  <div class="form-group form-group-sm <%= "has-error" if libro.errors.has_key?(:mes)  %>">
+   <%= f.label :mes, class:"col-md-2 control-label" %>
+   <div class="col-md-2">
+     <%= f.select :mes, {
+      "Enero": 1,
+      "Febrero": 2,
+      "Marzo": 3,
+      "Abril": 4,
+      "Mayo": 5,
+      "Junio": 6,
+      "Julio": 7,
+      "Agosto": 8,
+      "Septiembre": 9,
+      "Octubre": 10,
+      "Noviembre": 11,
+      "Diciembre": 12
+      },{},{
+        class: "form-control input-sm",
+        onchange: "formLibro.actualizarLibro('#{new_libro_path}');"
+        }%>
+     <% if libro.errors.has_key?(:mes) %>
+     <span class="help-block"><%= libro.errors.messages[:mes].join(',') %></span>
+     <% end %>
+   </div>
+   <%=f.label :ano,class:"col-md-2 control-label" %>
+   <div class="col-md-2">
+     <%= f.select :ano,2015..(Date.today.year),{},{
+        class: "form-control input-sm",
+        onchange: "formLibro.actualizarLibro('#{new_libro_path}');"
+        }   %>
+     <% if libro.errors.has_key?(:ano) %>
+     <span class="help-block"><%= libro.errors.messages[:ano].join(',') %></span>
+     <% end %>
+   </div>
+
+   <%=f.label :declarado,class:"col-md-2 control-label" %>
+   <div class="col-md-2">
+    <%= f.check_box :declarado %>
+      <% if libro.errors.has_key?(:declarado) %>
+     <span class="help-block"><%= libro.errors.messages[:declarado].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+<h3>Facturas del mes </h3>
+<div  class="form-group form-group-sm">
+    <div class="col-md-12">
+    <table class="table table-body" >
+      <thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Tipo</th><th>Total</th><th>Estado</th></tr></thead>
+      <tbody id="productos" style="height: 350px;">
+      <% libro.facturas.each do |factura|%>
+        <tr>
+            <td><%= factura.id %></td>
+            <td><%= factura.cliente_fiscal.nombre_completo %></td>
+            <td><%= factura.fecha %></td>
+            <td><%= factura.tipo %></td>
+            <td><%= moneda_venezuela(factura.total) %></td>
+            <td><%= factura.estado %></td>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Base :</strong></td>      
+          <td align="right"><label id="plan_base"><%= moneda_venezuela(libro.base || 0) %></label></td>  
+        </tr>
+        <tr>
+          <td  align="right" style="width: 70%;"><strong>Total :</strong></td>      
+          <td align="right"><label id="plan_total"><%= moneda_venezuela(libro.total || 0) %></label></td>      
+        </tr>
+      </tfoot>
+    </table>        
+    </div>
+  </div>
+
+ 
+  <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+<% end %>
+ 
+
+ 
+
+
+
+
+  
+
+ 
+

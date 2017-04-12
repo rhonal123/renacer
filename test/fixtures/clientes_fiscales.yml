@@ -1,0 +1,16 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+ 
+one:
+  id: 1
+  identidad: V-19827297
+  nombres:  Rhonal Chirinos 
+  direccion: Barrio el Jebe sector la estrella 
+
+
+
+two:
+  id: 2
+  identidad: V-17845985
+  nombres:  Josue Chirinos 
+  direccion: Barrio el Jebe sector la estrella 

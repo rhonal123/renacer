@@ -1,19 +1,27 @@
- 
-
 <div class="col-md-12">
   <%= detalle_usuario %>
   <h4 class="page-header2">Nueva Contraseña</h4>
-  <%= form_for(@usuario,url:   cambiar_contrasena_path, method: :post,
+  <%= form_for(@usuario,url:cambiar_contrasena_path, method: :post,
           html: {class:'form-inline', role:'form'}) do |f| %>
-      <div id="password" class="form-group">
-      	<%= f.hidden_field :reset_password_token %>
-        <%= f.password_field :password, placeholder: "contraseña", 
-            class: "form-control input-sm",maxlength:"30" , autocomplete: "off"   %>
-      <%= f.password_field :password_confirmation, placeholder: "repita contraseña", 
-              class: "form-control input-sm" , autocomplete: "off" %>
-      <%= submit_tag "Cambiar Contraseña" , class: "btn btn-primary btn-sm"  %>
-    </div>
-       <%= content_tag(:div,content_tag(:label,@error,class: "label label-danger",style: "font-size: 12px;"),style: "margin: 10px;") %>
+    <div id="password" class="form-group">
+      <%= f.hidden_field :reset_password_token %>
 
+      <%= f.password_field :password,
+        placeholder: "contraseña",
+        class: "form-control input-sm",
+        maxlength:"30",
+        autocomplete: "off" %>
+
+      <%= f.password_field :password_confirmation,
+        placeholder: "repita contraseña", 
+        class: "form-control input-sm",
+        autocomplete: "off" %>
+
+      <%= submit_tag "Cambiar Contraseña" , class: "btn btn-primary btn-sm"  %>
+
+    </div>
+    <%= content_tag(:div,
+      content_tag(:label,@error,class: "label label-danger",style: "font-size: 12px;"),
+      style: "margin: 10px;") %>
   <% end %>
 </div 

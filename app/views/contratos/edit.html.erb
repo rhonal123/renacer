@@ -1,10 +1,9 @@
-<div class="col-md-12 panel-body">
+<%= editar_titulo %> 
+<div class="panel-body2" >
 	<%= link_to 'Regresar', contratos_path, class: "btn btn-default" %>
 	<%= link_to 'Mostrar',@contrato, class: "btn btn-default" %>
-
 </div>
-
-<div class="col-md-12  panel-body">
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
 	<% if @error %>
 		<div class="alert alert-danger" role="alert"><%= @error%></div>
 	<% end %>

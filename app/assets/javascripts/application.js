@@ -18,4 +18,11 @@
 //= require bootstrap-datepicker 
 //= require select2
 //= require moment
+//= require bootstrap-wysihtml5
+//= require Chart
 //= require_tree .
+
+ 
+formatMoney = function(n){
+	return n.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+};

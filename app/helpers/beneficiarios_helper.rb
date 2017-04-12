@@ -1,0 +1,2 @@
+module BeneficiariosHelper
+end

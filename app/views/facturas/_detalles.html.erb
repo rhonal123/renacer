@@ -1,0 +1,48 @@
+<div  class="form-group form-group-sm">
+    <div class="col-md-12">
+    <table class="table table-body" >
+      <thead><tr><th>ID</th><th>Producto</th><th>Monto</th><th>Cantidad</th><th>Total</th></tr></thead>
+      <tbody id="productos">
+        <% factura.detalles.each do |detalle| %>
+          <tr>
+            <td><%= detalle.producto_id %></td>
+            <td><%= detalle.producto.descripcion %></td>
+            <td><%= moneda_venezuela(detalle.precio_unitario) %></td>
+            <td><%= detalle.cantidad %></td>
+            <td><%= moneda_venezuela(detalle.precio) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Base :</strong></td>      
+          <td align="right">
+            <label id="plan_base"><%= moneda_venezuela(factura.base || 0) %></label>
+          </td>      
+        </tr>
+        <tr>
+          <td align="right" style="width: 70%;"><strong><%= factura.impuesto.descripcion %> :</strong></td>
+          <td align="right">
+            <label id="plan_iva"><%= moneda_venezuela(factura.impuesto.porcentaje*factura.base.to_f) %></label>
+          </td>
+        </tr>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Total :</strong></td>      
+          <td align="right">
+            <label id="plan_total"><%= moneda_venezuela(factura.total || 0) %></label>
+          </td>
+        </tr>
+        <tr>
+          <td align="right" style="width: 70%;"></td>      
+          <td align="right">
+            <% if factura.saldo == 0 %>
+              <h3>Saldo <span class="label label-info"><%= moneda_venezuela(factura.saldo || 0) %></span> </h3>
+            <% else %>
+              <h3>Saldo <span class="label label-danger"><%= moneda_venezuela(factura.saldo || 0) %></span></h3>
+            <% end %>
+          </td>
+        </tr>
+      </tfoot>
+    </table>        
+    </div>
+  </div>

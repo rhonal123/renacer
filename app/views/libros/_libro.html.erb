@@ -1,0 +1,21 @@
+<tr>
+    <td><%= libro.id %></td>
+    <td><%= meses_libro libro.mes %></td>
+    <td><%= libro.ano %></td>
+    <td><%= moneda_venezuela libro.base %></td>
+    <td><%= moneda_venezuela libro.total %></td>
+    <td><%= libro.declarado? ? "Declarado": "NO Declarado" %></td>
+    <td align="right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', libro  %></li>
+            <li><%= link_to 'Imprimir', libro_imprimir_path(libro),target: "_blank"  %></li>
+            <li><%= button_to('Eliminar', libro_path(libro), method: "delete", class:"eliminar", data: { confirm: "Quieres Eliminar el libro del mes #{libro.mes } y ano #{libro.ano}" }) unless libro.declarado? %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+ 

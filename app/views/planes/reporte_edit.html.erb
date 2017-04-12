@@ -1,0 +1,8 @@
+<%= titulo("Plan Cambiar Reporte") %> 
+<div class="panel-body2">
+	<%= link_to 'Regresar', planes_path, class: "btn btn-default btn-sm" %>
+	<%= link_to 'Mostrar',@plan, class: "btn btn-default btn-sm" %>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render 'form_reporte', plan: @plan %>
+</div>

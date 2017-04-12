@@ -1,0 +1,1 @@
+formBeneficiario.editarBeneficiario "<%= escape_javascript(render('beneficiario', beneficiario: @beneficiario)) %>", "<%= @beneficiario.id%>"

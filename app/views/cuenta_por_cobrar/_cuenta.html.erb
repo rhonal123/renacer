@@ -1,0 +1,17 @@
+<tr>
+    <td><%=  cuenta.id %></td>
+    <td><%= cuenta.identidad %></td>
+    <td><%= cuenta.nombres %></td>
+    <td><%= moneda_venezuela(cuenta.porcobrar)%></td>
+    <td align="right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar',  cuenta_por_cobrar_path(cuenta)  %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+

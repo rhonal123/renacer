@@ -1,6 +1,5 @@
 <%= form_for(cliente,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
-  <h4 class="page-header2">Datos</h4>
-
+ 
   <div class="form-group form-group-sm <%= "has-error" if cliente.errors.has_key?(:identidad)  %>">
    <%= f.label :identidad, class:"col-md-2 control-label" %>
    <div class="col-md-3">

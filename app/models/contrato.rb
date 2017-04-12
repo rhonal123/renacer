@@ -1,9 +1,11 @@
 class Contrato < ApplicationRecord
 
-  belongs_to :cliente
-  belongs_to :plan
+  belongs_to :cliente, inverse_of: :contratos
+  belongs_to :plan, inverse_of: :contratos
 
-  has_many :pagos
+  has_many :pagos, dependent: :restrict_with_error , inverse_of: :contrato
+
+  has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
 
   def self.search(page = 1 , search , sort)
     search ||= ""
@@ -17,6 +19,8 @@ class Contrato < ApplicationRecord
           where("clientes.nombres||' '||clientes.identidad  like ?","%#{search}%").order("clientes.nombres")
       elsif sort == "plan"
         paginate(page: page).cargar_detalle.where("planes.nombre like ?","%#{search}%").order("planes.nombre")
+      elsif sort == "Numero"
+        paginate(page: page).cargar_detalle.where("contratos.id::text like ?","%#{search.to_i}%").order("contratos.id asc")
       else 
         paginate(page: page).cargar_detalle.where("#{sort} like ?","%#{search}%").order("#{sort} asc")
       end 
@@ -27,7 +31,10 @@ class Contrato < ApplicationRecord
     eager_load(:cliente,:plan)
   end 
 
-
+=begin
+  al generar un contrato guardare el ano actual y luego genero los pagos del ano 
+  actual, si se apertura un nuevo año se genera los pagos de todo el año 
+=end 
   def guardarContrato() 
     #Contrato.transaction do
     desdeweek = desde.cweek()
@@ -36,12 +43,30 @@ class Contrato < ApplicationRecord
     desdeweek = 1  if(desdeweek >= hastaweek)
     _deuda = 0.0 
     (desdeweek..hastaweek).each do  |n| 
-     self.pagos << Pago.new({semana: n, monto: plan.monto })
-       _deuda += plan.monto
+     self.pagos << Pago.new({semana: n, monto: plan.monto, ano: desde.year })
+      _deuda += plan.monto
     end 
     self.monto = _deuda
     self.total = _deuda
     save()
+    errors.empty?
+  end 
+
+  def generar_pagos(ano)
+    if(ano != self.desde.year)
+      self.desde = Date.new(ano,1,1)
+      self.hasta = Date.new(ano,12,31)
+      _deuda = 0.0 
+      (1..52).each do  |n| 
+        self.pagos << Pago.new({semana: n, monto: plan.monto, ano: ano })
+        _deuda += plan.monto
+      end 
+      self.monto = _deuda
+      self.total = _deuda
+      save()
+    else
+      errors.add(:estado,"NO puedes generar pago de este año, dado que es el año entransito del contrato.")
+    end 
     errors.empty?
   end 
 
@@ -81,6 +106,7 @@ class Contrato < ApplicationRecord
         pagos.each do |pago|
           if(pago.id == pago_id.to_i)
             pago.estado = "pagado"
+            pago.fecha_pago = Date.today 
             pago.save()
           else 
             pendiente += pago.monto if(pago.estado == "pendiente")        
@@ -92,9 +118,32 @@ class Contrato < ApplicationRecord
     end 
   end 
 
+  def anulado?
+    self.estado == "ANULADO"
+  end  
 
-  def monto_pendiente
-    self.pagos.where(estado: "pendiente").sum(:monto)
+  def no_anulado?
+    !anulado?
+  end 
+
+  def activo?
+    self.estado == "ACTIVO"
+  end 
+
+  def inactivo?
+    !activo?
+  end 
+
+  def monto_pendiente ano=Date.today.year
+    self.pagos.where(estado: "pendiente",ano: ano).sum(:monto)
+  end 
+
+  def total_ano  ano=Date.today.year 
+    self.pagos.where(ano: ano).sum(:monto)
+  end 
+
+  def ultimo_monto(ano=Date.today.year)
+    self.pagos.where(ano: ano).last.monto
   end 
 
   validates :cliente_id, 

@@ -6,11 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
-Usuario.create({
-	email: "admin@admin.com",
-nombres: "admin",
-username: "admin",
-password: "123456",
-password_confirmation: "123456" 
+Impuesto.create({
+	descripcion: "IVA",
+  porcentaje: 0.12
 })

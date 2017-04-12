@@ -1,0 +1,1 @@
+json.partial! "clientes_fiscales/cliente_fiscal", cliente_fiscal: @cliente_fiscal

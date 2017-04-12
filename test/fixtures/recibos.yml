@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  fecha: 2017-02-26
+  concepto: 
+  cliente: one
+  estado: MyString
+  monto: 1.5
+  factura: one
+
+two:
+  fecha: 2017-02-26
+  concepto: 
+  cliente: two
+  estado: MyString
+  monto: 1.5
+  factura: two

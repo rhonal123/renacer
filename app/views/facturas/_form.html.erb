@@ -1,0 +1,115 @@
+<%= form_for(factura, 
+  html: {
+      class:'form-horizontal formulario-facturacion',
+      role:'form',
+      onSubmit: "formFactura.valFormulario(event)",
+      data: {
+        impuesto: factura.impuesto.porcentaje
+      }
+  }) do |f| %>
+
+  <%= f.hidden_field :impuesto_id  %>
+  <div class="form-group form-group-sm <%= "has-error" if factura.errors.has_key?(:cliente_fiscal)  %>">
+    <%= f.label :cliente_fiscal_id,"Cliente Fiscal", class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <% clientes = []
+         clientes << factura.cliente_fiscal unless factura.cliente_fiscal_id.nil? %>
+      <%= f.select :cliente_fiscal_id,options_from_collection_for_select(clientes,"id","nombre_completo",factura.cliente_fiscal_id),{},class: "form-control input-sm" %> 
+      <% if factura.errors.has_key?(:cliente_fiscal_id) %>
+        <span class="help-block"><%= factura.errors.messages[:cliente_fiscal_id].join(',') %></span>
+      <% end %>
+    </div>
+
+    <%= f.label :tipo, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= f.select :tipo,["CONTADO","CREDITO"],{},class: "form-control input-sm" %> 
+      <% if factura.errors.has_key?(:tipo) %>
+        <span class="help-block"><%= factura.errors.messages[:tipo].join(',') %></span>
+      <% end %>
+    </div>
+
+    <%= f.label :fecha, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= f.text_field :fecha,class: "form-control input-sm",disabled: true,style: "background-color: #c4daf0;" %> 
+    </div>   
+  </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if factura.errors.has_key?(:direccion)  %>">
+    <%= f.label :direccion, class:"col-md-1 control-label" %>
+    <div class="col-md-11">
+      <%= f.text_area :direccion,class: "form-control input-sm" %> 
+      <% if factura.errors.has_key?(:direccion) %>
+        <span class="help-block"><%= factura.errors.messages[:direccion].join(',') %></span>
+      <% end %>
+    </div>
+  </div> 
+
+  <div  class="form-group form-group-sm">
+    <div class="col-md-11 col-md-offset-1">
+    <%= button_tag "Agregar",
+      class: "btn btn-default btn-sm",
+      type: "button",
+      id: "agregar_producto",
+      onClick: "formFactura.cargar_catalogo(event)"
+    %>
+    <% if factura.errors.has_key?(:detalles)  %>
+      <div class="alert alert-danger" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      Ingrese cantidad en los articulos </div>
+    <% end %>
+    <table class="table table-body" >
+      <thead><tr><th>ID</th><th>Producto</th><th>Monto</th><th>Cantidad</th><th>Total</th><th></th></tr></thead>
+      <tbody id="productos" style="height: 200px;">
+        <%= f.fields_for :detalles do |detalles_fields| %>
+          <tr id="<%=detalles_fields.object.producto.id %>" class="prodcuto">
+            <td>
+              <%= detalles_fields.object.producto_id %>
+              <%= detalles_fields.hidden_field :producto_id  %>
+            </td>
+            <td><%= detalles_fields.object.producto.descripcion %></td>
+            <td><%= detalles_fields.object.precio_unitario %></td>
+            <td>
+              <%= detalles_fields.number_field :cantidad,
+                class: "cantidad",
+                onkeyup: "formFactura.calcularMontos()",
+                onchange: "formFactura.calcularMontos()",
+                data: {
+                  precio:  detalles_fields.object.precio_unitario 
+                } %>
+            </td>
+            <td class="total"><%= detalles_fields.object.precio %></td>
+            <td><%= button_tag "Quitar",
+                class:   "btn btn-danger btn-sm",
+                type: "button",
+                onClick: "formFactura.quitarProducto(#{detalles_fields.object.producto.id})"
+              %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Base :</strong></td>      
+          <td align="right"><label id="plan_base"><%= moneda_venezuela(factura.base || 0) %></label></td>  </tr>
+        <tr>
+          <td align="right" style="width: 70%;"><strong><%= factura.impuesto.descripcion %> :</strong></td>      
+          <td align="right"><label id="plan_iva"><%= moneda_venezuela(factura.impuesto.porcentaje * factura.base.to_f) %></label></td>
+        </tr>
+        <tr>
+          <td  align="right" style="width: 70%;"><strong>Total :</strong></td>      
+          <td align="right"><label id="plan_total"><%= moneda_venezuela(factura.total || 0) %></label></td>      
+        </tr>
+      </tfoot>
+    </table>        
+    </div>
+  </div>
+  <div class="col-md-12 " align="right">
+    <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  formFactura.inciarFormulario("<%= productos_facturas_path %>","<%= agregar_facturas_path  %>","");
+</script>
+

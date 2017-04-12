@@ -9,8 +9,6 @@ class Usuario::SessionsController < Devise::SessionsController
 
   def create
     self.resource = warden.authenticate(auth_options) 
-    puts "---------------------------------"
-    puts self.resource
     unless self.resource.nil? 
       sign_in(resource_name,self.resource)
       respond_with resource, location: root_path

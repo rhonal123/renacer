@@ -1,0 +1,9 @@
+<%= nuevo_titulo %> 
+<div class="panel-body2">
+	<%= link_to 'Regresar',  factura_path(@factura), class: "btn btn-default btn-sm" %>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render 'form', recibo: @recibo, factura: @factura  %>
+</div>
+
+

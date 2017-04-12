@@ -1,0 +1,18 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one: 
+  id: 1
+  descripcion: producto1
+  precio: 2500
+
+
+two: 
+  id: 2
+  descripcion: producto2
+  precio: 2000
+
+
+three: 
+  id: 3
+  descripcion: producto3
+  precio: 1600

@@ -1,0 +1,1 @@
+formBeneficiario.agregarBeneficiario "<%= escape_javascript(render('beneficiario', beneficiario: @beneficiario)) %>"

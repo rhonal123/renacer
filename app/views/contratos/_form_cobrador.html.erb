@@ -1,0 +1,25 @@
+<%= form_for(contrato,as: :contrato,
+  remote: false,
+  url: contrato_cobrador_path(contrato),
+  method: :post,
+  authenticity_token: true,
+  html: {class:'form-horizontal', role:'form'}
+  ) do |f| %>
+
+
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+   <%= f.label :cobrador, class:"col-md-1 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :cobrador, class: "form-control input-sm" %>
+     <% if contrato.errors.has_key?(:cobrador) %>
+     <span class="help-block"><%= contrato.errors.messages[:cobrador].join(',') %></span>
+     <% end %>
+   </div>
+  </div> 
+
+   <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>

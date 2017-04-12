@@ -1,8 +1,8 @@
-<%= titulo("Clientes") %> 
-<p id="notice"><%= notice %></p>
-<div class="panel-body2"  style="height: 95%;">
+<%= index_titulo %> 
+<%= render partial: "/shared/flash_messages", flash: flash %> 
+<div class="panel-body2">
     <div class="row">
-        <div class="col-md-4" >
+        <div class="col-sm-4 col-md-4" >
           <%= link_to 'Nuevo', new_cliente_path,
             class: "btn btn-default btn-sm nuevo_cliente"  %>
         </div>
@@ -10,6 +10,12 @@
            <%= buscar(clientes_path,["identidad","nombres","apellidos"]) %>
         </div>
     </div>
-    <%= tabla_panel_responsive(["Identidad","Nombres","Apellidos","Telefono"],@clientes)%>
+    <%= tabla_panel_responsive([
+            { title: "Id", width: "20%"},
+            { title: "Identidad", width: "20%"},
+            { title: "Nombres", width: "20%"},
+            { title: "Apellidos", width: "20%"},
+            { title: "Telefono", width: "20%"},
+        ],@clientes)%>
     <%= paginador(@clientes,controller: :clientes, action: :index ) %>
 </div>

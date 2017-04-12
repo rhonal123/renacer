@@ -26,29 +26,20 @@ class PlanesController < ApplicationController
   # POST /planes.json
   def create
     @plan = Plan.new(plan_params)
-
-    respond_to do |format|
-      if @plan.save
-        format.html { redirect_to @plan, notice: 'Plan was successfully created.' }
-        format.json { render :show, status: :created, location: @plan }
-      else
-        format.html { render :new }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
-      end
+    if @plan.save
+      redirect_to @plan, notice: 'Plan fue creado correctamente.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /planes/1
   # PATCH/PUT /planes/1.json
   def update
-    respond_to do |format|
-      if @plan.update(plan_params)
-        format.html { redirect_to @plan, notice: 'Plan was successfully updated.' }
-        format.json { render :show, status: :ok, location: @plan }
-      else
-        format.html { render :edit }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
-      end
+    if @plan.update(plan_params)
+      redirect_to @plan, notice: 'Plan fue actualizado correctamente.'
+    else
+      render :edit
     end
   end
 
@@ -56,11 +47,26 @@ class PlanesController < ApplicationController
   # DELETE /planes/1.json
   def destroy
     @plan.destroy
-    respond_to do |format|
-      format.html { redirect_to planes_url, notice: 'Plan was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    if @plan.destroyed? 
+      redirect_to planes_url, notice: "El plan #{@plan.nombre} fue Eliminado."
+    else 
+      flash[:error]  ="El plan  #{@plan.nombre} no puede ser elmininado posee #{@plan.contratos.size} contratos."
+      redirect_to planes_url  
+    end 
   end
+
+  def reporte
+    @plan = Plan.find(params[:plan_id])
+    if @plan.update(plan_reporte_params)
+      redirect_to @plan, notice: 'Reporte actualizado correctamente.'
+    else
+      render :reporte_edit
+    end
+  end 
+
+  def reporte_edit
+    @plan = Plan.find(params[:plan_id])
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -70,6 +76,11 @@ class PlanesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plan_params
-      params.require(:plan).permit(:nombre, :monto, :componentes)
+      params.require(:plan).permit(:nombre, :monto, :componentes,:convenio)
     end
+
+    def plan_reporte_params
+      params.require(:plan).permit(:reporte)
+    end
+
 end

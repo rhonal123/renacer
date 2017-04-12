@@ -1,0 +1,68 @@
+<%= form_for(beneficiario,as: :beneficiario,
+  remote: true,
+  url: (beneficiario.id.nil? ?
+          contrato_beneficiarios_path(params[:contrato_id],beneficiario) : contrato_beneficiario_path(params[:contrato_id],beneficiario) ),
+  authenticity_token: true,
+  html: {class:'form-horizontal', role:'form'}
+  ) do |f| %>
+
+  <%=  f.hidden_field(:contrato_id) %>
+
+  <h4 class="page-header2">Datos</h4>
+  <div class="form-group form-group-sm <%= "has-error" if beneficiario.errors.has_key?(:identidad)  %>">
+   <%= f.label :identidad, class:"col-md-2 control-label" %>
+   <div class="col-md-4">
+     <%= f.text_field :identidad, class: "form-control input-sm" %>
+     <% if beneficiario.errors.has_key?(:identidad) %>
+     <span class="help-block"><%= beneficiario.errors.messages[:identidad].join(',') %></span>
+     <% end %>
+   </div>
+  </div> 
+  
+  <div class="form-group form-group-sm <%= "has-error" if beneficiario.errors.has_key?(:apellidos)  %>">
+   <%= f.label :apellidos, class:"col-md-2 control-label" %>
+   <div class="col-md-4">
+     <%= f.text_field :apellidos, class: "form-control input-sm" %>
+     <% if beneficiario.errors.has_key?(:apellidos) %>
+     <span class="help-block"><%= beneficiario.errors.messages[:apellidos].join(',') %></span>
+     <% end %>
+   </div>
+  </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if beneficiario.errors.has_key?(:nombres)  %>">
+   <%=f.label :nombres,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :nombres, class: "form-control input-sm" %>
+     <% if beneficiario.errors.has_key?(:nombres) %>
+     <span class="help-block"><%= beneficiario.errors.messages[:nombres].join(',') %></span>
+     <% end %>
+   </div>
+  </div>
+  
+  <div class="form-group form-group-sm <%= "has-error" if beneficiario.errors.has_key?(:fechaNacimiento)  %>">
+    <%= f.label :fechaNacimiento,"Fecha Nacimiento", class:"col-md-2 control-label" %>
+    <div class="col-md-3">
+      <%= f.date_select :fechaNacimiento, start_year: 1900,use_month_names: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre", "Noviembre", "Dicimebre"], class: "form-control input-sm" %>
+      <% if beneficiario.errors.has_key?(:fechaNacimiento) %>
+     <span class="help-block"><%= beneficiario.errors.messages[:fechaNacimiento].join(',') %></span>
+     <% end %>
+    </div>
+  </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if beneficiario.errors.has_key?(:parentesco)  %>">
+   <%=f.label :parentesco,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :parentesco, class: "form-control input-sm" %>
+     <% if beneficiario.errors.has_key?(:parentesco) %>
+     <span class="help-block"><%= beneficiario.errors.messages[:parentesco].join(',') %></span>
+     <% end %>
+   </div>
+  </div>
+
+
+   <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>

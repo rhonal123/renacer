@@ -1,24 +1,57 @@
+<% unless usuario_signed_in? %>
 <div style="margin-top:2%; margin-left:5%;">
-	<% unless usuario_signed_in? %>
-		<div class="page-header" >
-		  <h2> Iniciar Session <small> Ingrese su username y contraseña </small></h2>
-		</div>	
+	<div class="page-header" >
+	  <h2>Iniciar Session <small> Ingrese su username y contraseña </small></h2>
+	</div>	
 	<div align="right"  >
-		<%= form_for(@usuario, as: :usuario,url: usuario_session_path(@usuario),html: {class:'form-inline', 
-    role:'form'}) do |f| %>
-		 <div class="form-group" style="margin: 10px;">
-		    <%= f.text_field :username, autofocus: true, placeholder: "username", class: "form-control" %>
-		    <%= f.password_field :password, autocomplete: "off", placeholder: "password", class: "form-control" %>
-		    <%= f.submit "Log in", class: "btn btn-primary" %>
+		<%= form_for(@usuario,
+			as: :usuario,
+			url: usuario_session_path(@usuario),
+			html: {
+				class:'form-inline', 
+    		role:'form'
+    	}) do |f| %>
+		  <div class="form-group" style="margin: 10px;">
+		    <%= f.text_field :username,
+		    	autofocus: true,
+		    	placeholder: "username",
+		    	class: "form-control" %>
+		    <%= f.password_field :password,
+		    	autocomplete: "off",
+		    	placeholder: "password",
+		    	class: "form-control" %>
+		    <%= f.submit "Log in",
+		    	class: "btn btn-primary" %>
 		  </div>
-		   <%= content_tag(:div,content_tag(:label,@error,class: "label label-danger",style: "font-size: 12px;"),style: "margin: 10px;") %>
+		  <%= content_tag(:div,
+		  	content_tag(:label,
+		  		@error,
+		  		class: "label label-danger",
+		  			style: "font-size: 12px;"),
+		  			style: "margin: 10px;") %>
 		<% end %>
 	</div>
-	<% else %>
-		<div class="page-header" >
-		  <h2> Bienvenido <%= current_usuario.nombres %></h2>
-		</div>	
-		<p id="notice"><%= notice %></p> 
-
-	<% end %>
 </div>
+<% else %>
+	<p id="notice"><%= notice %></p> 
+	<div class="page-header" >
+	  <h2> Bienvenido <%= current_usuario.nombres %></h2>
+	  <div class="col-md-11" height="150">
+		<canvas id="myChart" width="150" ></canvas>
+	  </div>
+		<script type="text/javascript">
+			this.montosPago.grafico(
+				<%= Pago.where(ano: Date.today.year).group(:semana).order(:semana).sum(:monto).map{ |k,m| m }.to_json %>,
+				<%= Pago.where(ano: Date.today.year, estado: "pagado").group(:semana).order(:semana).sum(:monto).map{ |k,m| m }.to_json %>
+			);
+		</script>
+	</div>	
+
+	<% if @porCobrar %>
+		<div style="position: absolute; bottom: 10%; right: 0;  left: 80%;  ">
+			<span class="label label-warning" style="font-size: 12px">
+				Total por cobrar: <%= moneda_venezuela @porCobrar %>
+			</span>
+		</div> 	
+	<% end %>
+<% end %>

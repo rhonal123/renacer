@@ -1,0 +1,42 @@
+<%= titulo("Libros ") %> 
+<div class="panel-body2" >
+  <%= link_to 'Regresar',libros_path,class: "btn btn-default btn-sm" %>
+  <%= link_to 'Imprimir',libro_imprimir_path(@libro),class: "btn btn-default btn-sm",target: "_blank" %>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+  <%= render partial: "/shared/flash_messages", flash: flash %> 
+  <%= detalle "ID : ", @libro.id %>
+  <%= detalle "Mes : ",meses_libro(@libro.mes) %>
+  <%= detalle "Año : ", @libro.ano %>
+  <%= detalle "declarado : ", @libro.declarado? ? "Declarado": "NO Declarado"%>
+</div>
+<div class="form-group form-group-sm">
+  <div class="col-md-12">
+    <table class="table table-body" >
+      <thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Tipo</th><th>Total</th><th>Estado</th></tr></thead>
+      <tbody id="productos" style="height: 350px;">
+      <% @libro.facturas.each do |factura|%>
+        <tr>
+            <td><%= factura.id %></td>
+            <td><%= factura.cliente_fiscal.nombre_completo %></td>
+            <td><%= factura.fecha %></td>
+            <td><%= factura.tipo %></td>
+            <td><%= moneda_venezuela(factura.total) %></td>
+            <td><%= factura.estado %></td>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Base :</strong></td>      
+          <td align="right"><label id="plan_base"><%= moneda_venezuela(@libro.base || 0) %></label></td>  
+        </tr>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Total :</strong></td>      
+          <td align="right"><label id="plan_total"><%= moneda_venezuela(@libro.total || 0) %></label></td>  
+        </tr>
+      </tfoot>
+    </table>        
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<%= index_titulo %> 
+<%= render partial: "/shared/flash_messages", flash: flash %> 
+<div class="panel-body2" >
+    <div class="row">
+        <div class="col-sm-4 col-md-4" >
+          <%= link_to 'Nuevo', new_libro_path,
+            class: "btn btn-default btn-sm nuevo_cliente"  %>
+        </div>
+        <div class="col-md-8" align="right">
+           <%= buscar(clientes_path,["identidad","nombres","apellidos"]) %>
+        </div>
+    </div>
+    <%= tabla_panel_responsive(["Id","Mes","Año","Base","Total","Declarado"],@libros)%>
+    <%= paginador(@libros,controller: :libros, action: :index ) %>
+</div>
+ 

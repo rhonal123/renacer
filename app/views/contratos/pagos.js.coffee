@@ -1,0 +1,1 @@
+$("#pagos").empty().append "<%= escape_javascript(render('/contratos/pagos', contrato: @contrato, ano: params[:year]))%>"

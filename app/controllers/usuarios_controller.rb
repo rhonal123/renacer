@@ -29,11 +29,9 @@ class UsuariosController < ApplicationController
 
     respond_to do |format|
       if @usuario.save
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully created.' }
-        format.json { render :show, status: :created, location: @usuario }
+        redirect_to @usuario, notice: 'Usuario was successfully created.' 
       else
-        format.html { render :new }
-        format.json { render json: @usuario.errors, status: :unprocessable_entity }
+        render :new
       end
     end
   end
@@ -43,11 +41,9 @@ class UsuariosController < ApplicationController
   def update
     respond_to do |format|
       if @usuario.update(usuario_params)
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
-        format.json { render :show, status: :ok, location: @usuario }
+        redirect_to @usuario, notice: 'Usuario was successfully updated.'
       else
-        format.html { render :edit }
-        format.json { render json: @usuario.errors, status: :unprocessable_entity }
+        render :edit 
       end
     end
   end
@@ -57,8 +53,7 @@ class UsuariosController < ApplicationController
   def destroy
     @usuario.destroy
     respond_to do |format|
-      format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
-      format.json { head :no_content }
+      redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' 
     end
   end
 

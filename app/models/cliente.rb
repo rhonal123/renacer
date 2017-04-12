@@ -1,5 +1,5 @@
 class Cliente < ApplicationRecord
-
+  has_many :contratos, dependent: :restrict_with_error, inverse_of: :cliente  
 
   def self.search(page = 1 , search , sort)
     search ||= ""

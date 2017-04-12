@@ -1,0 +1,39 @@
+<%= titulo("Facturas ") %> 
+<div class="panel-body2">
+  <%= link_to 'Regresar', facturas_path, class: "btn btn-default btn-sm" %>
+  <%= link_to 'Imprimir', factura_imprimir_path(@factura),class: "btn btn-default btn-sm", target: "_blank" %> 
+  <%= button_to('Anular', factura_anular_path(@factura), 
+    method: "delete", 
+    class: "btn btn-default btn-sm form-inline",
+    data: { confirm: "Quieres Anular la Factura #{@factura.id }" }, 
+    form: {style: 'display:inline-block;'}) if @factura.pendiente? and @factura.libro.nil? %>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+  <%= render partial: "/shared/flash_messages", flash: flash %> 
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#factura" aria-controls="factura" role="tab" data-toggle="tab">Factura</a>
+    </li>
+    <li role="presentation">
+      <a href="#pagos" aria-controls="pagos" role="tab" data-toggle="tab">Recibos</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div  id="factura" role="tabpanel" class="tab-pane fade in active">
+      <div class="col-md-12  panel-body"  style="border: 1px solid #ddd; border-bottom-color: transparent;">
+        <%= detalle "Id : ",codigo_contrato(@factura.id) %>
+        <%= detalle "Fecha : ",@factura.fecha %>
+        <%= detalle "Tipo : ",@factura.tipo %>
+        <%= detalle "Estado : ",@factura.estado %>
+        <%= detalle "Cliente Fiscal : ",@factura.cliente_fiscal.nombre_completo %>
+        <%= detalle "Dirección : ",@factura.direccion %>
+        <%= detalle "Libro : ", "#{meses_libro(@factura.libro.mes)} -- #{@factura.libro.ano}" unless @factura.libro.nil? %>
+        <%= render "detalles",  factura: @factura %>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade in " id="pagos">
+        <%= render "recibos",  factura: @factura %>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,45 +1,145 @@
-<div class="col-md-12 panel-body">
-  <%= link_to 'Regresar', contratos_path, class: "btn btn-default" %>
-  <%= link_to 'Editar', edit_contrato_path(@contrato), class: "btn btn-default" if @contrato.estado == "CREADO"  %> 
-</div>
-<div class="col-md-12  panel-body">
-  <p id="notice"><%= notice %></p>
-  <%= detalle "Cliente : ", @contrato.cliente.nombre_corto %>
-  <%= detalle "Plan : ", @contrato.plan.nombre %>
-  <%= detalle "Desde : ", @contrato.desde %>
-  <%= detalle "Estado : ", @contrato.estado %>
-</div>
-<div class="col-md-12">
-  <div class="col-md-6" style="height: 600px; overflow: scroll;">
-    <h4 class="page-header2">Pagos</h4>
-     <div class="list-group">
-      <% @contrato.pagos.order(:id).each do |pago| %>
-        <div class="list-group-item">
-          <h4 class="list-group-item-heading">Semana <%= pago.semana %></h4>
-          <p class="list-group-item-text"> 
-              Monto :<%= number_to_currency(pago.monto) %> estado : <%= pago.estado %>
-          </p>
-          <div class="btn-group" role="group" >
-            <%= button_to('Pagar', contrato_pagar_path(@contrato,pago), method: "patch",
-                      class:"btn btn-info", data: { confirm: "Quieres Pagar la semana Nro #{pago.semana}" }) if @contrato.estado == "ACTIVO" and pago.estado == "pendiente" %>
-          </div>
-        </div>
-      <% end %>
+<%= titulo("Contrato ") %> 
+<div class="panel-body2" >
+  <%= link_to 'Regresar', contratos_path, class: "btn btn-default btn-sm" %>
+  <%= link_to 'Editar', edit_contrato_path(@contrato),class: "btn btn-default btn-sm" if @contrato.estado == "CREADO" %> 
+  <%= button_to("Generar Pagos año #{Date.today.year}",
+    contrato_generar_pagos_path(@contrato),
+    method: "POST",
+    remote: true,
+    class:"btn btn-default btn-sm form-inline",
+    data: { confirm: "Quieres Generar los pagos para el año #{Date.today.year} " },
+    form: {style: 'display:inline-block;'} ) if @contrato.desde.year < Date.today.year %>
+
+  <%= button_to('Activar', contrato_activar_path(@contrato),
+      method: "patch",
+      class:"btn btn-default btn-sm form-inline",
+      data: { confirm: "Quieres ACTIVAR el contrato Nro #{@contrato.id }" },
+     form: {style: 'display:inline-block;'} )  if @contrato.estado == "CREADO"  %>
+
+  <%  if @contrato.activo? %>
+    <div class="btn-group ">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" 
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Editar <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <%  if @contrato.no_anulado? %>
+        <li>
+          <%= button_to('Cambiar Cobrador', contrato_cobrador_path(@contrato),
+          method: "get",
+          remote: true,
+          class:"eliminar",
+          form: {style: 'display:inline-block;'} ) %>
+        </li>
+        <% end %>
+       <li>
+         <%= button_to('Asignar Fecha Registro ',  contrato_fecha_registro_path(@contrato),
+          method: "get", 
+          remote: true,
+          class:"eliminar",
+          form: {style: 'display:inline-block;'} )  %>
+      </li>
+      <li>
+         <%= button_to('Cambiar Propietario ',  contrato_propietario_path(@contrato),
+          method: "get", 
+          remote: true,
+          class:"eliminar",
+          form: {style: 'display:inline-block;'} )  %>
+      </li>
+    </ul>
     </div>
+  <% end %>
+
+
+  <%  if @contrato.no_anulado? %>
+  <div class="btn-group ">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" 
+    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to 'Cartulina', contrato_catulina_path(@contrato),target: "_blank"  %>
+      </li>
+      <li>
+        <%= link_to 'Carnet', contrato_carnet_path(@contrato),target: "_blank"  %>
+      </li>
+      <li>
+        <%= link_to 'Contrato',contrato_contrato_path(@contrato),target: "_blank"%> 
+      </li>
+    </ul>
   </div>
-  <div class="col-md-6" style="height: 600px; overflow: scroll;">
-    <h4 class="page-header2">Totales</h4>
-    <p>
-      <strong>Monto Semanal :</strong>
-      <label id="plan_monto"><%= number_to_currency(@contrato.plan.monto) %></label>
-    </p>
-    <p>
-      <strong>Monto Pendiente :</strong>
-      <label id="plan_monto"><%= number_to_currency(@contrato.monto_pendiente) %></label>
-    </p>
-    <p>
-      <strong>Total Contrato :</strong>
-      <label id="plan_mensual"><%= number_to_currency(@contrato.total )  %></label> 
-    </p>
+  <% end %>
+
+</div>
+
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+  <%= render partial: "/shared/flash_messages", flash: flash %> 
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#contrato" aria-controls="contrato" role="tab" data-toggle="tab">Contrato</a>
+    </li>
+    <li role="presentation">
+      <a href="#pagos" aria-controls="pagos" role="tab" data-toggle="tab">Pagos</a>
+    </li>
+    <li role="presentation">
+      <a href="#beneficiario" aria-controls="beneficiario" role="tab" data-toggle="tab">Beneficiarios</a>
+    </li>
+  </ul>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="contrato">
+      <div class="col-md-12  panel-body"  style="border: 1px solid #ddd; border-bottom-color: transparent;">
+        <%= detalle "Cliente : ", @contrato.cliente.nombre_corto %>
+        <%= detalle "Plan : ", @contrato.plan.nombre %>
+        <%= detalle "Desde : ", @contrato.desde %>
+        <%= detalle "Fecha Registro : ", @contrato.fecha_registro %>
+        <%= detalle "Cobrador : ", @contrato.cobrador %>
+        <%= detalle "Estado : ", @contrato.estado %>
+      </div>
+    </div>
+    <!--    Pagos  -->
+    <%= render('/contratos/pagos', contrato: @contrato, ano: Date.today.year )%>
+
+    <!-- Beneficiarios --> 
+    <div role="tabpanel" class="tab-pane fade in" id="beneficiario">
+      <div class="col-md-12" style="border: 1px solid #ddd; border-bottom-color: transparent;">
+        <div class="btn-group" role="group" style="margin-top:10px;">
+          <%= button_to("Agregar",
+              new_contrato_beneficiario_path(@contrato), 
+              remote: true,
+              method: :get,
+              class: "btn btn-primary") if @contrato.no_anulado? %>
+        </div>
+        <div class="table-responsive" >
+        <table class="table table-body">
+        <thead><tr><th>Identidad</th><th>Apellidos</th><th>Nombres</th><th>Fecha Nacimiento</th><th>Parentesco</th><th></th></tr></thead>
+        <tbody class="listaBeneficiarios">
+          <% @contrato.beneficiarios.order(:id).each do |beneficiario| %>
+            <%= render('/beneficiarios/beneficiario', beneficiario: beneficiario ) %>
+          <% end %>
+        </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Beneficiarios -->
+  </div>
+</div>
+
+<div class="modal fade" id="beneficiarioModal" tabindex="-1" role="dialog" aria-labelledby="beneficiarioModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="beneficiarioModal">Editar</h4>
+      </div>
+      <div class="modal-body ">
+        <div class="panel-body contenido">
+          
+
+        </div>
+      </div>
+    </div>
   </div>
 </div>

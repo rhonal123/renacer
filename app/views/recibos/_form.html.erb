@@ -1,0 +1,107 @@
+<%= form_for(recibo,
+  url:  factura_recibos_path(factura),
+  html: {
+    class:'form-horizontal',
+    role:'form',
+    class:'form-horizontal formulario-recibo',
+  }) do |f| %>
+   <div class="form-group form-group-sm <%= "has-error" if recibo.errors.has_key?(:cliente_fiscal)  %>">
+    <%= label_tag :factura,"Factura", class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= text_field_tag :factura,
+        factura.id,
+        class: "form-control input-sm",
+        disabled: true,
+        style: "background-color: #c4daf0;" %> 
+    </div>   
+
+    <%= label_tag :cliente,"Cliente", class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= text_field_tag :cliente,
+        factura.cliente_fiscal.nombre_completo,
+        class: "form-control input-sm",
+        disabled: true,
+        style: "background-color: #c4daf0;" %> 
+    </div>   
+
+    <%= f.label :fecha, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <%= f.text_field :fecha, 
+        class: "form-control input-sm",
+        disabled: true,
+        style: "background-color: #c4daf0;" %> 
+    </div>   
+  </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if factura.errors.has_key?(:concepto)  %>">
+    <%= f.label :concepto, class:"col-md-1 control-label" %>
+    <div class="col-md-11">
+      <%= f.text_area :concepto,class: "form-control input-sm" %> 
+      <% if factura.errors.has_key?(:concepto) %>
+        <span class="help-block"><%= factura.errors.messages[:concepto].join(',') %></span>
+      <% end %>
+    </div>
+  </div> 
+  <div  class="form-group form-group-sm">
+    <div class="col-md-11 col-md-offset-1">
+    <%= button_tag "Agregar",
+      class: "btn btn-default btn-sm",
+      type: "button",
+      id: "agregar_pago",
+      onClick: "formRecibo.agregar(event)"
+    %>
+
+    <table class="table table-body" >
+      <thead><tr><th>FECHA</th><th>MONTO</th><th>TIPO</th><th>REFERENCIA</th><th></th></tr></thead>
+      <tbody id="pagos" style="height: 200px;">
+        <%= f.fields_for :pagos do |pago_fields| %>
+          <tr class="pagos">
+          <th>
+            <%= pago_fields.text_field :fecha, 
+                value: pago_fields.object.fecha.strftime("%d/%m/%Y"),
+                class: "fecha form-control input-sm" %>
+          </th>
+          <th>
+            <%= pago_fields.number_field :monto,
+            class: "form-control input-sm monto",
+            onkeyup: "formRecibo.calcularMontos()",
+            onchange: "formRecibo.calcularMontos()",
+            step: "0.01" %>
+            
+            <% if pago_fields.object.errors.has_key?(:monto) %>
+              <span class="help-block"><%= pago_fields.object.errors.messages[:monto].join(',') %></span>
+            <% end %>
+          </th>
+          <th><%= pago_fields.select :tipo, 
+              ["TRANSFERENCIA","EFECTIVO","DEPOSITO","CHEQUE","PUNTO"] ,{},
+              class: "form-control input-sm"  %>
+          </th>
+          <th><%= pago_fields.text_field :referencia, class: "form-control input-sm" %></th>
+          <th><%= button_tag "Quitar",
+                class: "btn btn-danger btn-sm",
+                type: "button",
+                onClick: "formRecibo.quitar(event);"
+              %></th>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td  align="right" style="width: 80%;"><strong>Monto :</strong></td>      
+          <td align="right"><label id="monto"><%= moneda_venezuela(recibo.monto || 0) %></label></td>
+        </tr>
+      </tfoot>
+    </table>        
+    </div>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  formRecibo.inciarFormulario("<%=  agregar_factura_recibos_path(factura) %>");
+</script>

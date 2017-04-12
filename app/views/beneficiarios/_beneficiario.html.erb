@@ -1,0 +1,25 @@
+
+ <tr id="<%= beneficiario.id %>">
+  <td><%= beneficiario.identidad %></td>
+  <td><%= beneficiario.apellidos %></td>
+  <td><%= beneficiario.nombres %></td>
+  <td><%= beneficiario.fechaNacimiento %></td>
+  <td><%= beneficiario.parentesco %></td>
+  <td>
+  <div class="btn-group" role="group" aria-label="...">
+  <%= button_to "editar",
+    edit_contrato_beneficiario_path(beneficiario.contrato_id,beneficiario),
+    remote: true,
+    method: :get,
+			form: {style: 'display:inline-block;'},
+    class: "btn btn-sm btn-default"  %>
+  <%= button_to "quitar",
+    contrato_beneficiario_path(beneficiario.contrato_id,beneficiario),
+    remote: true,
+    method: :delete,
+    data: { confirm: "Quieres quitar el beneficiario con nombre #{beneficiario.nombres }" },
+		form: {style: 'display:inline-block;'},
+    class: "btn btn-sm btn-danger"  %>
+  </div>
+  </td>
+</tr>

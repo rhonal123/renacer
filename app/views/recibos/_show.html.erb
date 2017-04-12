@@ -1,0 +1,29 @@
+<div class="panel-body">
+  <%= detalle "Fecha : ",recibo.fecha %>
+  <%= detalle "Cliente Fiscal : ",recibo.cliente_fiscal.nombre_completo %>
+  <%= detalle "Concepto : ",recibo.concepto %>
+  <%= detalle "Estado : ",recibo.estado %>
+  <div  class="form-group form-group-sm">
+    <div class="col-md-12 ">
+      <table class="table table-body" >
+        <thead><tr><th>FECHA</th><th>MONTO</th><th>TIPO</th><th>REFERENCIA</th></tr></thead>
+        <tbody id="pagos" style="height: 200px;">
+          <% recibo.pagos.each do |pago| %>
+            <tr>
+  	          <td><%= pago.fecha %></td>	
+    	        <td><%= moneda_venezuela(pago.monto) %></td>	
+  	          <td><%= pago.tipo %></td>	
+  	          <td><%= pago.referencia %></td>	
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td  align="right" style="width: 80%;"><strong>Monto :</strong></td>      
+            <td align="right"><label id="monto"><%= moneda_venezuela(recibo.monto || 0) %></label></td>
+          </tr>
+        </tfoot>
+      </table>        
+    </div>
+  </div>
+</div>

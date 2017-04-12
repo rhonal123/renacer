@@ -7,6 +7,11 @@
 
 class FormContrato
   _plan = null
+
+  inciarFormularioCambiarPropietario: ()->
+    seleccionadores.cliente("contrato_cliente_id")
+
+    
   inciarFormulario: (_planJson = null) ->
     _plan = _planJson
     _this = this
@@ -19,6 +24,14 @@ class FormContrato
     }).on('changeDate', (ev) -> 
       _this.pagos()
     );
+
+    $('form #contrato_fecha_registro').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    })
 
     $('form #contrato_hasta').datepicker({
       autoclose: true,
@@ -45,7 +58,9 @@ class FormContrato
 
   pagos: () -> 
     desde = moment($('form #contrato_desde').val(),"DD/MM/YYYY")
-    hasta = moment($('form #contrato_hasta').val(),"DD/MM/YYYY")
+
+    year = moment(new Date()).year()
+    hasta = moment( new Date(year,11,31)) 
     if(desde >= hasta)
       aler "La Fecha es Invalida ";
     else
@@ -83,4 +98,33 @@ class FormContrato
 
 @formContrato = new FormContrato  
 
+
+class Contrato
+  generarReporte: () ->
+    $('#formGenerarReporte #hasta').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    })  
+    
+    $('#formGenerarReporte #desde').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    })
+
+    $('#formGenerarReporte').submit (e)->
+      e.preventDefault();
+      desde = $('#formGenerarReporte #desde').val()
+      hasta = $('#formGenerarReporte #hasta').val()
+      url = $(this).attr('action')
+      url = "#{url}?desde=#{desde}&hasta=#{hasta}"
+      window.open(url, '_blank').focus()
+
+@contratos = new Contrato  
+  
 

@@ -1,17 +1,63 @@
-<div class="col-md-12 panel-body">
-  <%= link_to 'Regresar', planes_path, class: "btn btn-default" %>
-  <%= link_to 'Editar', edit_plan_path(@plan), class: "btn btn-default"  %> 
-</div>
+<%= titulo("Plan ") %> 
 
-
-
-<div class="col-md-12  panel-body">
-  <p id="notice"><%= notice %></p>
-  <%= detalle "Nombre : ",@plan.nombre %>
-  <%= detalle "Monto Semanal : ", number_to_currency(@plan.monto ) %>
-  <%= detalle "Monto Mensual : ", number_to_currency( @plan.monto * 4 ) %>
-  <%= detalle "Monto Semestral: : ", number_to_currency(@plan.monto * 26 ) %>
-  <%= detalle "Monto Anual: : ", number_to_currency(@plan.monto * 52 ) %>
-  <%= detalle "Componentes: : ", @plan.componentes , "col-md-12"%>
+<div class="panel-body2" >
+  <%= link_to 'Regresar', planes_path, class: "btn btn-default btn-sm" %>
+  <%= link_to 'Editar', edit_plan_path(@plan), class: "btn btn-default btn-sm"  %> 
+  <%= link_to 'Cambiar Reporte', plan_reporte_path(@plan), class: "btn btn-default btn-sm"  %> 
 
 </div>
+
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">Plan</a>
+    </li>
+    <li role="presentation">
+      <a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">PDF</a>
+    </li>
+  </ul>
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="plan">
+      <div class="col-md-12  panel-body"  style="border: 1px solid #ddd; border-bottom-color: transparent;">
+        <%= render partial: "/shared/flash_messages", flash: flash %> 
+        <%= detalle "Id : ",@plan.id %>
+        <%= detalle "Nombre : ",@plan.nombre %>
+        <%= detalle "Monto Semanal : ", moneda_venezuela(@plan.monto ) %>
+        <%= detalle "Componentes: : ", @plan.componentes.html_safe, "col-md-6"%>
+        <div class="col-md-5" >
+          <h4 class="page-header"><strong>Totales :</strong></h4>
+        <table class="table table-hover">
+          <tr>
+           <td style="text-align: right;"><strong> Mensual : </strong></td>
+           <td style="text-align: left;"> <strong id="mensual"><%= moneda_venezuela( @plan.monto * 4 ) %></strong></td>
+          </tr>
+         <tr>
+           <td style="text-align: right;"><strong> Semestral : </strong></td>
+           <td style="text-align: left;"> <strong id="semestral"><%= moneda_venezuela(@plan.monto * 26 ) %></strong></td>
+          </tr>
+         <tr>
+           <td style="text-align: right;"><strong> Anual : </strong></td>
+           <td style="text-align: left;"><strong id="anual"><%= moneda_venezuela(@plan.monto * 52 ) %></strong></td>
+          </tr>
+        </table>
+        </div>
+      </div>
+    </div>
+    <!-- end tabppanel -->
+    <div role="tabpanel" class="tab-pane fade in" id="reporte">
+      <% if @plan.reporte.present? %>
+      <div class="col-md-12">
+        <iframe src="<%= @plan.reporte %>" style="width: 100%; height: 500px;"></iframe>
+      </div>
+      <% else %>
+        <h3>Reporte No definido</h3>
+      <% end %>
+    </div>
+    <!-- end tabppanel -->
+  </div>
+  <!-- end tabcontent -->
+</div>
+  
+
+</div>
+

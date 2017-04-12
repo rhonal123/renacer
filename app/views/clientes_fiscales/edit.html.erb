@@ -1,0 +1,10 @@
+<%= editar_titulo %> 
+<div class="col-md-12 panel-body">
+	<%= link_to 'Regresar', clientes_fiscales_path, class: "btn btn-default" %>
+	<%= link_to 'Mostrar',@cliente_fiscal, class: "btn btn-default" %>
+</div>
+<div class="col-md-12  panel-body">
+<%= render 'form', cliente_fiscal: @cliente_fiscal %>
+</div>
+
+

@@ -1,5 +1,4 @@
 <%= form_for(contrato,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
-  <h4 class="page-header2">Datos</h4>
   <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:cliente_id)  %>">
     <%= f.label :cliente_id, class:"col-md-1 control-label" %>
     <div class="col-md-3">
@@ -15,20 +14,21 @@
      <span class="help-block"><%= contrato.errors.messages[:cliente_id].join(',') %></span>
      <% end %>
     </div>
-    <%= f.label :desde,"Desde", class:"col-md-1 control-label" %>
-    <div class="col-md-3">
+    <%= f.label :desde,"Iniciar Cobros Desde", class:"col-md-2 control-label" %>
+    <div class="col-md-2">
       <% desde = contrato.desde.strftime("%d/%m/%Y") unless contrato.desde.nil?%>
       <%= text_field_tag "contrato[desde]",desde, class: "form-control input-sm" %>
       <% if contrato.errors.has_key?(:desde) %>
       <span class="help-block"><%= contrato.errors.messages[:desde].join(',') %></span>
       <% end %>
     </div>
-    <%= f.label :hasta,"Hasta", class:"col-md-1 control-label" %>
-    <div class="col-md-3">
-      <% hasta = contrato.hasta.strftime("%d/%m/%Y") unless contrato.hasta.nil?%>
-      <%= text_field_tag "contrato[hasta]",hasta,class: "form-control input-sm" %>
-      <% if contrato.errors.has_key?(:hasta) %>
-      <span class="help-block"><%= contrato.errors.messages[:hasta].join(',') %></span>
+
+    <%= f.label :fecha_registro,"Fecha Registro", class:"col-md-2 control-label" %>
+    <div class="col-md-2">
+      <% fecha_registro = contrato.fecha_registro.strftime("%d/%m/%Y") unless contrato.fecha_registro.nil?%>
+      <%= text_field_tag "contrato[fecha_registro]",fecha_registro, class: "form-control input-sm" %>
+      <% if contrato.errors.has_key?(:fecha_registro) %>
+      <span class="help-block"><%= contrato.errors.messages[:fecha_registro].join(',') %></span>
       <% end %>
     </div>
   </div> 
@@ -48,6 +48,15 @@
       <span class="help-block"><%= contrato.errors.messages[:plan_id].join(',') %></span>
       <% end %>
     </div>
+   <%= f.label :cobrador, class:"col-md-1 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :cobrador, class: "form-control input-sm" %>
+     <% if contrato.errors.has_key?(:cobrador) %>
+     <span class="help-block"><%= contrato.errors.messages[:cobrador].join(',') %></span>
+     <% end %>
+   </div>
+
+    
   </div> 
 
   <div class="col-md-12">
@@ -61,19 +70,19 @@
       <h4 class="page-header2">Plan</h4>
       <p>
         <strong>Monto Semanal:</strong>
-        <label id="plan_monto"><%= number_to_currency(contrato.plan.monto) unless contrato.plan.nil? %><label>
+        <label id="plan_monto"><%= moneda_venezuela(contrato.plan.monto) unless contrato.plan.nil? %><label>
       </p>
       <p>
         <strong>Monto Mensual:</strong>
-        <label id="plan_mensual"><%= number_to_currency(contrato.plan.monto * 4 ) unless contrato.plan.nil? %><label> 
+        <label id="plan_mensual"><%= moneda_venezuela(contrato.plan.monto * 4 ) unless contrato.plan.nil? %><label> 
       </p>
       <p>
         <strong>Monto Semestral:</strong>
-        <label id="plan_semestral"><%= number_to_currency(contrato.plan.monto * 26 )  unless contrato.plan.nil? %><label>
+        <label id="plan_semestral"><%= moneda_venezuela(contrato.plan.monto * 26 )  unless contrato.plan.nil? %><label>
       </p>
       <p>
         <strong>Monto Anual:</strong>
-        <label id="plan_anual"><%= number_to_currency(contrato.plan.monto * 52 )  unless contrato.plan.nil? %><label> 
+        <label id="plan_anual"><%= moneda_venezuela(contrato.plan.monto * 52 )  unless contrato.plan.nil? %><label> 
       </p>
       <p>
         <strong>Componentes:</strong>
@@ -92,7 +101,6 @@
     </div>
     </div>
   </div>
-
 <% end %>
 
 <script type="text/javascript">

@@ -1,0 +1,1 @@
+formBeneficiario.quitarBeneficiario("<%= @beneficiario.id %>")

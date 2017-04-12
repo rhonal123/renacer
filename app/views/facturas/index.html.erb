@@ -1,0 +1,42 @@
+<%= index_titulo %> 
+<%= render partial: "/shared/flash_messages", flash: flash %> 
+<div class="panel-body2">
+    <div class="row">
+        <div class="col-sm-4 col-md-4" >
+          <%= link_to 'Nuevo', new_factura_path,
+            class: "btn btn-default btn-sm"  %>
+        </div>
+        <div class="col-md-8" align="right">
+          <%= buscar_rango_fecha(facturas_path,["cliente","estado"]) %>
+        </div>
+    </div>
+    <%= tabla_panel_responsive([
+            { title: "Id", width: "10%"},
+            { title: "Cliente", width: "25%"},
+            { title: "Fecha", width: "20%"},
+            { title: "Tipo", width: "10%"},
+            { title: "Saldo", width: "10%"},
+            { title: "Total", width: "10%"},
+            { title: "Estado", width: "10%"},
+
+      ],@facturas)%>
+    <%= paginador(@facturas,controller: :facturas, action: :index ) %>
+</div>
+<script type="text/javascript">
+   $('#form_buscar #desde').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    });
+
+   $('#form_buscar #hasta').datepicker({
+      autoclose: true,
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    });
+
+</script>

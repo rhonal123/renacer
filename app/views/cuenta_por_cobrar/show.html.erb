@@ -1,0 +1,14 @@
+<div class="col-md-12 panel-body">
+  <%= link_to 'Regresar', cuenta_por_cobrar_index_path, class: "btn btn-default" %>
+ 
+</div>
+
+<div class="col-md-12  panel-body">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
+  <%= detalle "Identidad : ", @cuenta.identidad %>
+  <%= detalle "Nombres : ", @cuenta.nombres %>
+  <%= detalle "Por Cobrar : ",moneda_venezuela(@cuenta.porcobrar) %>
+</div>
+
+<%= tabla_panel_responsive(["Id","Cliente","Fecha","Tipo","Saldo","Total","Estado"],@cuenta.facturas)%>
+  

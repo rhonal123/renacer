@@ -1,0 +1,20 @@
+<tr>
+    <td><%= cliente_fiscal.id %></td>
+    <td><%= cliente_fiscal.identidad %></td>
+    <td><%= cliente_fiscal.nombres %></td>
+    <td><%= cliente_fiscal.direccion %></td>
+    <td align="right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', cliente_fiscal  %></li>
+    		<li><%= link_to 'Editar',edit_cliente_fiscal_path(cliente_fiscal) %></li>
+            <li><%= button_to('Eliminar', cliente_fiscal_path(cliente_fiscal), method: "delete", class:"eliminar", data: { confirm: "Quieres Eliminar el cliente con nombre #{cliente_fiscal.nombres }" }) %></li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+
+ 
