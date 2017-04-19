@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :cobradores
   root 'welcome#index'
   get  'cambiar_contrasena' => 'welcome#cambiar_contrasena_edit'
   post 'cambiar_contrasena' => 'welcome#cambiar_contrasena'

@@ -18,6 +18,7 @@
 
  ActiveSupport::Inflector.inflections(:en) do |inflect|
    inflect.irregular 'plan', 'planes'
+   inflect.irregular 'cobrador', 'cobradores'
    inflect.irregular 'clienteFiscal', 'clientesFiscales'
    inflect.irregular 'cliente_fiscal', 'clientes_fiscales'
  end

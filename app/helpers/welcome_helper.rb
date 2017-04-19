@@ -61,6 +61,7 @@ module WelcomeHelper
         
         nav.append(nav_link("Planes",planes_path,"planes"))
         nav.append(nav_link("Contratos",contratos_path,"contratos"))
+        nav.append(nav_link("Cobradores",cobradores_path,"cobradores"))
 
         nav.append(nav_link("Prodcutos",productos_path,"productos"))
         nav.append(nav_link("Facturas",facturas_path,"facturas"))

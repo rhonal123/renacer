@@ -1,0 +1,24 @@
+<tr>
+    <td><%= cobrador.id %></td>
+    <td><%= cobrador.identidad %></td>
+    <td><%= cobrador.nombre %></td>
+    <td align="right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+  		<ul class="dropdown-menu dropdown-menu-right">
+    		<li><%= link_to 'Mostrar', cobrador  %></li>
+    		<li><%= link_to 'Editar',edit_cobrador_path(cobrador) %></li>
+            <li><%= button_to('Eliminar', cobrador_path(cobrador),
+                method: "delete", class:"eliminar",
+                data: { 
+                    confirm: "Quieres Eliminar el cliente con nombre #{cobrador.nombre  }" 
+                }) %>
+            </li>
+	  	</ul>
+	</div>
+	</td>
+</tr>
+
+ 

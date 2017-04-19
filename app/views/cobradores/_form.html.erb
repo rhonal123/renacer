@@ -1,0 +1,41 @@
+
+<%= form_for(cobrador,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+ 
+  <div class="form-group form-group-sm <%= "has-error" if cobrador.errors.has_key?(:identidad)  %>">
+   <%= f.label :identidad, class:"col-md-2 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :identidad, class: "form-control input-sm" , placeholder:"V-0000000" %>
+     <% if cobrador.errors.has_key?(:identidad) %>
+     <span class="help-block"><%= cobrador.errors.messages[:identidad].join(',') %></span>
+     <% end %>
+   </div>
+ </div> 
+
+
+  <div class="form-group form-group-sm <%= "has-error" if cobrador.errors.has_key?(:nombre)  %>">
+   <%=f.label :nombre,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.text_field :nombre, class: "form-control input-sm", rows:"4", placeholder:" nombre y apellido"  %>
+     <% if cobrador.errors.has_key?(:nombre) %>
+     <span class="help-block"><%= cobrador.errors.messages[:nombre].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+
+  <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+<% end %>
+
+ 
+
+
+
+
+  
+
+ 
+

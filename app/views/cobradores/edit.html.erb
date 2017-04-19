@@ -1,0 +1,8 @@
+<%= editar_titulo %> 
+<div class="panel-body2">
+	<%= link_to 'Regresar', cobradores_path, class: "btn btn-default" %>
+	<%= link_to 'Mostrar',@cobrador, class: "btn btn-default" %>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render 'form', cobrador: @cobrador %>
+</div>

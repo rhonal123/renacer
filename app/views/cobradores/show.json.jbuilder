@@ -1,0 +1,1 @@
+json.partial! "cobradores/cobrador", cobrador: @cobrador
