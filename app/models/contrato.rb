@@ -35,7 +35,7 @@ class Contrato < ApplicationRecord
   al generar un contrato guardare el ano actual y luego genero los pagos del ano 
   actual, si se apertura un nuevo año se genera los pagos de todo el año 
 =end 
-  def guardarContrato() 
+  def guardar_contrato() 
     #Contrato.transaction do
     desdeweek = desde.cweek()
     hastaweek = hasta.cweek()
@@ -86,6 +86,33 @@ class Contrato < ApplicationRecord
     end 
     errors.empty?
   end 
+
+
+  # CREADO -> ACTIVO -> ANULADO -> VENCIDO
+  def cambiar_plan(plan_params) 
+    plan = Plan.find(plan_params[:plan_id])
+    unless ["CREADO","ACTIVO"].include?(self.estado) 
+      self.errors.add(:estado, "No Puedes Cambiar el Plan,este Contrato. se encuenta #{self.estado}")
+    else 
+      ano = Date.today.year()
+      semana = Date.today.cweek()
+      Contrato.transaction do
+        self.plan = plan 
+        ano = Pago.arel_table[:ano]
+        _semana =  Pago.arel_table[:semana]
+        estado =  Pago.arel_table[:estado]
+        self.pagos
+          .where(ano.eq(ano))
+          .where(_semana.gteq(semana))
+          .where(estado.eq("pendiente"))
+          .update_all(monto: plan.monto)
+        self.total = self.pagos.sum(:monto)
+        save!()
+      end 
+    end 
+    errors.empty?
+  end 
+
 
   def activar() 
     if self.estado != "CREADO"

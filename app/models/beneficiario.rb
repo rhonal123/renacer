@@ -2,7 +2,6 @@ class Beneficiario < ApplicationRecord
 	##ABUELO PADRE HERMANO NIETO OTROS 
   belongs_to :contrato , inverse_of: :beneficiarios
 
-
   def nombre_corto
     _nombre = self.nombres.split()[0]
     _apellido = self.apellidos.split()[0]

@@ -46,6 +46,13 @@
           class:"eliminar",
           form: {style: 'display:inline-block;'} )  %>
       </li>
+      <li>
+         <%= button_to('Cambiar Plan ',  contrato_plan_path(@contrato),
+          method: "get", 
+          remote: true,
+          class:"eliminar",
+          form: {style: 'display:inline-block;'} )  %>
+      </li>
     </ul>
     </div>
   <% end %>

@@ -11,6 +11,9 @@ class FormContrato
   inciarFormularioCambiarPropietario: ()->
     seleccionadores.cliente("contrato_cliente_id")
 
+  inciarFormularioCambiarPlan: ()->
+    seleccionadores.plan("contrato_plan_id")
+
     
   inciarFormulario: (_planJson = null) ->
     _plan = _planJson

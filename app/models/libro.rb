@@ -1,7 +1,6 @@
 class Libro < ApplicationRecord
 	has_many :facturas, inverse_of: :libro, autosave: true , dependent: :nullify
 
-
   def self.search(page = 1 , search , sort)
     search ||= ""
     sort ||= "" 

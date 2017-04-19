@@ -5,7 +5,7 @@
   authenticity_token: true,
   html: {class:'form-horizontal', role:'form'}
   ) do |f| %>
-  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:cliente_id)  %>">
    <%= f.label :cliente_id, class:"col-md-1 control-label" %>
    <div class="col-md-6">
     <% 
@@ -30,7 +30,6 @@
 <% end %>
  
 <script type="text/javascript">
-
   formContrato.inciarFormularioCambiarPropietario();
 </script>
 

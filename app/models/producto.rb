@@ -1,5 +1,4 @@
 class Producto < ApplicationRecord
- 
 
   def self.search(page = 1 , search , sort)
     search ||= ""
@@ -14,7 +13,6 @@ class Producto < ApplicationRecord
       end 
     end 
   end     
-
 
   validates :descripcion,
     presence: {message: 'Ingrese Descripcion '},

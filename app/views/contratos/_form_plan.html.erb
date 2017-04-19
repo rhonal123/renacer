@@ -1,0 +1,39 @@
+<%= form_for(contrato,as: :contrato,
+  remote: false,
+  url: contrato_plan_path(contrato),
+  method: :post,
+  authenticity_token: true,
+  html: {class:'form-horizontal', role:'form'}
+  ) do |f| %>
+  <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:plan_id)  %>">
+   <%= f.label :cliente_id, class:"col-md-1 control-label" %>
+   <div class="col-md-6">
+    <% 
+        if contrato.plan.nil?
+          planes = []
+        else 
+          planes = [contrato.plan]
+        end 
+      %>
+     <%= f.select :plan_id,
+      options_from_collection_for_select(planes,"id", "nombre",contrato.plan_id),
+      {},
+      class: "form-control input-sm",
+        style:" width: 300px" %> 
+     <% if contrato.errors.has_key?(:plan_id) %>
+     <span class="help-block"><%= contrato.errors.messages[:plan_id].join(',') %></span>
+     <% end %>
+   </div>  
+  </div> 
+
+   <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right" >
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+<% end %>
+ 
+<script type="text/javascript">
+  formContrato.inciarFormularioCambiarPlan();
+</script>
+

@@ -1,7 +1,5 @@
 class Plan < ApplicationRecord
-
   has_many :contratos, dependent: :restrict_with_error, inverse_of: :plan  
-
   has_attached_file :reporte 
   #validates_attachment :reporte, content_type: { content_type: "application/pdf" }
   validates_attachment_content_type :reporte, :content_type => ['application/pdf','application/octet-stream','binary/octet-stream']
@@ -25,7 +23,6 @@ class Plan < ApplicationRecord
   validates :nombre,
     presence: {message: 'Ingrese nombre '},
     length: {maximum: 120, too_long:"%{count} caracteres es el maximo  "}
-
 
   def update(attr)
     ano = Date.today.year

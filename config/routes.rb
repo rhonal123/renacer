@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get "propietario"   ,action: "propietario_edit" ,as: :propietario
     post "propietario"   ,action: "propietario"
 
+    get "plan"   ,action: "plan_edit" ,as: :plan
+    post "plan"   ,action: "plan"
 
     resources :beneficiarios, only: [:new,:create,:edit,:update,:destroy],defaults: { format: :js }, constraints: { :format => '(js)' }  
   end 

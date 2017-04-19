@@ -28,7 +28,7 @@ class ContratosController < ApplicationController
   def create
     @contrato = Contrato.new(contrato_params)
     @contrato.hasta =  Date.new(Date.today.year,12,31)
-    if @contrato.guardarContrato
+    if @contrato.guardar_contrato
       redirect_to @contrato, notice: 'Contrato fue correctamente creado.'
     else
       render :new
@@ -104,8 +104,6 @@ class ContratosController < ApplicationController
     end
   end 
   
-  
-
   def fecha_registro
     @contrato = Contrato.find(params[:contrato_id])
     if @contrato.update(fecha_registro_params)
@@ -169,8 +167,19 @@ class ContratosController < ApplicationController
     pdf = PagosPdf.new @pagos, @desde,@hasta
     send_data pdf.render,filename: "pagos", type: 'application/pdf',disposition: 'inline'
   end 
-  
 
+  def plan_edit
+    @contrato = Contrato.find(params[:contrato_id])
+  end 
+
+  def plan
+    @contrato = Contrato.find(params[:contrato_id])
+    if @contrato.cambiar_plan(plan_params)
+       redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
+    else
+      render :plan_edit
+    end
+  end   
 
 
   private
@@ -192,10 +201,13 @@ class ContratosController < ApplicationController
       params.require(:contrato).permit(:cliente_id)
     end
     
+    def plan_params
+      params.require(:contrato).permit(:plan_id)
+    end
+  
     def fecha_registro_params
       params.require(:contrato).permit(:fecha_registro)
     end
-
 
     def cobrador_params
       params.require(:contrato).permit(:cobrador)
