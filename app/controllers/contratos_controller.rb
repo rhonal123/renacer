@@ -28,7 +28,7 @@ class ContratosController < ApplicationController
   def create
     @contrato = Contrato.new(contrato_params)
     @contrato.hasta =  Date.new(Date.today.year,12,31)
-    if @contrato.guardar_contrato
+    if @contrato.guardar_contrato()
       redirect_to @contrato, notice: 'Contrato fue correctamente creado.'
     else
       render :new
@@ -190,7 +190,7 @@ class ContratosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contrato_params
-      params.require(:contrato).permit(:cliente_id, :plan_id, :desde, :deuda, :monto, :total,:cobrador,:fecha_registro)
+      params.require(:contrato).permit(:cliente_id, :plan_id, :desde, :deuda, :monto, :total,:cobrador_id,:fecha_registro)
     end
 
     def pagos_cobrados_params()
@@ -210,7 +210,7 @@ class ContratosController < ApplicationController
     end
 
     def cobrador_params
-      params.require(:contrato).permit(:cobrador)
+      params.require(:contrato).permit(:cobrador_id)
     end
 
 end

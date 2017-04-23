@@ -1,6 +1,7 @@
 <%= form_for(contrato,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
   <div class="form-group form-group-sm <%= "has-error" if contrato.errors.has_key?(:cliente_id)  %>">
     <%= f.label :cliente_id, class:"col-md-1 control-label" %>
+    
     <div class="col-md-3">
       <% 
         if contrato.cliente.nil?
@@ -14,6 +15,7 @@
      <span class="help-block"><%= contrato.errors.messages[:cliente_id].join(',') %></span>
      <% end %>
     </div>
+
     <%= f.label :desde,"Iniciar Cobros Desde", class:"col-md-2 control-label" %>
     <div class="col-md-2">
       <% desde = contrato.desde.strftime("%d/%m/%Y") unless contrato.desde.nil?%>
@@ -48,15 +50,25 @@
       <span class="help-block"><%= contrato.errors.messages[:plan_id].join(',') %></span>
       <% end %>
     </div>
-   <%= f.label :cobrador, class:"col-md-1 control-label" %>
-   <div class="col-md-3">
-     <%= f.text_field :cobrador, class: "form-control input-sm" %>
-     <% if contrato.errors.has_key?(:cobrador) %>
-     <span class="help-block"><%= contrato.errors.messages[:cobrador].join(',') %></span>
-     <% end %>
-   </div>
 
-    
+    <%= f.label :cobrador, class:"col-md-1 control-label" %>
+    <div class="col-md-3">
+      <% 
+        if contrato.cobrador.nil?
+          cobradores = []
+        else 
+          cobradores = [contrato.cobrador]
+        end 
+      %>
+      <%= f.select :cobrador_id,
+        options_from_collection_for_select(cobradores,"id", "nombre",contrato.cobrador_id),
+        {},
+        class: "form-control input-sm"
+      %> 
+      <% if contrato.errors.has_key?(:cobrador_id) %>
+        <span class="help-block"><%= contrato.errors.messages[:cobrador_id].join(',') %></span>
+      <% end %>
+    </div>
   </div> 
 
   <div class="col-md-12">

@@ -14,7 +14,9 @@ class FormContrato
   inciarFormularioCambiarPlan: ()->
     seleccionadores.plan("contrato_plan_id")
 
-    
+  inciarFormularioCambiarContrato: ()->
+    seleccionadores.cobradores("contrato_cobrador_id")
+
   inciarFormulario: (_planJson = null) ->
     _plan = _planJson
     _this = this
@@ -47,6 +49,7 @@ class FormContrato
     );
 
     seleccionadores.cliente("contrato_cliente_id")
+    seleccionadores.cobradores("contrato_cobrador_id")
     plan = seleccionadores.plan("contrato_plan_id")
     plan.on('select2:select',(evt)->
       _plan = evt.params.data

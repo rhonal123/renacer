@@ -102,6 +102,34 @@ class Seleccionadores
       templateResult: formato,
     )  
 
+
+  cobradores: (element,data =_data,processResults =_processResults)-> 
+    element = $("##{element}")
+    formato = (obj)->
+      if obj.text
+        return obj.text 
+      else 
+        return capitalize("#{obj.nombre} #{obj.monto} bsf.")
+
+    element.off('select2:select')
+    return element.select2(
+      ajax:{
+        url: "/cobradores.json"
+        type: "GET"
+        dataType: "json"
+        delay: 250,
+        data: data
+        processResults: processResults
+        minimumInputLength: 10
+      },
+      placeholder: 'Seleccione una cobradores ',
+      escapeMarkup: (markup) -> markup
+      minimumInputLength: 0,
+      templateSelection: formato,
+      templateResult: formato,
+    )  
+
+
 @seleccionadores = new Seleccionadores
 
 class MontosPago 
