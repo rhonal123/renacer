@@ -2,7 +2,7 @@ class Contrato < ApplicationRecord
 
   belongs_to :cliente, inverse_of: :contratos
   belongs_to :plan, inverse_of: :contratos
-
+  belongs_to :cobrador
   has_many :pagos, dependent: :restrict_with_error , inverse_of: :contrato
 
   has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
@@ -36,20 +36,21 @@ class Contrato < ApplicationRecord
   actual, si se apertura un nuevo año se genera los pagos de todo el año 
 =end 
   def guardar_contrato() 
-    #Contrato.transaction do
-    desdeweek = desde.cweek()
-    hastaweek = hasta.cweek()
-    hastaweek = 52 if(hastaweek == 1) 
-    desdeweek = 1  if(desdeweek >= hastaweek)
-    _deuda = 0.0 
-    (desdeweek..hastaweek).each do  |n| 
-     self.pagos << Pago.new({semana: n, monto: plan.monto, ano: desde.year })
-      _deuda += plan.monto
+    if self.valid?
+      desdeweek = desde.cweek()
+      hastaweek = hasta.cweek()
+      hastaweek = 52 if(hastaweek == 1) 
+      desdeweek = 1  if(desdeweek >= hastaweek)
+      _deuda = 0.0 
+      (desdeweek..hastaweek).each do  |n| 
+       self.pagos << Pago.new({semana: n, monto: plan.monto, ano: desde.year })
+        _deuda += plan.monto
+      end 
+      self.monto = _deuda
+      self.total = _deuda
+      save()
+      errors.empty?
     end 
-    self.monto = _deuda
-    self.total = _deuda
-    save()
-    errors.empty?
   end 
 
   def generar_pagos(ano)
@@ -184,6 +185,9 @@ class Contrato < ApplicationRecord
 
   validates :plan_id, 
       presence: {message: 'Seleccione'}
+
+  validates :fecha_registro, 
+      presence: {message: 'Ingrese Fecha de Registro'}
 
   validate :fechas_validas? 
 
