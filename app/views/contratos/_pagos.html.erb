@@ -1,61 +1,61 @@
 <div role="tabpanel" class="tab-pane fade in " id="pagos">
-      <div align="left">
-        <%
-          if contrato.fecha_registro.nil?
-            inicio = Date.today.year 
-          else
-            inicio = contrato.fecha_registro.year 
-          end 
-          fecha = Date.today.year 
-        %>
-        <div class="panel-body">
-         <label for="">Año</label>
-        <%= select_tag("year", options_for_select(inicio..fecha,ano),
-            class: "",
-            data: {remote: true, 
-            url:  contrato_pagos_path(contrato) 
-            } 
-          ) %>
-        </div>
-      </div>
-      <div class="table-responsive" >
-        <% if contrato.pagos.where(ano: ano).empty? %>
-          <h2>No hay Pagos Registrados para este año <%= ano %></h2>
-        <% else %>
-        <table class="table table-body" >
-        <thead><tr><th>Año</th><th>Semana</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
-        <tbody>
-          <% contrato.pagos.where(ano: ano ).order(:id).each do |pago| %>
-            <tr>
-               <td><%= pago.ano %></td>
-               <td><%= pago.semana %></td>
-               <td><%= moneda_venezuela(pago.monto) %></td>
-               <td><%= pago.estado %></td>
-               <td><%= button_to('Pagar',
-                      contrato_pagar_path(contrato,pago),
-                      method: "patch",
-                      class:"btn btn-sm btn-info",
-                      data: {
-                        confirm: "Quieres Pagar la semana Nro #{pago.semana}" 
-                      }) if contrato.estado == "ACTIVO" and pago.estado == "pendiente" %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td align="right" style="width: 70%;"><strong>Monto Semanal :</strong></td>      
-            <td><label id="plan_monto"><%= moneda_venezuela(contrato.ultimo_monto(ano)) %></label></td>      
-          </tr>
-          <tr>
-            <td  align="right" style="width: 70%;"><strong>Monto Pendiente :</strong></td>      
-            <td><label id="plan_monto"><%= moneda_venezuela(contrato.monto_pendiente(ano)) %></label></td>      
-          </tr>
-          <tr>
-            <td  align="right" style="width: 70%;"><strong>Total Contrato :</strong></td>      
-            <td><label id="plan_mensual"><%= moneda_venezuela(contrato.total_ano(ano) )  %></label></td>      
-          </tr>
-        </tfoot>
-        </table>
-        <% end %>
-      </div>
+  <div align="left">
+  <%
+    if contrato.fecha_registro.nil?
+      inicio = Date.today.year 
+    else
+      inicio = contrato.fecha_registro.year 
+    end 
+    fecha = Date.today.year 
+    %>
+    <div class="panel-body">
+      <label for="">Año</label>
+      <%= select_tag("year", options_for_select(inicio..fecha,ano),
+        data: {remote: true, 
+        url:  contrato_pagos_path(contrato) 
+        } 
+      ) %>
     </div>
+  </div>
+  <div class="table-responsive" >
+    <% if contrato.pagos.where(ano: ano).empty? %>
+      <h2>No hay Pagos Registrados para este año <%= ano %></h2>
+    <% else %>
+      <table class="table table-body" >
+      <thead><tr><th>Año</th><th>Semana</th><th>Plan</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        <% contrato.pagos.where(ano: ano ).order(:id).each do |pago| %>
+          <tr>
+            <td><%= pago.ano %></td>
+            <td><%= pago.semana %></td>
+            <td><%= pago.plan.nombre unless pago.plan.nil? %></td>
+            <td><%= moneda_venezuela(pago.monto) %></td>
+            <td><%= pago.estado %></td>
+            <td><%= button_to('Pagar',
+                contrato_pagar_path(contrato,pago),
+                method: "patch",
+                class:"btn btn-sm btn-info",
+                data: {
+                  confirm: "Quieres Pagar la semana Nro #{pago.semana}" 
+                }) if contrato.estado == "ACTIVO" and pago.estado == "pendiente" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td align="right" style="width: 70%;"><strong>Monto Semanal :</strong></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(contrato.ultimo_monto(ano)) %></label></td>      
+        </tr>
+        <tr>
+          <td  align="right" style="width: 70%;"><strong>Monto Pendiente :</strong></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(contrato.monto_pendiente(ano)) %></label></td>      
+        </tr>
+        <tr>
+          <td  align="right" style="width: 70%;"><strong>Total Contrato :</strong></td>      
+          <td><label id="plan_mensual"><%= moneda_venezuela(contrato.total_ano(ano) )  %></label></td>      
+        </tr>
+      </tfoot>
+      </table>
+    <% end %>
+  </div>
+</div>

@@ -43,7 +43,7 @@ class Contrato < ApplicationRecord
       desdeweek = 1  if(desdeweek >= hastaweek)
       _deuda = 0.0 
       (desdeweek..hastaweek).each do  |n| 
-       self.pagos << Pago.new({semana: n, monto: plan.monto, ano: desde.year })
+       self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: desde.year })
         _deuda += plan.monto
       end 
       self.monto = _deuda
@@ -59,7 +59,7 @@ class Contrato < ApplicationRecord
       self.hasta = Date.new(ano,12,31)
       _deuda = 0.0 
       (1..52).each do  |n| 
-        self.pagos << Pago.new({semana: n, monto: plan.monto, ano: ano })
+        self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: ano })
         _deuda += plan.monto
       end 
       self.monto = _deuda
@@ -106,7 +106,7 @@ class Contrato < ApplicationRecord
           .where(ano.eq(ano))
           .where(_semana.gteq(semana))
           .where(estado.eq("pendiente"))
-          .update_all(monto: plan.monto)
+          .update_all(monto: plan.monto,plan_id: plan.id)
         self.total = self.pagos.sum(:monto)
         save!()
       end 
@@ -134,6 +134,7 @@ class Contrato < ApplicationRecord
         pagos.each do |pago|
           if(pago.id == pago_id.to_i)
             pago.estado = "pagado"
+            pago.plan = self.plan 
             pago.fecha_pago = Date.today 
             pago.save()
           else 

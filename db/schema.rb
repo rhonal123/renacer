@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419231057) do
+ActiveRecord::Schema.define(version: 20170423234103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,7 +142,9 @@ ActiveRecord::Schema.define(version: 20170419231057) do
     t.datetime "updated_at",                        null: false
     t.date     "fecha_pago"
     t.integer  "ano"
+    t.integer  "plan_id"
     t.index ["contrato_id"], name: "index_pagos_on_contrato_id", using: :btree
+    t.index ["plan_id"], name: "index_pagos_on_plan_id", using: :btree
   end
 
   create_table "planes", force: :cascade do |t|
@@ -208,6 +210,7 @@ ActiveRecord::Schema.define(version: 20170419231057) do
   add_foreign_key "facturas", "libros"
   add_foreign_key "forma_pagos", "recibos"
   add_foreign_key "pagos", "contratos"
+  add_foreign_key "pagos", "planes"
   add_foreign_key "recibos", "clientes_fiscales"
   add_foreign_key "recibos", "facturas"
 end
