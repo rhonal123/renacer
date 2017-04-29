@@ -98,8 +98,6 @@ class ReciboPdf < Prawn::Document
 	      _texto = "<i><b>Monto</b>#{moneda_venezuela(@recibo.monto)}</i>"
 	      text _texto, :align=> :right ,:inline_format => true
 	    end
-
-
   end 
 
 end

@@ -48,7 +48,7 @@ COBRADOR : #{@cobrador.nombre}
     end
 
 	 grid([7,0], [19,9]).bounding_box do
-      titulo = ["PLAN","N° CARTULINAS","MONTO BS","N° CANCELADAS","COBRADO BS","30%","PRENSA","TOTAL"]
+      titulo = ["PLAN","CARTULINAS","MONTO BS","CANCELADAS","COBRADO BS","30%","PRENSA","TOTAL"]
 			tabla = []
 			tabla << titulo 
 			@planes.each do |plan|

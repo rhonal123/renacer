@@ -1,5 +1,6 @@
 class CobradoresController < ApplicationController
   before_action :set_cobrador, only: [:show, :edit, :update, :destroy,:planilla_liquidacion]
+  before_action :authenticate_usuario!
 
   # GET /cobradors
   # GET /cobradors.json

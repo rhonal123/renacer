@@ -1,6 +1,8 @@
 class CuentaPorCobrarController < ApplicationController
   include ApplicationHelper
   include  ActionView::Helpers::NumberHelper 
+  before_action :authenticate_usuario!
+
 	 # GET /cuenta por cobrar
   def index
   	@total = View::CuentaPorCobrar.sum(:porcobrar)

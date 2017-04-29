@@ -1,5 +1,6 @@
 class RecibosController < ApplicationController
   before_action :set_recibo, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_usuario!
 
   # GET /recibos/1
   # GET /recibos/1.json

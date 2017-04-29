@@ -1,6 +1,7 @@
 class LibrosController < ApplicationController
   before_action :set_libro, only: [:show, :edit, :update, :destroy]
   include LibrosHelper
+  before_action :authenticate_usuario!
 
   # GET /libros
   # GET /libros.json
