@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
 
-  resources :cobradores
+  resources :cobradores do
+    get "planilla/liquidacion", action: "planilla_liquidacion", as: :planilla_liquidacion 
+  end 
+
   root 'welcome#index'
   get  'cambiar_contrasena' => 'welcome#cambiar_contrasena_edit'
   post 'cambiar_contrasena' => 'welcome#cambiar_contrasena'

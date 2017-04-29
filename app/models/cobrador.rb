@@ -1,4 +1,5 @@
 class Cobrador < ApplicationRecord
+  has_many :contratos
 
   def self.search(page = 1 , search , sort)
     search ||= ""
@@ -20,9 +21,31 @@ class Cobrador < ApplicationRecord
       uniqueness: {message: 'Identidad Registrada ', on: :create },
       length: {maximum: 16 , too_long:"%{count} caracteres es el maximo"}
     
-    validates :nombre,
-      presence: {message: 'Ingrese.'},
-      length: {maximum: 180, too_long:"%{count} caracteres es el maximo"}
- 
+  validates :nombre,
+    presence: {message: 'Ingrese.'},
+    length: {maximum: 180, too_long:"%{count} caracteres es el maximo"}
+
+  def totalizar_pagos(plan_id,desde,hasta)
+    desde = Date.parse(desde).year 
+    hasta = Date.parse(hasta).year  
+    contratos.joins(:pagos).where(
+      pagos: { ano: desde..hasta},
+      plan_id: plan_id).
+    pluck(
+      Pago.arel_table[:id].count,
+      Pago.arel_table[:monto].sum)
+  end 
+
+  def totalizar_pagos_pagados(plan_id,desde,hasta)
+    contratos.joins(:pagos).where(
+      pagos: { 
+        fecha_pago: desde..hasta,
+        estado: "pagado" },
+      plan_id: plan_id).
+    pluck(
+      Pago.arel_table[:id].count,
+      Pago.arel_table[:monto].sum)
+  end 
+
   self.per_page = 12 
 end

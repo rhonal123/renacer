@@ -3,6 +3,9 @@
 <div class="panel-body2"  >
   <%= link_to 'Regresar', cobradores_path, class: "btn btn-default" %>
   <%= link_to 'Editar', edit_cobrador_path(@cobrador), class: "btn btn-default"  %> 
+  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#reporteModal">
+    Reporte Pagos
+  </button>
 </div>
 <div class="panel-body2"  style="height: 95%; padding-top: 10px;">
 	<%= render partial: "/shared/flash_messages", flash: flash %> 
@@ -10,3 +13,45 @@
   <%= detalle "Nombres : ", @cobrador.nombre %>
 </div>
  
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="reporteModal" tabindex="-1" role="dialog" aria-labelledby="planillaLiquidacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="planillaLiquidacion">Generar Reporte Planilla Liquidacion </h4>
+      </div>
+      <div class="modal-body panel-body">
+         <%= form_tag cobrador_planilla_liquidacion_path(@cobrador), 
+         	method: :get,
+         	id: "formPlanillaLiquidacion",
+         	target: '_blank',
+         	class:'form-horizontal formulario-facturacion'  do |f|  %>
+         	<div class="form-group">
+            <label for="desde" class="col-sm-2 control-label">Desde</label>
+            <div class="col-sm-10">
+           	  <%= text_field_tag :desde,"",class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="hasta" class="col-sm-2 control-label">Hasta</label>
+            <div class="col-sm-10">
+           	  <%= text_field_tag :hasta,"",class: "form-control" %>
+            </div>
+          </div>
+            <div class="col-md-12 " align="right">
+					    <%= submit_tag "Generar" , class: "btn btn-primary btn-sm"  %>
+					  </div>
+         <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<script type="text/javascript">
+  cobradores.planillaLiquidacion();
+</script>

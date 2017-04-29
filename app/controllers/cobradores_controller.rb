@@ -1,5 +1,5 @@
 class CobradoresController < ApplicationController
-  before_action :set_cobrador, only: [:show, :edit, :update, :destroy]
+  before_action :set_cobrador, only: [:show, :edit, :update, :destroy,:planilla_liquidacion]
 
   # GET /cobradors
   # GET /cobradors.json
@@ -52,13 +52,24 @@ class CobradoresController < ApplicationController
       flash[:error]  = "No Puedes Eliminar este Cobrador, esta siendo utilizado por contratos."
       redirect_to cobradors_url 
     end
-
   end
+
+  def planilla_liquidacion
+    #@totalizar_pagados = Pago.totalizar_pagos_pagados(params[:cobrador_id],params[:desde],params[:hasta])
+    #@totalizar = Pago.totalizar_pagos(params[:cobrador_id],params[:desde],params[:hasta])
+    #@pagos = Pago.all 
+    pdf = PlanillaLiquidacionPdf.new(params)
+    send_data pdf.render, 
+      filename: "planilla_liquidacion#{@cobrador.id}",
+      type: 'application/pdf',
+      disposition: 'inline'
+  end 
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_cobrador
-      @cobrador = Cobrador.find(params[:id])
+      @cobrador = Cobrador.find(params[:id] || params[:cobrador_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
