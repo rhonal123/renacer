@@ -26,27 +26,26 @@ class Cobrador < ApplicationRecord
     presence: {message: 'Ingrese.'},
     length: {maximum: 180, too_long:"%{count} caracteres es el maximo"}
 
-=begin
-  def totalizar_pagos(plan_id,desde,hasta)
-    desde = Date.parse(desde).year 
-    hasta = Date.parse(hasta).year  
-    contratos.joins(:pagos).where(
-      pagos: { ano: desde..hasta},
+  def totalizar_pagos(plan_id,desde,hasta,estado = "pagado")
+    self.pagos.
+    where(
+      fecha_pago: desde..hasta,
+      estado: estado,
       plan_id: plan_id).
     pluck(
       Pago.arel_table[:id].count,
-      Pago.arel_table[:monto].sum)
+      Pago.arel_table[:monto].sum
+    )
   end 
-=end 
-  def totalizar_pagos(plan_id,desde,hasta,estado = "pagado")
+
+  def pendiente_por_cobrar(plan_id)
     contratos.joins(:pagos).where(
       pagos: { 
-        fecha_pago: desde..hasta,
-        estado: estado },
-      plan_id: plan_id).
-    pluck(
-      Pago.arel_table[:id].count,
-      Pago.arel_table[:monto].sum)
+        fecha_pago: nil,
+        estado: "pendiente"
+      },
+      plan_id: plan_id
+    ).sum("pagos.monto")
   end 
 
   self.per_page = 12 

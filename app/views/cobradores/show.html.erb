@@ -1,4 +1,3 @@
- 
 <%= titulo("Cobrador  #{@cobrador.id}") %> 
 <div class="panel-body2"  >
   <%= link_to 'Regresar', cobradores_path, class: "btn btn-default" %>
@@ -13,16 +12,26 @@
   <%= detalle "Nombres : ", @cobrador.nombre %>
   <div class="col-md-12">
     <label>Contratos Asignados :</label>
-    <ul class="list-group">
-      <% @cobrador.contratos.each do |contrato| %>
-        <li  class="list-group-item">
-          <%= link_to contrato  do |link|%>
-            <h4 class="list-group-item-heading">Contrato Nro : <%= codigo_contrato(contrato.id) %></h4>
-            <p class="list-group-item-text">Estado <%= contrato.estado  %></p>
-          <% end %>
-        </li>
-      <% end %>      
-    </ul>
+    <div class="table-responsive">
+      <table class="table">
+      <thead>
+        <tr>
+          <th>Contrato Nro</th>
+          <th>Cliente</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cobrador.contratos.each do |contrato| %>
+          <tr>
+            <td><%= link_to codigo_contrato(contrato.id),contrato %></td>
+            <td><%= contrato.cliente.nombre_corto%></td>
+            <td><%= contrato.estado %></td>
+          </tr>
+        <% end %>      
+      </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
