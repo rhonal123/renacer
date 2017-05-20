@@ -20,13 +20,12 @@ class PlanillaLiquidacionPdf < Prawn::Document
 
 	  grid([0,2], [2, 7]).bounding_box do
       _texto = """<font size='14'><b><i>SERVICIOS FUNERARIOS
-EL NUEVO RENACER C.A.</i></b></font>
-Carrera 33 con Av. Andres Bello entre Calle 21. Edif 
-Sindicato de Hospitales y Clinica, Local 1, PB. Barquisimeto.
-0251-415.83.86 / 0416-124.30.84 / 0414-525.03.01 / 0426- 
-657.31.59  /0251-231.38.86/  
-<b><i>Rif J-40219124-3</i></b>
-"""
+					EL NUEVO RENACER C.A.</i></b></font>
+					Carrera 33 con Av. Andres Bello entre Calle 21. Edif 
+					Sindicato de Hospitales y Clinica, Local 1, PB. Barquisimeto.
+					0251-415.83.86 / 0416-124.30.84 / 0414-525.03.01 / 0426- 
+					657.31.59  /0251-231.38.86/  
+					<b><i>Rif J-40219124-3</i></b>"""
       text _texto, :align=> :center , :valign => :center, :inline_format => true
     end
 
@@ -38,9 +37,9 @@ Sindicato de Hospitales y Clinica, Local 1, PB. Barquisimeto.
 
 	  grid([5,7], [6,9]).bounding_box do
       _texto = """
-FECHA  : #{Date.today} 
-ZONA :                       
-COBRADOR : #{@cobrador.nombre}
+				FECHA  : #{Date.today} 
+				ZONA :                       
+				COBRADOR : #{@cobrador.nombre}
       """
       text _texto, :align=> :center , :valign => :center, :inline_format => true
     end
@@ -50,20 +49,19 @@ COBRADOR : #{@cobrador.nombre}
 			tabla = []
 			tabla << titulo 
 			@planes.each do |plan|
-				totalizar_pagados =  @cobrador.totalizar_pagos(plan,@desde,@hasta)
-				totalizar_por_pagar =  @cobrador.totalizar_pagos(plan,@desde,@hasta,"pendiente")
-		    puts "---------------------------------------------------------------"
-		    #totalizar = @cobrador.totalizar_pagos(plan,@desde,@hasta)
-		    puts "---------------------------------------------------------------"
+				totalizar_pagos = @cobrador.totalizar_pagos(plan.id,@desde,@hasta)
+				nro_cancelado = totalizar_pagos.first.first
+				total_cobrado = totalizar_pagos.first.second
+				pendiente = @cobrador.pendiente_por_cobrar(plan.id)
 				arr = []
 				arr << plan.nombre
 				arr << @cobrador.contratos.where(plan_id: plan.id).count
 				arr << moneda_venezuela(@cobrador.contratos.where(plan_id: plan.id).sum(:total) )
-				arr << totalizar_pagados.first.first
-				arr << moneda_venezuela(totalizar_pagados.first.second.to_f)
-				arr << moneda_venezuela(totalizar_pagados.first.second.to_f * 0.30 )
+				arr << nro_cancelado 
+				arr << moneda_venezuela(total_cobrado.to_f)
+				arr << moneda_venezuela(total_cobrado.to_f * 0.30 )
 				arr << ""
-				arr << moneda_venezuela(totalizar_por_pagar.first.second.to_f)
+				arr << moneda_venezuela(pendiente.to_f)
 				tabla << arr
 			end  
 
@@ -73,8 +71,5 @@ COBRADOR : #{@cobrador.nombre}
 				 #:cell_style => {size: letra_sm-3},
 				 :position => :center 
     end
-
-
   end 
-
 end
