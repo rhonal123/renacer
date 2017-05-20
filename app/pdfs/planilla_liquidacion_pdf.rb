@@ -3,7 +3,6 @@ class PlanillaLiquidacionPdf < Prawn::Document
   include ContratosHelper
   include ApplicationHelper
 
-
   def initialize(parametros)
     super(margin: 10, page_layout: :landscape)
     font_size 10
@@ -12,7 +11,6 @@ class PlanillaLiquidacionPdf < Prawn::Document
 		@cobrador = Cobrador.find(parametros[:cobrador_id])
     @planes = Plan.all 
     define_grid(:columns => 10, :rows => 20, :gutter => 0)
-    #grid.show_all
 		encabezado 
   end
 
@@ -48,24 +46,24 @@ COBRADOR : #{@cobrador.nombre}
     end
 
 	 grid([7,0], [19,9]).bounding_box do
-      titulo = ["PLAN","CARTULINAS","MONTO BS","CANCELADAS","COBRADO BS","30%","PRENSA","TOTAL"]
+      titulo = ["PLAN","CONTRATOS","MONTO BS","CANCELADO","COBRADO BS","30%","PRENSA","TOTAL"]
 			tabla = []
 			tabla << titulo 
 			@planes.each do |plan|
-				totalizar_pagados =  @cobrador.totalizar_pagos_pagados(plan,@desde,@hasta)
+				totalizar_pagados =  @cobrador.totalizar_pagos(plan,@desde,@hasta)
+				totalizar_por_pagar =  @cobrador.totalizar_pagos(plan,@desde,@hasta,"pendiente")
 		    puts "---------------------------------------------------------------"
-		    totalizar = @cobrador.totalizar_pagos(plan,@desde,@hasta)
+		    #totalizar = @cobrador.totalizar_pagos(plan,@desde,@hasta)
 		    puts "---------------------------------------------------------------"
-		    puts "#{totalizar_pagados} <------>  #{totalizar}"
 				arr = []
 				arr << plan.nombre
-				arr << totalizar.first.first
-				arr << moneda_venezuela(totalizar.first.second.to_f)
+				arr << @cobrador.contratos.where(plan_id: plan.id).count
+				arr << moneda_venezuela(@cobrador.contratos.where(plan_id: plan.id).sum(:total) )
 				arr << totalizar_pagados.first.first
 				arr << moneda_venezuela(totalizar_pagados.first.second.to_f)
 				arr << moneda_venezuela(totalizar_pagados.first.second.to_f * 0.30 )
 				arr << ""
-				arr << ""
+				arr << moneda_venezuela(totalizar_por_pagar.first.second.to_f)
 				tabla << arr
 			end  
 
