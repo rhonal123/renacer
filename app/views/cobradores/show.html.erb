@@ -11,27 +11,7 @@
   <%= detalle "Identidad : ", @cobrador.identidad %>
   <%= detalle "Nombres : ", @cobrador.nombre %>
   <div class="col-md-12">
-    <label>Contratos Asignados :</label>
-    <div class="table-responsive">
-      <table class="table">
-      <thead>
-        <tr>
-          <th>Contrato Nro</th>
-          <th>Cliente</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @cobrador.contratos.each do |contrato| %>
-          <tr>
-            <td><%= link_to codigo_contrato(contrato.id),contrato %></td>
-            <td><%= contrato.cliente.nombre_corto%></td>
-            <td><%= contrato.estado %></td>
-          </tr>
-        <% end %>      
-      </tbody>
-      </table>
-    </div>
+    <%= contratos_cobrador @cobrador %>
   </div>
 </div>
 
