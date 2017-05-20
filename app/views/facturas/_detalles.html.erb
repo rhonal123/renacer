@@ -23,7 +23,7 @@
         <tr>
           <td align="right" style="width: 70%;"><strong><%= factura.impuesto.descripcion %> :</strong></td>
           <td align="right">
-            <label id="plan_iva"><%= moneda_venezuela(factura.impuesto.porcentaje*factura.base.to_f) %></label>
+            <label id="plan_iva"><%= moneda_venezuela(factura.monto_impuesto) %></label>
           </td>
         </tr>
         <tr>
