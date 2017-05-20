@@ -19,7 +19,8 @@
      <%= f.select :cobrador_id,
         options_from_collection_for_select(cobradores,"id", "nombre",contrato.cobrador_id),
         {},
-        class: "form-control input-sm"
+        class: "form-control input-sm",
+        style:" width: 300px" 
       %> 
      <% if contrato.errors.has_key?(:cobrador_id) %>
      <span class="help-block"><%= contrato.errors.messages[:cobrador_id].join(',') %></span>
@@ -35,6 +36,6 @@
 <% end %>
 
 <script type="text/javascript">
-  formContrato.inciarFormularioCambiarContrato();
+  formContrato.inciarFormularioCambiarCobrador();
 </script>
 

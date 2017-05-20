@@ -14,7 +14,7 @@ class FormContrato
   inciarFormularioCambiarPlan: ()->
     seleccionadores.plan("contrato_plan_id")
 
-  inciarFormularioCambiarContrato: ()->
+  inciarFormularioCambiarCobrador: ()->
     seleccionadores.cobradores("contrato_cobrador_id")
 
   inciarFormulario: (_planJson = null) ->

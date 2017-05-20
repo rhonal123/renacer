@@ -109,7 +109,7 @@ class Seleccionadores
       if obj.text
         return obj.text 
       else 
-        return capitalize("#{obj.nombre} #{obj.monto} bsf.")
+        return capitalize("#{obj.nombre}")
 
     element.off('select2:select')
     return element.select2(
