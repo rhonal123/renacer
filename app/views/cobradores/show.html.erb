@@ -11,11 +11,20 @@
 	<%= render partial: "/shared/flash_messages", flash: flash %> 
   <%= detalle "Identidad : ", @cobrador.identidad %>
   <%= detalle "Nombres : ", @cobrador.nombre %>
+  <div class="col-md-12">
+    <label>Contratos Asignados :</label>
+    <ul class="list-group">
+      <% @cobrador.contratos.each do |contrato| %>
+        <li  class="list-group-item">
+          <%= link_to contrato  do |link|%>
+            <h4 class="list-group-item-heading">Contrato Nro : <%= codigo_contrato(contrato.id) %></h4>
+            <p class="list-group-item-text">Estado <%= contrato.estado  %></p>
+          <% end %>
+        </li>
+      <% end %>      
+    </ul>
+  </div>
 </div>
- 
-
-
-
 
 <!-- Modal -->
 <div class="modal fade" id="reporteModal" tabindex="-1" role="dialog" aria-labelledby="planillaLiquidacion">
