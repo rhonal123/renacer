@@ -135,14 +135,15 @@ class Contrato < ApplicationRecord
           if(pago.id == pago_id.to_i)
             pago.estado = "pagado"
             pago.plan = self.plan 
+            pago.cobrador = self.cobrador
             pago.fecha_pago = Date.today 
-            pago.save()
+            pago.save!()
           else 
             pendiente += pago.monto if(pago.estado == "pendiente")        
           end 
         end
         self.monto = pendiente
-        self.update({monto: pendiente})
+        self.update!({monto: pendiente})
       end 
     end 
   end 
