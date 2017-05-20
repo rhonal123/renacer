@@ -131,7 +131,7 @@ class Contrato < ApplicationRecord
     if self.estado == "ACTIVO"
       Contrato.transaction do
         pendiente = 0.0 
-        pagos.each do |pago|
+        pagos(true).eager_load(:plan).each do |pago|
           if(pago.id == pago_id.to_i)
             pago.estado = "pagado"
             pago.plan = self.plan 
