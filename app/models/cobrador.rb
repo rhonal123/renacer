@@ -1,5 +1,6 @@
 class Cobrador < ApplicationRecord
   has_many :contratos
+  has_many :pagos 
 
   def self.search(page = 1 , search , sort)
     search ||= ""
