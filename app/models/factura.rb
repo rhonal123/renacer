@@ -82,6 +82,8 @@ class Factura < ApplicationRecord
     sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
     self.base = sum.round(2)   
     self.total = (sum.round(2) + sum.round(2) * impuesto.porcentaje).round(2)
+    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2)
+    self.porcentaje = impuesto.porcentaje
     self.saldo = self.total 
   end 
 
@@ -96,6 +98,8 @@ class Factura < ApplicationRecord
     self.base = sum     
     self.total = sum + sum * impuesto.porcentaje
     self.saldo = self.total 
+    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2)
+    self.porcentaje = impuesto.porcentaje
     detalles << Detalle.new( producto: producto, 
         cantidad: 0.0,
         precio_unitario: producto.precio,
@@ -109,6 +113,8 @@ class Factura < ApplicationRecord
       self.base   = 0
       self.total  = 0
       self.saldo  = 0
+      self.impuesto = 0
+      self.porcentaje = 0
       save()
     else
       self.errors.add(:estado,"No Puedes Anular esta Factura se encuenta #{self.estado}") if self.estado != "PENDIENTE"
