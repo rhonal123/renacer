@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170423234103) do
+ActiveRecord::Schema.define(version: 20170520124256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,8 @@ ActiveRecord::Schema.define(version: 20170423234103) do
     t.integer  "impuesto_id"
     t.integer  "libro_id"
     t.string   "telefono",          limit: 35
+    t.float    "monto_impuesto"
+    t.float    "porcentaje"
     t.index ["cliente_fiscal_id"], name: "index_facturas_on_cliente_fiscal_id", using: :btree
     t.index ["impuesto_id"], name: "index_facturas_on_impuesto_id", using: :btree
     t.index ["libro_id"], name: "index_facturas_on_libro_id", using: :btree
@@ -143,6 +145,8 @@ ActiveRecord::Schema.define(version: 20170423234103) do
     t.date     "fecha_pago"
     t.integer  "ano"
     t.integer  "plan_id"
+    t.integer  "cobrador_id"
+    t.index ["cobrador_id"], name: "index_pagos_on_cobrador_id", using: :btree
     t.index ["contrato_id"], name: "index_pagos_on_contrato_id", using: :btree
     t.index ["plan_id"], name: "index_pagos_on_plan_id", using: :btree
   end
@@ -209,6 +213,7 @@ ActiveRecord::Schema.define(version: 20170423234103) do
   add_foreign_key "facturas", "impuestos"
   add_foreign_key "facturas", "libros"
   add_foreign_key "forma_pagos", "recibos"
+  add_foreign_key "pagos", "cobradores"
   add_foreign_key "pagos", "contratos"
   add_foreign_key "pagos", "planes"
   add_foreign_key "recibos", "clientes_fiscales"

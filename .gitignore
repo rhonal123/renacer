@@ -7,6 +7,11 @@
 # Ignore bundler config.
 /.bundle
 
+/public/assets/
+/public/system/
+/public/assets/*
+/public/system/*
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal

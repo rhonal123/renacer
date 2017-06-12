@@ -83,7 +83,7 @@ class ContratosController < ApplicationController
     if @contrato.update(cobrador_params)
        redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
     else
-      render :cobrador_edit
+      render :error_asignar_cobrador
     end
   end 
 
