@@ -2,12 +2,13 @@
 <div class="table-responsive">
   <table class="table">
     <thead>
-      <tr><th>Contrato Nro</th><th>Cliente</th><th>Estado</th></tr>
+      <tr><th>Contrato Nro</th><th>Plan</th><th>Cliente</th><th>Estado</th></tr>
     </thead>
 		<tbody>
 		  <% contratos.each do |contrato| %>
 		    <tr>
 		      <td><%= link_to codigo_contrato(contrato[0]),contrato_path(contrato[0]) %></td>
+		      <td><%= contrato[4] %></td>
 		      <td><%= "#{contrato[1]} -- #{contrato[2]}" %></td>
 		      <td><%= contrato[3] %></td>
 		    </tr>
