@@ -1,1 +1,0 @@
-alert "Error al Intentar Asigar Cobrador: <%= @contrato.errors.full_messages %>"
