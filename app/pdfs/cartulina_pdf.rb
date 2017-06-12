@@ -40,7 +40,7 @@ class CartulinaPdf < Prawn::Document
     end
 
     grid([2, 0], [3, 1]).bounding_box do
-      text " Cobrador : #{@contrato.cobrador} ", valign: :center
+      text " Cobrador : #{@contrato.cobrador.nombre} ", valign: :center
       stroke_bounds
     end
     semana = 52
