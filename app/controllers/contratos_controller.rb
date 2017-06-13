@@ -27,8 +27,7 @@ class ContratosController < ApplicationController
   # POST /contratos.json
   def create
     @contrato = Contrato.new(contrato_params)
-    @contrato.hasta =  Date.new(Date.today.year,12,31)
-    if @contrato.guardar_contrato()
+    if @contrato.save()
       redirect_to @contrato, notice: 'Contrato fue correctamente creado.'
     else
       render :new
@@ -151,7 +150,7 @@ class ContratosController < ApplicationController
 
   def generar_pagos
     @contrato = Contrato.find(params[:contrato_id])
-    @contrato.generar_pagos(Date.today.year)
+    @contrato.generar_pagos_proximo_periodo(Date.today.year)
     if(@contrato.errors.empty?)
       redirect_to @contrato, notice: "Pagos Generados del ano #{Date.today.year}"
     else
@@ -191,7 +190,7 @@ class ContratosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contrato_params
-      params.require(:contrato).permit(:cliente_id, :plan_id, :desde, :deuda, :monto, :total,:cobrador_id,:fecha_registro)
+      params.require(:contrato).permit(:cliente_id, :plan_id, :desde,:cobrador_id,:fecha_registro)
     end
 
     def pagos_cobrados_params()
