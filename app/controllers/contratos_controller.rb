@@ -37,7 +37,7 @@ class ContratosController < ApplicationController
   # PATCH/PUT /contratos/1
   # PATCH/PUT /contratos/1.json
   def update
-    unless @contrato.estado ==  "ANULADO"
+    unless @contrato.anulado?
       if @contrato.update(contrato_params)
         redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.'
       else
@@ -70,7 +70,7 @@ class ContratosController < ApplicationController
   def activar 
     @contrato = Contrato.find(params[:contrato_id])
     @contrato.activar()
-    if @contrato.estado == "ACTIVO"
+    if @contrato.activo?
       redirect_to @contrato, notice: 'Contrato Activado'
     else 
       redirect_to @contrato, notice: 'Error al activar el contrato'

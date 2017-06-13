@@ -3,6 +3,7 @@ class Contrato < ApplicationRecord
   belongs_to :cliente, inverse_of: :contratos
   belongs_to :plan, inverse_of: :contratos
   belongs_to :cobrador
+
   has_many :pagos, -> { eager_load(:plan).order(:id) } , dependent: :restrict_with_error , inverse_of: :contrato do 
     def por_ano(ano)
       where(ano: ano)
@@ -11,12 +12,19 @@ class Contrato < ApplicationRecord
 
   has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
 
+  enum  estado: {
+    creado: "CREADO",
+    activo: "ACTIVO",
+    anulado: "ANULADO",
+    vencido: "VENCIDO"
+  }    
+
   before_update do 
     if creado?
       Pago.where(contrato_id: id, ano: Date.today.year).delete_all
       self.hasta = Date.new(Date.today.year,12,31)
       desdeweek = desde.cweek()
-      desdeweek = 1 if(desdeweek > 52)
+      desdeweek = 1 if(desdeweek >= 52)
       generar_pagos(self.desde.year,desdeweek)
     end 
   end 
@@ -24,7 +32,7 @@ class Contrato < ApplicationRecord
   before_create do
     self.hasta =  Date.new(Date.today.year,12,31)
     desdeweek = desde.cweek()
-    desdeweek = 1  if(desdeweek > 52)
+    desdeweek = 1  if(desdeweek >= 52)
     generar_pagos(self.desde.year,desdeweek)
   end
 
@@ -65,11 +73,9 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-  # CREADO -> ACTIVO -> ANULADO -> VENCIDO
+
   def anular() 
-    if self.estado != "CREADO"
-      self.errors.add(:estado, "No Puedes Anular este Contrato. se encuenta #{self.estado}")
-    else 
+    if creado?
       Contrato.transaction do
         self.monto = 0.0
         self.total = 0.0
@@ -77,6 +83,8 @@ class Contrato < ApplicationRecord
         self.pagos.update_all(estado: "anulado")
         save!()
       end 
+    else 
+      self.errors.add(:estado, "No Puedes Anular este Contrato. se encuenta #{self.estado}.")
     end 
     errors.empty?
   end 
@@ -107,15 +115,11 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-
   def activar() 
-    if self.estado != "CREADO"
-      self.errors.add(:estado, "No Puedes Activar este Contrato. se encuenta #{self.estado}")
+    if creado?
+      activo!
     else 
-      Contrato.transaction do
-        self.estado = "ACTIVO"
-        save!()
-      end 
+      self.errors.add(:estado, "No Puedes Activar este Contrato. se encuenta #{self.estado}")
     end 
     errors.empty?
   end 
@@ -141,24 +145,12 @@ class Contrato < ApplicationRecord
     end 
   end 
 
-  def anulado?
-    self.estado == "ANULADO"
-  end  
-
   def no_anulado?
     !anulado?
   end 
 
-  def activo?
-    self.estado == "ACTIVO"
-  end 
-
   def inactivo?
     !activo?
-  end 
-
-  def creado?
-    self.estado == "CREADO"
   end 
 
   def monto_pendiente ano=Date.today.year
@@ -183,7 +175,7 @@ class Contrato < ApplicationRecord
 
   validates :plan_id, presence: {message: 'Seleccione'}
 
-  validates :fecha_registro, presence: {message: 'Ingrese Fecha de Registro'}
+  #validates :fecha_registro, presence: {message: 'Ingrese Fecha de Registro'}
 
   validate :fecha_valida? 
 

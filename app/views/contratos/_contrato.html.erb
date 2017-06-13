@@ -30,7 +30,7 @@
             class:"eliminar",
             data: {
              confirm: "Quieres ACTIVAR el contrato Nro #{contrato.id }"
-            })  if contrato.estado == "CREADO"  %></li>
+            })  if contrato.creado?  %></li>
 	  	</ul>
 	</div>
 	</td>

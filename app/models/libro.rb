@@ -32,7 +32,6 @@ class Libro < ApplicationRecord
 	validate :validar_fechas_libro, on: :create
  	
 	def puede_eliminar?
-		puts "--------------------_>>>>"
 		errors.add(:declarado,"No pudes eliminar este libro se enuentra declarado") if declarado?
 		raise "No Puedes eliminar este Libreo se encuentra declarado " unless errors.blank?
 	end 

@@ -4,8 +4,9 @@ module ContratosHelper
     inicio = (contrato.fecha_registro.nil? ? Date.today.year : contrato.fecha_registro.year )
     fecha = Date.today.year 
     select_tag("year", options_for_select(inicio..fecha,ano),
+        class: "form-control",
         data: {remote: true, 
-        url:  contrato_pagos_path(contrato) 
+        url:  contrato_pagos_path(contrato),
     })
   end 
 

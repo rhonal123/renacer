@@ -48,10 +48,12 @@ class PlanillaLiquidacionPdf < Prawn::Document
       titulo = ["PLAN","CONTRATOS","MONTO BS","CANCELADO","COBRADO BS","30%","PRENSA","TOTAL"]
 			tabla = []
 			tabla << titulo 
+			sum = 0.0
 			@planes.each do |plan|
 				totalizar_pagos = @cobrador.totalizar_pagos(plan.id,@desde,@hasta)
 				nro_cancelado = totalizar_pagos.first.first
-				total_cobrado = totalizar_pagos.first.second
+				total_cobrado = totalizar_pagos.first.second.to_f
+				sum += total_cobrado
 				pendiente = @cobrador.pendiente_por_cobrar(plan.id)
 				arr = []
 				arr << plan.nombre
@@ -64,12 +66,14 @@ class PlanillaLiquidacionPdf < Prawn::Document
 				arr << moneda_venezuela(pendiente.to_f)
 				tabla << arr
 			end  
-
 			table tabla,:header => true,
 				 :width => 750,
 				 #:column_widths	=> [40,60,80,460,80],
 				 #:cell_style => {size: letra_sm-3},
 				 :position => :center 
+      move_down(20)
+ 			text "Total Cobrado :#{moneda_venezuela(sum)} ", align: :right, inline_format: true
+ 			text " 30% :#{moneda_venezuela(sum* 0.3)}  ", align: :right, inline_format: true
     end
   end 
 end
