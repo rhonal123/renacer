@@ -7,6 +7,24 @@ class Contrato < ApplicationRecord
 
   has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
 
+  before_update do 
+    if creado?
+      Pago.where(contrato_id: id, ano: Date.today.year).delete_all
+      self.hasta = Date.new(Date.today.year,12,31)
+      desdeweek = desde.cweek()
+      desdeweek = 1 if(desdeweek > 52)
+      generar_pagos(self.desde.year,desdeweek)
+    end 
+  end 
+
+  before_create do
+    self.hasta =  Date.new(Date.today.year,12,31)
+    desdeweek = desde.cweek()
+    desdeweek = 1  if(desdeweek > 52)
+    generar_pagos(self.desde.year,desdeweek)
+  end
+
+
   def self.search(page = 1 , search , sort)
     search ||= ""
     sort ||= "" 
@@ -31,46 +49,17 @@ class Contrato < ApplicationRecord
     eager_load(:cliente,:plan)
   end 
 
-=begin
-  al generar un contrato guardare el ano actual y luego genero los pagos del ano 
-  actual, si se apertura un nuevo año se genera los pagos de todo el año 
-=end 
-  def guardar_contrato() 
-    if self.valid?
-      desdeweek = desde.cweek()
-      hastaweek = hasta.cweek()
-      hastaweek = 52 if(hastaweek == 1) 
-      desdeweek = 1  if(desdeweek >= hastaweek)
-      _deuda = 0.0 
-      (desdeweek..hastaweek).each do  |n| 
-       self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: desde.year })
-        _deuda += plan.monto
-      end 
-      self.monto = _deuda
-      self.total = _deuda
-      save()
-      errors.empty?
-    end 
-  end 
-
-  def generar_pagos(ano)
-    if(ano != self.desde.year)
+  def generar_pagos_proximo_periodo(ano)
+    if(ano > self.desde.year)
       self.desde = Date.new(ano,1,1)
       self.hasta = Date.new(ano,12,31)
-      _deuda = 0.0 
-      (1..52).each do  |n| 
-        self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: ano })
-        _deuda += plan.monto
-      end 
-      self.monto = _deuda
-      self.total = _deuda
+      generar_pagos(ano,1)
       save()
     else
-      errors.add(:estado,"NO puedes generar pago de este año, dado que es el año entransito del contrato.")
+      errors.add(:estado,"No puedes generar pago de este año, dado que es el año entransito del contrato.")
     end 
     errors.empty?
   end 
-
 
   # CREADO -> ACTIVO -> ANULADO -> VENCIDO
   def anular() 
@@ -128,7 +117,7 @@ class Contrato < ApplicationRecord
   end 
 
   def pagar(pago_id)
-    if self.estado == "ACTIVO"
+    if activo?
       Contrato.transaction do
         pendiente = 0.0 
         pagos(true).eager_load(:plan).each do |pago|
@@ -164,6 +153,10 @@ class Contrato < ApplicationRecord
     !activo?
   end 
 
+  def creado?
+    self.estado == "CREADO"
+  end 
+
   def monto_pendiente ano=Date.today.year
     self.pagos.where(estado: "pendiente",ano: ano).sum(:monto)
   end 
@@ -182,23 +175,33 @@ class Contrato < ApplicationRecord
   validates :desde, 
       presence: {message: 'Ingrese'}
 
-  validates :hasta, 
-      presence: {message: 'Ingrese'}
+  #validates :hasta,presence: {message: 'Ingrese'}
 
-  validates :plan_id, 
-      presence: {message: 'Seleccione'}
+  validates :plan_id, presence: {message: 'Seleccione'}
 
-  validates :fecha_registro, 
-      presence: {message: 'Ingrese Fecha de Registro'}
+  validates :fecha_registro, presence: {message: 'Ingrese Fecha de Registro'}
 
-  validate :fechas_validas? 
-
-  def fechas_validas?
-    if !desde.nil?  and !hasta.nil? and desde >= hasta 
-      errors.add(:desde,"Desde debe ser menor a Hasta.")
-    end 
-    errors.empty?
-  end
+  validate :fecha_valida? 
 
   self.per_page = 12 
+
+  private 
+  
+    def generar_pagos(ano,semana_incial)
+      _deuda = 0.0 
+      (semana_incial..52).each do  |n| 
+        self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: ano })
+       _deuda += plan.monto
+      end 
+      self.monto = _deuda
+      self.total = _deuda
+    end 
+
+    def fecha_valida?
+      if !desde.nil? and desde.year != Date.today.year 
+        errors.add(:desde,"Error el año debe ser el año actual.")
+      end 
+      errors.empty?
+    end
+
 end
