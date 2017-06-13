@@ -3,7 +3,11 @@ class Contrato < ApplicationRecord
   belongs_to :cliente, inverse_of: :contratos
   belongs_to :plan, inverse_of: :contratos
   belongs_to :cobrador
-  has_many :pagos, dependent: :restrict_with_error , inverse_of: :contrato
+  has_many :pagos, -> { eager_load(:plan).order(:id) } , dependent: :restrict_with_error , inverse_of: :contrato do 
+    def por_ano(ano)
+      where(ano: ano)
+    end 
+  end 
 
   has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
 

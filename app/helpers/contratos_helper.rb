@@ -1,4 +1,14 @@
 module ContratosHelper
+
+  def seleccionar_pagos_por_ano contrato,ano
+    inicio = (contrato.fecha_registro.nil? ? Date.today.year : contrato.fecha_registro.year )
+    fecha = Date.today.year 
+    select_tag("year", options_for_select(inicio..fecha,ano),
+        data: {remote: true, 
+        url:  contrato_pagos_path(contrato) 
+    })
+  end 
+
 	def codigo_contrato(id)
 		s = "000000#{id}" 
 		s[s.size-6, s.size]
