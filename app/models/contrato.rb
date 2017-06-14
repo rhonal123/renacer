@@ -8,6 +8,18 @@ class Contrato < ApplicationRecord
     def por_ano(ano)
       where(ano: ano)
     end 
+
+    def monto_pendiente(ano=Date.today.year)
+      where(estado: Pago.estados[:pendiente],ano: ano).sum(:monto)
+    end 
+
+    def total_ano(ano=Date.today.year)
+      where(ano: ano).sum(:monto)
+    end 
+
+    def ultimo_monto(ano=Date.today.year)
+      where(ano: ano).last.monto
+    end 
   end 
 
   has_many :beneficiarios, dependent: :restrict_with_error, inverse_of: :contrato
@@ -77,11 +89,12 @@ class Contrato < ApplicationRecord
   def anular() 
     if creado?
       Contrato.transaction do
-        self.monto = 0.0
-        self.total = 0.0
-        self.estado = "ANULADO"
-        self.pagos.update_all(estado: "anulado")
-        save!()
+        self.pagos.update_all(estado: Pago.estados[:anulado])
+        update!({
+          monto: 0.0,
+          total:0.0,
+          estado: "ANULADO"
+        })
       end 
     else 
       self.errors.add(:estado, "No Puedes Anular este Contrato. se encuenta #{self.estado}.")
@@ -143,28 +156,8 @@ class Contrato < ApplicationRecord
         self.update!({monto: pendiente})
       end 
     end 
-  end 
-
-  def no_anulado?
-    !anulado?
-  end 
-
-  def inactivo?
-    !activo?
-  end 
-
-  def monto_pendiente ano=Date.today.year
-    self.pagos.where(estado: "pendiente",ano: ano).sum(:monto)
-  end 
-
-  def total_ano  ano=Date.today.year 
-    self.pagos.where(ano: ano).sum(:monto)
-  end 
-
-  def ultimo_monto(ano=Date.today.year)
-    self.pagos.where(ano: ano).last.monto
-  end 
-
+  end   
+ 
   validates :cliente_id, 
       presence: {message: 'Seleccione'}
 

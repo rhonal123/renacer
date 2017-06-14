@@ -43,15 +43,15 @@
       <tfoot>
         <tr>
           <td align="right" style="width: 70%;"><strong>Monto Semanal :</strong></td>      
-          <td><label id="plan_monto"><%= moneda_venezuela(contrato.ultimo_monto(ano)) %></label></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(contrato.pagos.ultimo_monto(ano)) %></label></td>      
         </tr>
         <tr>
           <td  align="right" style="width: 70%;"><strong>Monto Pendiente :</strong></td>      
-          <td><label id="plan_monto"><%= moneda_venezuela(contrato.monto_pendiente(ano)) %></label></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(contrato.pagos.monto_pendiente(ano)) %></label></td>      
         </tr>
         <tr>
           <td  align="right" style="width: 70%;"><strong>Total Contrato :</strong></td>      
-          <td><label id="plan_mensual"><%= moneda_venezuela(contrato.total_ano(ano) )  %></label></td>      
+          <td><label id="plan_mensual"><%= moneda_venezuela(contrato.pagos.total_ano(ano) )  %></label></td>      
         </tr>
       </tfoot>
       </table>

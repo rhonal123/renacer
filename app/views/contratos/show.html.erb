@@ -23,7 +23,6 @@
       Editar <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <%  if @contrato.no_anulado? %>
         <li>
           <%= button_to('Cambiar Cobrador', contrato_cobrador_path(@contrato),
           method: "get",
@@ -31,34 +30,33 @@
           class:"eliminar",
           form: {style: 'display:inline-block;'} ) %>
         </li>
-        <% end %>
-       <li>
-         <%= button_to('Asignar Fecha Registro ',  contrato_fecha_registro_path(@contrato),
-          method: "get", 
-          remote: true,
-          class:"eliminar",
-          form: {style: 'display:inline-block;'} )  %>
-      </li>
-      <li>
-         <%= button_to('Cambiar Propietario ',  contrato_propietario_path(@contrato),
-          method: "get", 
-          remote: true,
-          class:"eliminar",
-          form: {style: 'display:inline-block;'} )  %>
-      </li>
-      <li>
-         <%= button_to('Cambiar Plan ',  contrato_plan_path(@contrato),
-          method: "get", 
-          remote: true,
-          class:"eliminar",
-          form: {style: 'display:inline-block;'} )  %>
-      </li>
-    </ul>
+        <li>
+          <%= button_to('Asignar Fecha Registro ',  contrato_fecha_registro_path(@contrato),
+           method: "get", 
+           remote: true,
+           class:"eliminar",
+           form: {style: 'display:inline-block;'} )  %>
+        </li>
+        <li>
+          <%= button_to('Cambiar Propietario ',  contrato_propietario_path(@contrato),
+           method: "get", 
+           remote: true,
+           class:"eliminar",
+           form: {style: 'display:inline-block;'} )  %>
+        </li>
+        <li>
+          <%= button_to('Cambiar Plan ',  contrato_plan_path(@contrato),
+           method: "get", 
+           remote: true,
+           class:"eliminar",
+           form: {style: 'display:inline-block;'} )  %>
+        </li>
+      </ul>
     </div>
   <% end %>
 
 
-  <%  if @contrato.no_anulado? %>
+  <%  unless @contrato.anulado? %>
   <div class="btn-group ">
     <button type="button" class="btn btn-default btn-sm dropdown-toggle" 
     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -116,7 +114,7 @@
               new_contrato_beneficiario_path(@contrato), 
               remote: true,
               method: :get,
-              class: "btn btn-primary") if @contrato.no_anulado? %>
+              class: "btn btn-primary") if @contrato.anulado? %>
         </div>
         <div class="table-responsive" >
         <table class="table table-body">

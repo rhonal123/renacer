@@ -22,7 +22,7 @@
             class:"eliminar",
             data: { 
               confirm: "Quieres Anular el contrato Nro #{contrato.id }"
-              }) if contrato.no_anulado? %>                
+              }) if contrato.creado? %>                
         </li>
     		<li><%= button_to('Activar',
             contrato_activar_path(contrato),
