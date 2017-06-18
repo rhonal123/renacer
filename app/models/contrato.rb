@@ -143,11 +143,7 @@ class Contrato < ApplicationRecord
   validates :desde, 
       presence: {message: 'Ingrese'}
 
-  #validates :hasta,presence: {message: 'Ingrese'}
-
   validates :plan_id, presence: {message: 'Seleccione'}
-
-  #validates :fecha_registro, presence: {message: 'Ingrese Fecha de Registro'}
 
   validate :fecha_valida? 
 

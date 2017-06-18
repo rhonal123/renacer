@@ -1,5 +1,5 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar]
+  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -58,13 +58,12 @@ class ContratosController < ApplicationController
   end
 
   def pagos
-    @contrato = Contrato.find(params[:contrato_id])
+
   end 
 
   def pagar 
     @pago = @contrato.pagos.find(params[:pago_id])
-    @pago.pagar()
-    if @pago.errors.empty? 
+    if PagoService.new(@pago).pagar() 
       redirect_to @contrato, notice: 'Contrato Actualizado'
     else
       flash[:error] = @pago.errors.full_messages
