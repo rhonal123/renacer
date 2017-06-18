@@ -137,27 +137,6 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-  def pagar(pago_id)
-    if activo?
-      Contrato.transaction do
-        pendiente = 0.0 
-        pagos(true).eager_load(:plan).each do |pago|
-          if(pago.id == pago_id.to_i)
-            pago.estado = "pagado"
-            pago.plan = self.plan 
-            pago.cobrador = self.cobrador
-            pago.fecha_pago = Date.today 
-            pago.save!()
-          else 
-            pendiente += pago.monto if(pago.estado == "pendiente")        
-          end 
-        end
-        self.monto = pendiente
-        self.update!({monto: pendiente})
-      end 
-    end 
-  end   
- 
   validates :cliente_id, 
       presence: {message: 'Seleccione'}
 

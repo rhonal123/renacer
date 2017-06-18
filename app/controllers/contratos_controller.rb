@@ -1,5 +1,5 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy]
+  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -62,9 +62,14 @@ class ContratosController < ApplicationController
   end 
 
   def pagar 
-    @contrato = Contrato.find(params[:contrato_id])
-    @contrato.pagar(params[:pago_id])
-    redirect_to @contrato, notice: 'Contrato Actualizado'
+    @pago = @contrato.pagos.find(params[:pago_id])
+    @pago.pagar()
+    if @pago.errors.empty? 
+      redirect_to @contrato, notice: 'Contrato Actualizado'
+    else
+      flash[:error] = @pago.errors.full_messages
+      redirect_to @contrato 
+    end 
   end 
 
   def activar 
@@ -151,7 +156,7 @@ class ContratosController < ApplicationController
   def generar_pagos
     @contrato = Contrato.find(params[:contrato_id])
     @contrato.generar_pagos_proximo_periodo(Date.today.year)
-    if(@contrato.errors.empty?)
+    if @contrato.errors.empty?
       redirect_to @contrato, notice: "Pagos Generados del ano #{Date.today.year}"
     else
       flash[:error] = @contrato.errors.full_messages 
@@ -185,7 +190,7 @@ class ContratosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contrato
-      @contrato = Contrato.find(params[:id])
+      @contrato = Contrato.find(params[:id] || params[:contrato_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
