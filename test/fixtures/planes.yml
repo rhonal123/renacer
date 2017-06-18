@@ -1,3 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
- 
+ one: 
+  nombre:  PLAN A
+  monto: 4500 
+  componentes: plan con todos los componentes requeridos para un funeral
+
+
+ two: 
+  nombre:  PLAN B
+  monto: 3500 
+  componentes: plan con  algunos los componentes requeridos para un funeral
+
+ three: 
+  nombre:  PLAN C
+  monto: 2500 
+  componentes: plan con los componentes minimos requeridos para un funeral

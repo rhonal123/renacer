@@ -1,12 +1,15 @@
 require 'test_helper'
 
 class PlanesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @plan = planes(:one)
+    sign_in usuarios(:one)
   end
 
   test "should get index" do
-    get planes_url
+    get planes_path
     assert_response :success
   end
 
