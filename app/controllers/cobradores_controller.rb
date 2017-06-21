@@ -48,7 +48,7 @@ class CobradoresController < ApplicationController
   def destroy
     begin
       @cobrador.destroy
-      redirect_to cobradores_url, notice: "#{@cobrador.nombres} fue Eliminado."
+      redirect_to cobradores_url, notice: "#{@cobrador.nombre} fue Eliminado."
     rescue ActiveRecord::InvalidForeignKey => e
       flash[:error]  = "No Puedes Eliminar este Cobrador, esta siendo utilizado por contratos."
       redirect_to cobradores_url 
