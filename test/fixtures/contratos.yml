@@ -1,3 +1,14 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
  
+one: 
+  cliente: one 
+  plan: one 
+  desde: 26/08/1990
+  hasta: 26/08/1990
+  monto: 7850
+  total: 7850
+  estado: ACTIVO
+  fecha_registro: 26/08/1990
+  cobrador: one 
+  

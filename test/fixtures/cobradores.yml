@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  identidad: MyString
-  nombre: MyString
+  identidad: 19827297
+  nombre: Perez Gonzales
 
 two:
-  identidad: MyString
-  nombre: MyString
+  identidad: 1897878
+  nombre: Mujica Herrera 

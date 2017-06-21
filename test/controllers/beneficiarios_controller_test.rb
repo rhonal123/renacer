@@ -1,48 +1,60 @@
 require 'test_helper'
 
 class BeneficiariosControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @beneficiario = beneficiarios(:one)
-  end
-
-  test "should get index" do
-    get beneficiarios_url
-    assert_response :success
+    @contrato = contratos(:one)
+    sign_in usuarios(:one)
   end
 
   test "should get new" do
-    get new_beneficiario_url
+    get new_contrato_beneficiario_path(@contrato,:js),  xhr: true
     assert_response :success
   end
 
   test "should create beneficiario" do
     assert_difference('Beneficiario.count') do
-      post beneficiarios_url, params: { beneficiario: {  } }
+      post  contrato_beneficiarios_path(@contrato), 
+        params: { 
+          beneficiario: { 
+            identidad: "V-7847845",
+            contrato_id: @contrato.id,
+            apellidos: "RODRIGUEZ",
+            nombres: "MARIA",
+            fechaNacimiento: "26/08/1995",
+            parentesco: "HERMANO" 
+           }
+        }
     end
-
-    assert_redirected_to beneficiario_url(Beneficiario.last)
-  end
-
-  test "should show beneficiario" do
-    get beneficiario_url(@beneficiario)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_beneficiario_url(@beneficiario)
+    get edit_contrato_beneficiario_path(@contrato,@beneficiario), xhr: true 
     assert_response :success
   end
 
   test "should update beneficiario" do
-    patch beneficiario_url(@beneficiario), params: { beneficiario: {  } }
-    assert_redirected_to beneficiario_url(@beneficiario)
+    patch contrato_beneficiario_url(@contrato,@beneficiario),
+        params: { 
+          beneficiario: { 
+            identidad: "V-7847845",
+            contrato_id: @contrato.id,
+            apellidos: "RODRIGUEZ",
+            nombres: "MARIA",
+            fechaNacimiento: "26/08/1995",
+            parentesco: "HERMANO" 
+           }
+        }
+    assert_response :success
   end
 
   test "should destroy beneficiario" do
     assert_difference('Beneficiario.count', -1) do
-      delete beneficiario_url(@beneficiario)
+      delete  contrato_beneficiario_path(@contrato,@beneficiario), xhr: true 
     end
-
-    assert_redirected_to beneficiarios_url
+    assert_response :success
   end
 end

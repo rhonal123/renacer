@@ -1,3 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
  
+
+one: 
+  identidad: 165448978
+  apellidos: JUAN PERES
+  contrato: one 
+  nombres: PEDRO 
+  fechaNacimiento: 26/08/1953
+  parentesco: PADRE
+  
