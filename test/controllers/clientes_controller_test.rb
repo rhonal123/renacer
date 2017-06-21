@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class ClientesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @cliente = clientes(:one)
+    sign_in usuarios(:one)
   end
 
   test "should get index" do
@@ -17,9 +20,17 @@ class ClientesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create cliente" do
     assert_difference('Cliente.count') do
-      post clientes_url, params: { cliente: { apelliso: @cliente.apelliso, direccion: @cliente.direccion, fecha: @cliente.fecha, identidad: @cliente.identidad, nombre: @cliente.nombre, telefono: @cliente.telefono } }
+      post clientes_url, params: { 
+        cliente: { 
+          identidad: "V-7484885", 
+          nombres: "ROSA", 
+          apellidos: "GARCIA", 
+          direccion: "barquisimeto, estado lara", 
+          fecha: "02/07/1995", 
+          telefono: "0412-1254878"
+        } 
+      }
     end
-
     assert_redirected_to cliente_url(Cliente.last)
   end
 
@@ -34,15 +45,23 @@ class ClientesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update cliente" do
-    patch cliente_url(@cliente), params: { cliente: { apelliso: @cliente.apelliso, direccion: @cliente.direccion, fecha: @cliente.fecha, identidad: @cliente.identidad, nombre: @cliente.nombre, telefono: @cliente.telefono } }
+    patch cliente_url(@cliente), params: { 
+      cliente: { 
+        identidad: "V-7484885", 
+        nombres: "ROSA", 
+        apellidos: "GARCIA", 
+        direccion: "barquisimeto, estado lara", 
+        fecha: "02/07/1995", 
+        telefono: "0412-1254878"
+      } 
+    }
     assert_redirected_to cliente_url(@cliente)
   end
 
   test "should destroy cliente" do
     assert_difference('Cliente.count', -1) do
-      delete cliente_url(@cliente)
+      delete cliente_url(clientes(:to_destroy))
     end
-
     assert_redirected_to clientes_url
   end
 end

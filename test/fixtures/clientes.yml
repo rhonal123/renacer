@@ -1,2 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
- 
+
+one:
+  identidad: V-17458987
+  apellidos: Garcia
+  nombres: Joana
+  fecha: 01/05/1945
+  direccion: barrio la paz con calle 1 y 2 
+  telefono: 0412-155-7845
+
+to_destroy:
+  identidad: V-1458785
+  apellidos: Garcia
+  nombres: Joana
+  fecha: 01/05/1945
+  direccion: barrio la paz con calle 1 y 2 
+  telefono: 0412-155-7845
+
+
+
+
