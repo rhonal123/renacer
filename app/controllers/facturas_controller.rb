@@ -58,7 +58,7 @@ class FacturasController < ApplicationController
   def imprimir
     @factura = Factura.find(params[:factura_id])
     pdf = FacturaPdf.new @factura
-    send_data pdf.render,filename: "factura_#{@factura.id}", type: 'application/pdf',disposition: 'inline'
+    send_data pdf.render,filename: "factura_#{@factura.id}.pdf", type: 'application/pdf',disposition: 'inline'
   end 
 
   private

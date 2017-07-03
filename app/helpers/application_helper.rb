@@ -207,4 +207,9 @@ module ApplicationHelper
     number_to_currency(monto,unit: "Bs", format: "%n %u")
   end 
 
+
+  def moneda(monto)
+    number_to_currency(monto,unit: "", format: "%n %u")
+  end 
+
 end

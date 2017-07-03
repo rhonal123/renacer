@@ -32,10 +32,10 @@ class ClienteFiscal < ApplicationRecord
     
     validates :nombres,
       presence: {message: 'Ingrese.'},
-      length: {maximum: 180, too_long:"%{count} caracteres es el maximo"}
+      length: {maximum: 120, too_long:"%{count} caracteres es el maximo"}
 
     validates :direccion,
-      length: {maximum: 400, too_long:"%{count} caracteres es el maximo"}
+      length: {maximum: 250, too_long:"%{count} caracteres es el maximo"}
 
 
     validates :telefono,
