@@ -106,7 +106,7 @@ class Contrato < ApplicationRecord
   # CREADO -> ACTIVO -> ANULADO -> VENCIDO
   def cambiar_plan(plan_params) 
     plan = Plan.find(plan_params[:plan_id])
-    unless ["CREADO","ACTIVO"].include?(self.estado) 
+    if self.anulado? or self.vencido?  
       self.errors.add(:estado, "No Puedes Cambiar el Plan,este Contrato. se encuenta #{self.estado}")
     else 
       ano = Date.today.year()

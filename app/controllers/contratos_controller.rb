@@ -181,10 +181,10 @@ class ContratosController < ApplicationController
     if @contrato.cambiar_plan(plan_params)
        redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
     else
-      render :plan_edit
+       flash[:error] = @contrato.errors.full_messages 
+       render :show
     end
   end   
-
 
   private
     # Use callbacks to share common setup or constraints between actions.
