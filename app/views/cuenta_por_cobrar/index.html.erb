@@ -9,6 +9,6 @@
            <%= buscar( cuenta_por_cobrar_index_path,["identidad","nombres"]) %>
         </div>
     </div>
-    <%= tabla_panel_responsive(["Id","Identidad","Nombres","Por Cobrar"],@cuentas,partial: "/cuenta_por_cobrar/cuenta")%>
+    <%= tabla_panel_responsive(["Identidad","Nombres","Por Cobrar"],@cuentas,partial: "/cuenta_por_cobrar/cuenta")%>
     <%= paginador(@cuentas, action: :index ) %>
 </div>

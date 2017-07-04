@@ -2,20 +2,20 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-
 class FormFactura
 
-  constructor: (@productos_catalago = [],
+  constructor: (
+    @productos = [],
     @current_page= null
     @per_page= null
     @total_entries= null
-    @url= null) ->
+    @url= null ) ->
 
   inciarFormulario: (url,agregar,quitar) ->
     @url = url
     @urlAgregar = agregar
     @urlQuitar =  quitar
-    @prodcutos_factura =[]
+    @productos_factura =[]
     @current_page= null
     @per_page= null
     @total_entries= null
@@ -27,14 +27,14 @@ class FormFactura
     );
 
   cargar_catalogo: (e, page = 1) -> 
-    _self = this 
     e.preventDefault()
+    _self = this 
     url = _self.url_search(page)
     $.ajax(url,
       type: 'GET'
       dataType: 'json'
       success: (data, textStatus, jqXHR) ->
-        _self.productos_catalago = data.productos
+        _self.productos = data.productos
         _self.current_page  = data.current_page
         _self.per_page  = data.per_page
         _self.total_entries  = data.total_entries
@@ -82,17 +82,17 @@ class FormFactura
   dibujar_productos: ( )->
     _self = this 
     catalago = $("#catalogo_productos #productos").empty()
-    for v in @productos_catalago  
+    for v in @productos  
       producto_id = $("<td>").append(v.id)
       descripcion = $("<td>").append(v.descripcion)
-      precio = $("<td>").append(v.precio)
+      precio = $("<td>").append(Format.Money(v.precio)) 
       agregar = $("<button>",{
           class: "btn btn-sm btn-defaul"
           id: v.id
         }).append("agregar").click(
           (e)->
             e = $(e.target)
-            for item in _self.productos_catalago
+            for item in _self.productos
               if(item.id.toString() == e.attr('id')) 
                 _self.agregar(item)
         )
@@ -112,8 +112,7 @@ class FormFactura
 
   calcularMontos: ()->
     sum = 0.0
-    productos = $('#productos').find('.prodcuto')# .each(function(e,v){console.log(e,v);})
-    productos.each (i,v)->
+    $('#productos').find('.producto').each (i,v)->
       item = $(v)
       cantidad = parseFloat(item.find('.cantidad').val())  
       if isNaN(cantidad)
@@ -121,21 +120,24 @@ class FormFactura
       precio = parseFloat(item.find('.cantidad').data('precio'))
       total = cantidad * precio; 
       sum += total 
-      item.find(".total").empty().append(total)
+      item.find(".total").empty().append(Format.Money(total))
     impuesto = $("#new_factura").data('impuesto')
 
-    $('#plan_base').empty().append(formatMoney(sum.toFixed(2)))
-    $('#plan_iva').empty().append(formatMoney((impuesto * sum ).toFixed(2)))
-    $('#plan_total').empty().append(formatMoney((sum + impuesto * sum).toFixed(2)))
+    $('#plan_base').empty().append(Format.Money(sum))
+    $('#plan_iva').empty().append(Format.Money(impuesto * sum ))
+    $('#plan_total').empty().append(Format.Money(sum + impuesto * sum))
 
   quitarProducto: (producto)->
-    productos = $('#productos').find("##{producto}").remove()
+    $('#productos').find("##{producto}").remove()
+    @calcularMontos()
+    return 
 
 @formFactura = new FormFactura  
 
 
 class FormRecibo
   constructor: (@url= null) ->
+
   inciarFormulario: (url) ->
     @url = url
     $('.fecha').datepicker({
@@ -157,14 +159,14 @@ class FormRecibo
 
   calcularMontos: ()->
     sum = 0.0
-    productos = $('#pagos').find('.monto')# .each(function(e,v){console.log(e,v);})
+    productos = $('#pagos').find('.monto')
     productos.each (i,v)->
       item = $(v)
       monto = parseFloat($(v).val())
       if isNaN(monto)
         monto = 0 
       sum += monto
-    $("#monto").empty().append(formatMoney(sum.toFixed(2)))
+    $("#monto").empty().append(Format.Money(sum.toFixed(2)))
 
   quitar: (event)->
     e = $(event.target)

@@ -2,7 +2,7 @@
 <div class="panel-body2">
   <%= link_to 'Regresar', facturas_path, class: "btn btn-default btn-sm" %>
   <%= link_to 'Imprimir', factura_imprimir_path(@factura),class: "btn btn-default btn-sm", target: "_blank" %> 
-  <%= button_to('Anular', factura_anular_path(@factura), 
+  <%= button_to('Anular', factura_anular_path(codigo_factura(@factura.id)), 
     method: "delete", 
     class: "btn btn-default btn-sm form-inline",
     data: { confirm: "Quieres Anular la Factura #{@factura.id }" }, 
@@ -21,7 +21,7 @@
   <div class="tab-content">
     <div  id="factura" role="tabpanel" class="tab-pane fade in active">
       <div class="col-md-12  panel-body"  style="border: 1px solid #ddd; border-bottom-color: transparent;">
-        <%= detalle "Id : ",codigo_contrato(@factura.id) %>
+        <%= detalle "Id : ",codigo_factura(@factura.id) %>
         <%= detalle "Fecha : ",@factura.fecha %>
         <%= detalle "Tipo : ",@factura.tipo %>
         <%= detalle "Estado : ",@factura.estado %>

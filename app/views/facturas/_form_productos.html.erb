@@ -1,0 +1,26 @@
+<%= f.fields_for :detalles do |field| %>
+  <tr id="<%=field.object.producto.id %>" class="producto">
+    <td>
+      <%= field.object.producto_id %>
+      <%= field.hidden_field :producto_id  %>
+    </td>
+    <td><%= field.object.producto.descripcion %></td>
+    <td><%= field.object.precio_unitario %></td>
+    <td>
+    <%= field.number_field :cantidad,
+      class: "cantidad",
+      min: 1,
+      onkeyup: "formFactura.calcularMontos()",
+      onchange: "formFactura.calcularMontos()",
+        data: {
+          precio:  field.object.precio_unitario 
+        } %>
+    </td>
+    <td class="total">
+      <%= moneda_venezuela field.object.precio  %>
+    </td>
+    <td>
+      <%= quitar_producto_factura field.object.producto %>
+    </td>
+  </tr>
+<% end %>

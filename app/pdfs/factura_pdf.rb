@@ -9,9 +9,9 @@ class FacturaPdf < Prawn::Document
     define_grid(:columns => 12, :rows => 30, :gutter => 0)
     font_size 10
 
-    grid([3,0 ], [3, 9]).bounding_box do
+    grid([3,0 ], [3, 11]).bounding_box do
       _texto = "<b><i>FACTURA </b></i> N° #{codigo_factura(@factura.id)}"
-      text _texto, :align=> :center , :valign => :center, :inline_format => true
+      text _texto, :align=> :right , :valign => :center, :inline_format => true
     end
     #grid.show_all
     datos_cliente_factura()

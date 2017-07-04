@@ -11,4 +11,10 @@ module FacturasHelper
 		s[s.size-4, s.size]
 	end 
 
+	def quitar_producto_factura producto
+		button_tag "Quitar",
+	    class:   "btn btn-danger btn-sm",
+	    type: "button",
+	    onClick: "formFactura.quitarProducto(#{producto.id})"
+	end 
 end

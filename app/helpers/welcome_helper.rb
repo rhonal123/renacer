@@ -72,4 +72,12 @@ module WelcomeHelper
     end 
   end 
 
+  def has_form_error(object,key)
+    object.errors.has_key?(key) ? "form-group form-group-sm  has-error": " form-group form-group-sm " 
+  end 
+
+  def element &block
+    capture(&block)
+  end 
+
 end

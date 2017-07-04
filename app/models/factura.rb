@@ -113,7 +113,7 @@ class Factura < ApplicationRecord
       self.base   = 0
       self.total  = 0
       self.saldo  = 0
-      self.impuesto = 0
+      self.monto_impuesto = 0
       self.porcentaje = 0
       save()
     else
