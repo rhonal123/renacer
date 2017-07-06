@@ -110,14 +110,6 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-  def activar  
-    if creado?
-      activo!
-    else 
-      self.errors.add(:estado, "No Puedes Activar este Contrato. se encuenta #{self.estado}")
-    end 
-    errors.empty?
-  end 
 
   validates :cliente_id, 
       presence: {message: 'Seleccione'}
@@ -130,6 +122,8 @@ class Contrato < ApplicationRecord
   validate :fecha_valida? 
 
   validates_with AnularContratoValidator, on: :anular
+  validates_with ActivarContratoValidator, on: :activar
+
 
   self.per_page = 12 
 

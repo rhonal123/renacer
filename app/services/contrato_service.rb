@@ -15,4 +15,8 @@ class ContratoService
     end 
   end 
 
+  def activar  
+    @contrato.activo! if @contrato.valid? :activar     
+  end 
+
 end 

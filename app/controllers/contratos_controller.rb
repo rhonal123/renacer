@@ -1,5 +1,5 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos]
+  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -76,11 +76,11 @@ class ContratosController < ApplicationController
   end 
 
   def activar 
-    @contrato = Contrato.find(params[:contrato_id])
-    @contrato.activar()
+    ContratoService.new(@contrato).activar 
     if @contrato.activo?
       redirect_to @contrato, notice: 'Contrato Activado'
     else 
+      flash[:error] = @contrato.errors.full_messages
       redirect_to @contrato, notice: 'Error al activar el contrato'
     end 
   end 
