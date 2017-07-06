@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class ContratosControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @contrato = contratos(:one)
+    sign_in usuarios(:one)
   end
 
   test "should get index" do
@@ -17,7 +20,17 @@ class ContratosControllerTest < ActionDispatch::IntegrationTest
 
   test "should create contrato" do
     assert_difference('Contrato.count') do
-      post contratos_url, params: { contrato: { cliente_id: @contrato.cliente_id, desde: @contrato.desde, deuda: @contrato.deuda, hasta: @contrato.hasta, monto: @contrato.monto, plan_id: @contrato.plan_id, total: @contrato.total } }
+      post contratos_url, params: { 
+        contrato: { 
+          cliente_id: @contrato.cliente_id,
+          desde: @contrato.desde,
+          hasta: @contrato.hasta, 
+          monto: @contrato.monto, 
+          plan_id: @contrato.plan_id,
+          fecha_registro: "15/08/2016",
+          cobrador_id: cobradores(:one).id
+          }
+      }
     end
 
     assert_redirected_to contrato_url(Contrato.last)
@@ -34,15 +47,20 @@ class ContratosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update contrato" do
-    patch contrato_url(@contrato), params: { contrato: { cliente_id: @contrato.cliente_id, desde: @contrato.desde, deuda: @contrato.deuda, hasta: @contrato.hasta, monto: @contrato.monto, plan_id: @contrato.plan_id, total: @contrato.total } }
+    patch contrato_url(@contrato), params: { 
+      contrato: { 
+        cliente_id: @contrato.cliente_id,
+        desde: @contrato.desde,
+        hasta: @contrato.hasta, 
+        monto: @contrato.monto, 
+        plan_id: @contrato.plan_id, 
+        total: @contrato.total }
+      }
     assert_redirected_to contrato_url(@contrato)
   end
 
   test "should destroy contrato" do
-    assert_difference('Contrato.count', -1) do
-      delete contrato_url(@contrato)
-    end
-
+    delete contrato_url(@contrato)
     assert_redirected_to contratos_url
   end
 end

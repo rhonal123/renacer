@@ -1,3 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
- 
+
+one:
+  cliente: one
+  plan: one
+  desde: 26/01/2017
+  hasta: 31/12/2017
+  monto: 780000
+  total: 780000
+  estado: "CREADO"
+  fecha_registro: 26/08/2016
+  cobrador: one

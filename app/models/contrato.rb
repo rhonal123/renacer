@@ -85,24 +85,6 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-
-  def anular() 
-    if creado?
-      Contrato.transaction do
-        self.pagos.update_all(estado: Pago.estados[:anulado])
-        update!({
-          monto: 0.0,
-          total:0.0,
-          estado: "ANULADO"
-        })
-      end 
-    else 
-      self.errors.add(:estado, "No Puedes Anular este Contrato. se encuenta #{self.estado}.")
-    end 
-    errors.empty?
-  end 
-
-
   # CREADO -> ACTIVO -> ANULADO -> VENCIDO
   def cambiar_plan(plan_params) 
     plan = Plan.find(plan_params[:plan_id])
@@ -128,7 +110,7 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-  def activar() 
+  def activar  
     if creado?
       activo!
     else 
@@ -146,6 +128,8 @@ class Contrato < ApplicationRecord
   validates :plan_id, presence: {message: 'Seleccione'}
 
   validate :fecha_valida? 
+
+  validates_with AnularContratoValidator, on: :anular
 
   self.per_page = 12 
 

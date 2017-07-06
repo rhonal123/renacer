@@ -1,21 +1,18 @@
 class ContratoService 
-	
-	
 
-  def anular() 
+  attr_reader :contrato
 
-  end 
+  def initialize(contrato)
+    @contrato = contrato
+  end
 
-  def cambiar_plan(plan_params) 
-
-  end 
-
-  def activar() 
-
-  end 
-
-  def generar_pagos_proximo_periodo(ano)
-
+  def anular
+    if @contrato.valid? :anular 
+      Contrato.transaction do
+        @contrato.pagos.update_all(estado: Pago.estados[:anulado])
+        @contrato.update! monto: 0.0, total: 0.0, estado: Contrato.estados[:anulado] 
+      end 
+    end 
   end 
 
 end 

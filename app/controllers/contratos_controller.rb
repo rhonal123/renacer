@@ -52,9 +52,13 @@ class ContratosController < ApplicationController
   # DELETE /contratos/1
   # DELETE /contratos/1.json
   def destroy
-    #@contrato.destroy
-    @contrato.anular()
-    redirect_to contratos_url, notice: 'Contrato fue correctamente anulado'
+    ContratoService.new(@contrato).anular 
+    if @contrato.anulado?
+      redirect_to contratos_url, notice: 'Contrato anulado'
+    else
+      flash[:error] = @contrato.errors.full_messages
+      redirect_to contratos_url
+    end 
   end
 
   def pagos
