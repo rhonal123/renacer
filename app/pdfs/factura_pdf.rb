@@ -54,7 +54,7 @@ class FacturaPdf < Prawn::Document
     end
 
     grid([4,9], [6,11]).bounding_box do
-      _text = " <b>EMISION:</b> #{@factura.fecha} \n <b>TIPO:</b>#{@factura.tipo}"
+      _text = " <b>EMISION:</b> #{@factura.fecha} \n <b>TIPO:</b>#{@factura.tipo} \ Barquisimeto-Lara"
       indent(10) do
         text _text, align: :center, valign: :center, inline_format:  true
       end 
@@ -69,7 +69,7 @@ class FacturaPdf < Prawn::Document
       stroke_bounds
  	  end 
 
- 	  grid([11,0], [24,11]).bounding_box do
+ 	  grid([11,0], [26,11]).bounding_box do
       titulo = ["CODIGO","PRODUCTO","CANT","UNITARIO","PRECIO"]
 			tabla = []
 			tabla << titulo 
@@ -95,8 +95,8 @@ class FacturaPdf < Prawn::Document
       stroke_bounds
 	   end
 
-  grid([25,8], [27,11]).bounding_box do
-    cell_1 = make_cell(content: "Base :") 
+  grid([27,8], [29,11]).bounding_box do
+    cell_1 = make_cell(content: "Subtotal :") 
     cell_2 = make_cell(content: moneda_venezuela(@factura.base)) 
     cell_3 = make_cell(content: "#{@factura.impuesto.descripcion} :")
     cell_4 = make_cell(content: moneda_venezuela(@factura.monto_impuesto))
@@ -116,7 +116,7 @@ class FacturaPdf < Prawn::Document
   end
 
 
-
+#carolina.londono@oracle.com
 
   end 
 

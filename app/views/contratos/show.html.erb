@@ -114,7 +114,7 @@
               new_contrato_beneficiario_path(@contrato), 
               remote: true,
               method: :get,
-              class: "btn btn-primary") if @contrato.anulado? %>
+              class: "btn btn-primary btn-sm") unless @contrato.anulado? %>
         </div>
         <div class="table-responsive" >
         <table class="table table-body">
