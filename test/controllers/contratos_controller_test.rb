@@ -63,4 +63,24 @@ class ContratosControllerTest < ActionDispatch::IntegrationTest
     delete contrato_url(@contrato)
     assert_redirected_to contratos_url
   end
+
+  test "should change plan" do
+    post contrato_plan_url(@contrato), params: {
+      contrato:{
+        plan_id: planes(:one).id
+      }
+    }
+    assert_redirected_to contrato_url(@contrato)
+    assert_equal 'Contrato fue correctamente Actualizado.', flash[:notice]
+
+    post contrato_plan_url(@contrato), params: {
+      contrato:{
+        plan_id: 7896000456123
+      }
+    }
+    assert_response :unprocessable_entity
+    assert_equal ["Estado este plan ah sido eliminado."], flash[:error]
+
+  end
+
 end

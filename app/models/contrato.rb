@@ -85,31 +85,6 @@ class Contrato < ApplicationRecord
     errors.empty?
   end 
 
-  # CREADO -> ACTIVO -> ANULADO -> VENCIDO
-  def cambiar_plan(plan_params) 
-    plan = Plan.find(plan_params[:plan_id])
-    if self.anulado? or self.vencido?  
-      self.errors.add(:estado, "No Puedes Cambiar el Plan,este Contrato. se encuenta #{self.estado}")
-    else 
-      ano = Date.today.year()
-      semana = Date.today.cweek()
-      Contrato.transaction do
-        self.plan = plan 
-        ano = Pago.arel_table[:ano]
-        _semana =  Pago.arel_table[:semana]
-        estado =  Pago.arel_table[:estado]
-        self.pagos
-          .where(ano.eq(ano))
-          .where(_semana.gteq(semana))
-          .where(estado.eq("pendiente"))
-          .update_all(monto: plan.monto,plan_id: plan.id)
-        self.total = self.pagos.sum(:monto)
-        save!()
-      end 
-    end 
-    errors.empty?
-  end 
-
 
   validates :cliente_id, 
       presence: {message: 'Seleccione'}
@@ -123,7 +98,7 @@ class Contrato < ApplicationRecord
 
   validates_with AnularContratoValidator, on: :anular
   validates_with ActivarContratoValidator, on: :activar
-
+  validates_with CambiarPlanContratoValidator, on: :cambiar_plan
 
   self.per_page = 12 
 

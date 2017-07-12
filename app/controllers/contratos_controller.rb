@@ -1,5 +1,5 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar]
+  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar, :plan,:plan_edit]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -144,7 +144,7 @@ class ContratosController < ApplicationController
   end 
 
   def catulina 
-    @contrato = Contrato.find(params[:contrato_id])
+    @contrato = Contrato.find params[:contrato_id]
     @monto = @contrato.plan.monto
     pdf = CartulinaPdf.new @contrato
     send_data pdf.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
@@ -177,16 +177,16 @@ class ContratosController < ApplicationController
   end 
 
   def plan_edit
-    @contrato = Contrato.find(params[:contrato_id])
+
   end 
 
   def plan
-    @contrato = Contrato.find(params[:contrato_id])
-    if @contrato.cambiar_plan(plan_params)
+    @service = ContratoService.new(@contrato).cambiar_plan plan_params[:plan_id]
+    if @service.has_error?
        redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
     else
        flash[:error] = @contrato.errors.full_messages 
-       render :show
+       render :show ,status: :unprocessable_entity
     end
   end   
 
