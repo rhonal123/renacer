@@ -1,5 +1,5 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar, :plan,:plan_edit]
+  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar, :plan,:plan_edit,:generar_pagos]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -157,13 +157,13 @@ class ContratosController < ApplicationController
   end 
 
   def generar_pagos
-    @contrato = Contrato.find(params[:contrato_id])
-    @contrato.generar_pagos_proximo_periodo(Date.today.year)
-    if @contrato.errors.empty?
-      redirect_to @contrato, notice: "Pagos Generados del ano #{Date.today.year}"
+    @service = ContratoService.new(@contrato)
+    @service.generar_pagos_proximo_periodo
+    if @service.no_error?
+      redirect_to @contrato, notice: "Pagos Generados del ano #{@contrato.desde.year}"
     else
-      flash[:error] = @contrato.errors.full_messages 
-      redirect_to @contrato  
+       flash[:error] = @contrato.errors.full_messages 
+       render :show ,status: :unprocessable_entity
     end 
   end 
 
@@ -181,8 +181,9 @@ class ContratosController < ApplicationController
   end 
 
   def plan
-    @service = ContratoService.new(@contrato).cambiar_plan plan_params[:plan_id]
-    if @service.has_error?
+    @service = ContratoService.new(@contrato)
+    @service.cambiar_plan plan_params[:plan_id]
+    if @service.no_error?
        redirect_to @contrato, notice: 'Contrato fue correctamente Actualizado.' 
     else
        flash[:error] = @contrato.errors.full_messages 

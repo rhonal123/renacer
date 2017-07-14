@@ -19,9 +19,19 @@ class ContratoService
     @contrato.activo! if @contrato.valid? :activar     
   end 
 
+  def generar_pagos_proximo_periodo
+    if @contrato.valid? :pagos_proximo_periodo 
+      year = Date.today.year 
+      @contrato.hasta = Date.new year, 12, 31
+      @contrato.desde = Date.new year,1,1 
+      @contrato.generar_pagos
+      @contrato.save
+    end 
+  end 
+
   def cambiar_plan plan_id
     begin
-      plan = Plan.find(plan_id)
+      plan = Plan.find plan_id
       if @contrato.valid? :cambiar_plan
         ano = Date.today.year
         semana = Date.today.cweek
@@ -41,10 +51,9 @@ class ContratoService
     rescue ActiveRecord::RecordNotFound
       @contrato.errors.add :estado,"este plan ah sido eliminado."
     end
-    self
   end 
 
-  def has_error?
+  def no_error?
     @contrato.errors.empty?
   end 
 

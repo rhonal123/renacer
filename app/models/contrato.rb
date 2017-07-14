@@ -5,19 +5,19 @@ class Contrato < ApplicationRecord
   belongs_to :cobrador
 
   has_many :pagos, -> { eager_load(:plan).order(:id) } , dependent: :restrict_with_error , inverse_of: :contrato do 
-    def por_ano(ano)
-      where(ano: ano)
+    def por_ano ano 
+      where ano: ano 
     end 
 
-    def monto_pendiente(ano=Date.today.year)
+    def monto_pendiente ano=Date.today.year 
       where(estado: Pago.estados[:pendiente],ano: ano).sum(:monto)
     end 
 
-    def total_ano(ano=Date.today.year)
+    def total_ano ano=Date.today.year 
       where(ano: ano).sum(:monto)
     end 
 
-    def ultimo_monto(ano=Date.today.year)
+    def ultimo_monto ano=Date.today.year 
       where(ano: ano).last.monto
     end 
   end 
@@ -34,20 +34,19 @@ class Contrato < ApplicationRecord
   before_update do 
     if creado?
       Pago.where(contrato_id: id, ano: Date.today.year).delete_all
-      self.hasta = Date.new(Date.today.year,12,31)
-      desdeweek = desde.cweek()
-      desdeweek = 1 if(desdeweek >= 52)
-      generar_pagos(self.desde.year,desdeweek)
+      self.hasta = Date.new Date.today.year,12,31 
+      desdeweek = desde.cweek
+      desdeweek = 1 if desdeweek >= 52 
+      generar_pagos desdeweek 
     end 
   end 
 
   before_create do
-    self.hasta =  Date.new(Date.today.year,12,31)
-    desdeweek = desde.cweek()
-    desdeweek = 1  if(desdeweek >= 52)
-    generar_pagos(self.desde.year,desdeweek)
+    self.hasta =  Date.new Date.today.year,12,31 
+    desdeweek = desde.cweek
+    desdeweek = 1  if desdeweek >= 52 
+    generar_pagos desdeweek 
   end
-
 
   def self.search(page = 1 , search , sort)
     search ||= ""
@@ -70,55 +69,38 @@ class Contrato < ApplicationRecord
   end     
 
   def self.cargar_detalle
-    eager_load(:cliente,:plan)
+    eager_load :cliente,:plan 
   end 
 
-  def generar_pagos_proximo_periodo(ano)
-    if(ano > self.desde.year)
-      self.desde = Date.new(ano,1,1)
-      self.hasta = Date.new(ano,12,31)
-      generar_pagos(ano,1)
-      save()
-    else
-      errors.add(:estado,"No puedes generar pago de este año, dado que es el año entransito del contrato.")
-    end 
-    errors.empty?
-  end 
-
-
-  validates :cliente_id, 
-      presence: {message: 'Seleccione'}
-
-  validates :desde, 
-      presence: {message: 'Ingrese'}
-
+  validates :cliente_id, presence: {message: 'Seleccione'}
+  validates :desde, presence: {message: 'Ingrese'}
   validates :plan_id, presence: {message: 'Seleccione'}
-
-  validate :fecha_valida? 
+  validate :fecha_valida? , on: [:create, :update]
 
   validates_with AnularContratoValidator, on: :anular
   validates_with ActivarContratoValidator, on: :activar
   validates_with CambiarPlanContratoValidator, on: :cambiar_plan
+  validates_with PagosProximoPeriodoValidator, on: :pagos_proximo_periodo
 
   self.per_page = 12 
 
-  private 
-  
-    def generar_pagos(ano,semana_incial)
-      _deuda = 0.0 
-      (semana_incial..52).each do  |n| 
-        self.pagos << Pago.new({semana: n, monto: plan.monto, plan_id: plan.id, ano: ano })
-       _deuda += plan.monto
-      end 
-      self.monto = _deuda
-      self.total = _deuda
+  def generar_pagos semana_incial= 1 
+    _deuda = 0.0 
+    year = self.desde.year
+    (semana_incial..52).each do  |n| 
+      self.pagos << Pago.new(semana: n, monto: plan.monto, plan_id: plan.id, ano: year)
+     _deuda += plan.monto
     end 
-
-    def fecha_valida?
-      if !desde.nil? and desde.year != Date.today.year 
-        errors.add(:desde,"Error el año debe ser el año actual.")
-      end 
-      errors.empty?
-    end
+    self.monto = _deuda
+    self.total = _deuda
+  end 
+  
+  private 
+  def fecha_valida?
+    if !desde.nil? and desde.year != Date.today.year 
+      errors.add :desde,"Error el año debe ser el año actual." 
+    end 
+    errors.empty?
+  end
 
 end

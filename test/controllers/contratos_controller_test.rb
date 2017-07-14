@@ -80,7 +80,37 @@ class ContratosControllerTest < ActionDispatch::IntegrationTest
     }
     assert_response :unprocessable_entity
     assert_equal ["Estado este plan ah sido eliminado."], flash[:error]
-
   end
+
+  test "should generate proximo periodo" do 
+    desde = @contrato.desde 
+    travel_to desde.next_year do
+      post contrato_generar_pagos_url @contrato
+      assert_redirected_to contrato_url @contrato 
+      assert_equal "Pagos Generados del ano #{desde.next_year.year}", flash[:notice]
+    end
+
+    @contrato_fail = contratos(:fails)
+    desde = @contrato_fail.desde 
+    travel_to desde.next_year do
+      post contrato_generar_pagos_url @contrato_fail
+      assert_response :unprocessable_entity
+      assert_equal ["Estado No puedes generar pagos a un contrato anulado o vencido"], flash[:error]
+    end
+    #same year 
+    @contrato = contratos(:fails)
+    desde = @contrato.desde 
+    post contrato_generar_pagos_url @contrato
+    assert_response :unprocessable_entity
+    assert_equal ["Estado No puedes generar pago de este año, dado que es el año entransito del contrato.", 
+      "Estado No puedes generar pagos a un contrato anulado o vencido"], flash[:error]
+
+    desde = @contrato.desde 
+    travel_to desde.last_year do
+      post contrato_generar_pagos_url @contrato
+      assert_equal ["Estado No puedes generar pago de este año, dado que es el año entransito del contrato.", 
+      "Estado No puedes generar pagos a un contrato anulado o vencido"], flash[:error]
+    end
+  end 
 
 end

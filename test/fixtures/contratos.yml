@@ -11,3 +11,16 @@ one:
   estado: "CREADO"
   fecha_registro: 26/08/2016
   cobrador: one
+
+
+
+fails:
+  cliente: one
+  plan: one
+  desde: 26/01/2017
+  hasta: 31/12/2017
+  monto: 780000
+  total: 780000
+  estado: "ANULADO"
+  fecha_registro: 26/08/2016
+  cobrador: one
