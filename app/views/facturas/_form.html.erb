@@ -52,7 +52,7 @@
      <% end %>
    </div>
   </div> 
-  
+
   <div  class="form-group form-group-sm">
     <div class="col-md-11 col-md-offset-1">
     <%= button_tag "Agregar",
@@ -109,9 +109,18 @@
     </div>
   </div>
 
-  <div class="col-md-12 " align="right">
-    <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
-  </div>
+  <div class="<%= has_form_error factura,:nota  %>" >
+    <%= f.label :nota, class:"col-md-1 control-label" %>
+    <div class="col-md-8">
+      <%= f.text_area :nota,class: "form-control input-sm" %> 
+      <% if factura.errors.has_key?(:nota) %>
+        <span class="help-block"><%= factura.errors.messages[:nota].join(',') %></span>
+      <% end %>
+    </div>
+    <div class="col-md-3 pull-right" align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div> 
 <% end %>
 
 <script type="text/javascript">

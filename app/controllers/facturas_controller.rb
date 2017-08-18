@@ -77,6 +77,7 @@ class FacturasController < ApplicationController
           :telefono,
           :direccion,
           :impuesto_id,
+          :nota,
           detalles_attributes:[:producto_id, :cantidad ])
     end
 end

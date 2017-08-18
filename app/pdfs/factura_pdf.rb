@@ -95,6 +95,15 @@ class FacturaPdf < Prawn::Document
       stroke_bounds
 	   end
 
+  grid([27,0], [29,7]).bounding_box do 
+    _texto = "<i><b>Nota</b></i> #{@factura.nota}"
+    indent(3) do
+      move_down(5)
+      text _texto,valign: :top, inline_format: true, size:7
+    end 
+  end 
+
+
   grid([27,8], [29,11]).bounding_box do
     cell_1 = make_cell(content: "Subtotal :") 
     cell_2 = make_cell(content: moneda_venezuela(@factura.base)) 

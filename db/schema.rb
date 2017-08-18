@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170520124256) do
+ActiveRecord::Schema.define(version: 20170818193103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20170520124256) do
     t.string   "telefono",          limit: 35
     t.float    "monto_impuesto"
     t.float    "porcentaje"
+    t.text     "nota"
     t.index ["cliente_fiscal_id"], name: "index_facturas_on_cliente_fiscal_id", using: :btree
     t.index ["impuesto_id"], name: "index_facturas_on_impuesto_id", using: :btree
     t.index ["libro_id"], name: "index_facturas_on_libro_id", using: :btree

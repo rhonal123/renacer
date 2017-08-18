@@ -29,6 +29,7 @@
         <%= detalle "Dirección : ",@factura.direccion %>
         <%= detalle "Telefono : ",@factura.telefono %>
         <%= detalle "Libro : ", "#{meses_libro(@factura.libro.mes)} -- #{@factura.libro.ano}" unless @factura.libro.nil? %>
+        <%= detalle "Nota : ",@factura.nota %>
         <%= render "detalles",  factura: @factura %>
       </div>
     </div>
