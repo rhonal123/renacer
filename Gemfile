@@ -88,3 +88,5 @@ gem 'combine_pdf'
 gem "paperclip", "~> 5.0.0"
 
 gem 'chart-js-rails'
+
+gem 'jquery-datatables-rails', '~> 3.4.0'

@@ -21,19 +21,30 @@ class FacturasController < ApplicationController
   end 
 
   def productos 
-    @productos = Producto.search(params[:page], params[:search], params[:sort])
+    @search = params[:search]
+    @search = @search[:value] if @search.instance_of?(ActionController::Parameters)    
+    @start =  params[:start]
+    @length = params[:length]
+    @productos = Producto.search(@start,@length,@search,params[:sort])
+    @draw = params[:draw].to_i 
   end 
 
   # GET /facturas/new
   def new
     @factura = Factura.new()
+    @iva = eval(params[:iva].to_s)
     @factura.fecha = Date.today
-    @factura.impuesto = Impuesto.iva 
+    if @iva 
+      @factura.impuesto = Impuesto.iva_personal 
+    else
+      @factura.impuesto = Impuesto.iva
+    end 
   end
 
   # POST /facturas
   # POST /facturas.json
   def create
+    @iva = eval(params[:iva].to_s)
     @factura = Factura.factura_nueva(factura_params)
     if @factura.save()
       @factura.cliente_fiscal.direccion = @factura.direccion
@@ -78,6 +89,7 @@ class FacturasController < ApplicationController
           :direccion,
           :impuesto_id,
           :nota,
+          :monto_impuesto,
           detalles_attributes:[:producto_id, :cantidad ])
     end
 end

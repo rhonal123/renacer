@@ -4,11 +4,13 @@
       role:'form',
       onSubmit: "formFactura.valFormulario(event)",
       data: {
-        impuesto: factura.impuesto.porcentaje
-      }
+        impuesto: factura.impuesto.porcentaje 
+      } 
   }) do |f| %>
 
+
   <%= f.hidden_field :impuesto_id  %>
+  <%= hidden_field_tag(:iva,value=@iva)%>
 
   <div class="<%= has_form_error factura,:cliente_fiscal  %>" >
     <%= f.label :cliente_fiscal_id,"Cliente Fiscal", class: "col-md-1 control-label" %>
@@ -34,7 +36,7 @@
       <%= f.text_field :fecha,class: "form-control input-sm",disabled: true,style: "background-color: #c4daf0;" %> 
     </div>   
   </div>
-
+ 
   <div class="<%= has_form_error factura,:direccion  %>" >
     <%= f.label :direccion, class:"col-md-1 control-label" %>
     <div class="col-md-7">
@@ -86,16 +88,29 @@
             <label id="plan_base"><%= moneda_venezuela(factura.base || 0) %></label>
           </td>
         </tr>
-        <tr>
-          <td align="right" style="width: 70%;">
-            <strong><%= factura.impuesto.descripcion %> :</strong>
-          </td>      
-          <td align="right">
-            <label id="plan_iva">
-              <%= moneda_venezuela(factura.impuesto.porcentaje * factura.base.to_f) %>
-            </label>
-          </td>
-        </tr>
+        <% if @iva %>
+          <tr>
+            <td align="right" style="width: 70%;">
+              <strong><%= factura.impuesto.descripcion %> :</strong>
+            </td>      
+            <td align="right">
+              <label id="plan_iva">
+                <%= f.number_field :monto_impuesto, class: "form-control input-sm", onkeyup: "formFactura.calcularMontos()", onchange: "formFactura.calcularMontos()" %>
+              </label>
+            </td>
+          </tr>
+        <% else %>
+          <tr>
+            <td align="right" style="width: 70%;">
+              <strong><%= factura.impuesto.descripcion %> :</strong>
+            </td>      
+            <td align="right">
+              <label id="plan_iva">
+                <%= moneda_venezuela(factura.impuesto.porcentaje * factura.base.to_f) %>
+              </label>
+            </td>
+          </tr>
+        <% end %>
         <tr>
           <td align="right" style="width: 70%;">
             <strong>Total :</strong>
@@ -121,9 +136,12 @@
       <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
     </div>
   </div> 
+
 <% end %>
 
 <script type="text/javascript">
-  formFactura.inciarFormulario("<%= productos_facturas_path %>","<%= agregar_facturas_path  %>","");
+$(document).ready(function() {
+  formFactura.inciarFormulario();
+});
 </script>
 

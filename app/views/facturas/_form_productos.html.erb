@@ -1,5 +1,5 @@
 <%= f.fields_for :detalles do |field| %>
-  <tr id="<%=field.object.producto.id %>" class="producto">
+  <tr id="<%=field.object.producto.id %>">
     <td>
       <%= field.object.producto_id %>
       <%= field.hidden_field :producto_id  %>

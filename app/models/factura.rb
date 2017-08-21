@@ -82,7 +82,7 @@ class Factura < ApplicationRecord
     sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
     self.base = sum.round(2)   
     self.total = (sum.round(2) + sum.round(2) * impuesto.porcentaje).round(2)
-    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2)
+    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
     self.porcentaje = impuesto.porcentaje
     self.saldo = self.total 
   end 

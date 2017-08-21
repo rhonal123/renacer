@@ -5,6 +5,8 @@
         <div class="col-sm-4 col-md-4" >
           <%= link_to 'Nuevo', new_factura_path,
             class: "btn btn-default btn-sm"  %>
+          <%= link_to 'Nuevo(IVA)', new_factura_path(iva: true ),
+            class: "btn btn-default btn-sm"  %>
         </div>
         <div class="col-md-8" align="right">
           <%= buscar_rango_fecha(facturas_path,["cliente","estado"]) %>

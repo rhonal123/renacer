@@ -9,110 +9,87 @@ class FormFactura
     @current_page= null
     @per_page= null
     @total_entries= null
-    @url= null ) ->
+    @url= null
+    @nroDetalle = 0 ) -> 
 
-  inciarFormulario: (url,agregar,quitar) ->
-    @url = url
-    @urlAgregar = agregar
-    @urlQuitar =  quitar
-    @productos_factura =[]
-    @current_page= null
-    @per_page= null
-    @total_entries= null
+  inciarFormulario: () ->
     select_cliente = seleccionadores.clienteFiscal("factura_cliente_fiscal_id")
     select_cliente.on('select2:select',(evt)->
       _cliente = evt.params.data
       $("#factura_direccion").val(_cliente.direccion) if _cliente.direccion?
       $("#factura_telefono").val(_cliente.telefono) if _cliente.telefono?
     );
-
-  cargar_catalogo: (e, page = 1) -> 
-    e.preventDefault()
-    _self = this 
-    url = _self.url_search(page)
-    $.ajax(url,
-      type: 'GET'
-      dataType: 'json'
-      success: (data, textStatus, jqXHR) ->
-        _self.productos = data.productos
-        _self.current_page  = data.current_page
-        _self.per_page  = data.per_page
-        _self.total_entries  = data.total_entries
-        _self.dibujar_productos()
-        _self.dibujar_paginador()
-      error: (jqXHR,textStatus,errorThrown) -> 
-        alert "error"
-    )
-
-  dibujar_paginador: ()->
-    _self = this 
-    paginador = $("#catalogo_productos #paginador")
-    nav = $("<nav>")
-    ul = $("<ul>", class: "pagination")
-    total_page = (@total_entries / @per_page )
-    i = 0
-    while(i <total_page)
-      params = { }
-      if((i + 1) == @current_page)
-        params.class= "active"
-      li = $("<li>",params)
-      page = new Number(i+1) 
-      params = { 
-        "data-page": (i + 1) 
+    @table = $('#tablaP').DataTable({
+      processing: true,
+      serverSide: true,
+      pageLength: 35,    
+      dom: 'Bfrtip',
+      ajax: {
+        url: '/facturas/productos',
+        dataSrc: 'productos'
+      },
+      columns: [{data: 'id'},{data: 'descripcion'},{data: 'precio',render: $.fn.dataTable.render.number( ',', '.', 2)}],
+      select: {
+        style:     '',
+        className: 'active'
       }
-      a  = $("<a>",params).append(page).click(
-        (e)-> 
-          page = new Number($(e.target).data('page')) 
-          _self.cargar_catalogo(e,page)
-      )
-      li.append(a)
-      ul.append(li)
-      i++ 
-    nav.append(ul)
-    paginador.empty().append(ul)
+    });
 
-  url_search: (page)->
-    datos= {
-      search: $("#search").val(),
-      page: page,
-      sort: "descripcion"
-    }
-    return @url+"?"+decodeURIComponent($.param(datos))
-
-  dibujar_productos: ( )->
-    _self = this 
-    catalago = $("#catalogo_productos #productos").empty()
-    for v in @productos  
-      producto_id = $("<td>").append(v.id)
-      descripcion = $("<td>").append(v.descripcion)
-      precio = $("<td>").append(Format.Money(v.precio)) 
-      agregar = $("<button>",{
-          class: "btn btn-sm btn-defaul"
-          id: v.id
-        }).append("agregar").click(
-          (e)->
-            e = $(e.target)
-            for item in _self.productos
-              if(item.id.toString() == e.attr('id')) 
-                _self.agregar(item)
-        )
-      tr = $("<tr>").append(producto_id,descripcion,precio,$("<td>").append(agregar))
-      catalago.append(tr)
+  cargar_catalogo: (e) -> 
+    e.preventDefault()
     $("#catalogo_productos").modal('show')
 
-  agregar: (item)->
-    form = $("#new_factura")
-    url = "#{@urlAgregar}?#{decodeURIComponent($.param(producto_id: item.id))}"
-    data = form.serialize()
-    $.ajax(url,
-      type: 'POST'
-      data: data 
-      dataType: 'script')
-    $("#catalogo_productos").modal('hide')
+  agregar: ()->
+   datos =  @table.rows({selected: true}).data()
+   productos = $('#productos').find('.producto')
+   _this = this 
+   $.each datos, (index,item) ->
+    if $('#productos').find("tr##{item.id}").length == 0
+      tr = $("<tr></tr>",{id: item.id})
+      tdid = $("<td>#{item.id}</td>")
+      hidden = $("<input></input>",{
+        value: item.id,
+        name: "factura[detalles_attributes][#{_this.nroDetalle}][producto_id]",
+        type: "hidden"
+      })
+      tdid.append hidden 
+      tdprodcuto = $("<td>#{item.descripcion}</td>")
+      tdmonto = $("<td>#{Format.Money(item.precio)}</td>")
+      tdcantidad = $("<td></td>")
+      cantidad =  $("<input></input>",{
+        class: "cantidad",
+        onkeyup: "formFactura.calcularMontos()",
+        onchange: "formFactura.calcularMontos()",
+        type: "number",
+        name: "factura[detalles_attributes][#{_this.nroDetalle}][cantidad]",
+        data: {
+          precio:  item.precio
+        }
+      })
+      tdcantidad.append cantidad
+      tdtotal = $("<td></td>",{class: "total"})
+      tdtotal.append "0.00"
+      tdquitar =  $("<td></td>")
+      button = $("<button></button>",{
+        class:   "btn btn-danger btn-sm",
+        type: "button",
+        onClick: "formFactura.quitarProducto(#{item.id})"
+      })
+      button.append "quitar"
+      tdquitar.append button
+      tr.append tdid
+      tr.append tdprodcuto
+      tr.append tdmonto
+      tr.append tdcantidad
+      tr.append tdtotal   
+      tr.append tdquitar 
+      $('#productos').append tr
+      _this.nroDetalle++;
 
   calcularMontos: ()->
+    id = parseInt($("#factura_impuesto_id").val())
     sum = 0.0
-    $('#productos').find('.producto').each (i,v)->
+    $('#productos').find('tr').each (i,v)->
       item = $(v)
       cantidad = parseFloat(item.find('.cantidad').val())  
       if isNaN(cantidad)
@@ -122,10 +99,13 @@ class FormFactura
       sum += total 
       item.find(".total").empty().append(Format.Money(total))
     impuesto = $("#new_factura").data('impuesto')
-
     $('#plan_base').empty().append(Format.Money(sum))
-    $('#plan_iva').empty().append(Format.Money(impuesto * sum ))
-    $('#plan_total').empty().append(Format.Money(sum + impuesto * sum))
+    if id != 2
+      $('#plan_iva').empty().append(Format.Money(impuesto * sum ))
+      $('#plan_total').empty().append(Format.Money(sum + impuesto * sum))
+    else 
+      monto = parseFloat($('#factura_monto_impuesto').val())
+      $('#plan_total').empty().append(Format.Money(sum + monto))
 
   quitarProducto: (producto)->
     $('#productos').find("##{producto}").remove()
