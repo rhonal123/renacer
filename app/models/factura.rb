@@ -110,6 +110,8 @@ class Factura < ApplicationRecord
 
   before_validation :factura_nueva, on: :create
 
+  before_save :actualizar_cliente, on: :create
+
   private
 
     def factura_nueva
@@ -122,6 +124,9 @@ class Factura < ApplicationRecord
       self.total = (sum.round(2) + self.monto_impuesto).round(2)
       self.porcentaje = impuesto.porcentaje
       self.saldo = self.total 
+    end 
+
+    def actualizar_cliente
       self.cliente_fiscal.direccion = self.direccion
       self.cliente_fiscal.telefono = self.telefono
       self.cliente_fiscal.save()
