@@ -88,7 +88,7 @@
             <label id="plan_base"><%= moneda_venezuela(factura.base || 0) %></label>
           </td>
         </tr>
-        <% if @iva %>
+        <% if factura.impuesto.id == 2  %>
           <tr>
             <td align="right" style="width: 70%;">
               <strong><%= factura.impuesto.descripcion %> :</strong>

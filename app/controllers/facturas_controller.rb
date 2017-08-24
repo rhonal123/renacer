@@ -13,12 +13,6 @@ class FacturasController < ApplicationController
   def show
   end
 
-  def agregar
-    @factura = Factura.new(factura_params)
-    @factura.fecha = Date.today
-    producto  = Producto.find(params[:producto_id])
-    @factura.agregar(producto)
-  end 
 
   def productos 
     @search = params[:search]
@@ -32,26 +26,18 @@ class FacturasController < ApplicationController
   # GET /facturas/new
   def new
     @factura = Factura.new()
-    @iva = eval(params[:iva].to_s)
     @factura.fecha = Date.today
-    if @iva 
-      @factura.impuesto = Impuesto.iva_personal 
-    else
-      @factura.impuesto = Impuesto.iva
-    end 
+    @factura.impuesto = Impuesto.iva params[:impuesto_id]
   end
 
   # POST /facturas
   # POST /facturas.json
   def create
-    @iva = eval(params[:iva].to_s)
-    @factura = Factura.factura_nueva(factura_params)
+    @factura = Factura.new(factura_params)
     if @factura.save()
-      @factura.cliente_fiscal.direccion = @factura.direccion
-      @factura.cliente_fiscal.telefono = @factura.telefono
-      @factura.cliente_fiscal.save()
       redirect_to @factura, notice: 'Factura fue creado correctamente.'
     else
+      puts @factura.errors.full_messages
       render :new
     end 
   end

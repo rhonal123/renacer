@@ -7,7 +7,6 @@ class Factura < ApplicationRecord
   has_many :recibos, inverse_of: :factura
 
   accepts_nested_attributes_for :detalles 
-
   #accepts_nested_attributes_for :detalles #, :reject_if => lambda { |a| puts("--->",a) } 
   #before_validation :remove_whitespaces
   def detalles_attributes=(detalles)
@@ -56,10 +55,10 @@ class Factura < ApplicationRecord
   end 
 
   def self.facturas(mes,ano)
-    Factura.where("date_part('Y',fecha) = :ano and date_part('month',fecha) = :mes and libro_id is null ",{
+    Factura.where(" date_part('Y',fecha) = :ano and date_part('month',fecha) = :mes and libro_id is null ",{
       ano: ano,
       mes:mes
-      })
+    })
   end 
 
   def self.detalle 
@@ -70,45 +69,25 @@ class Factura < ApplicationRecord
   	where(fecha..desde,fecha..hasta)
   end 
 
-  def self.factura_nueva(params)
-    factura = new(params)
-    factura.fecha = Date.today 
-    factura.estado = "PENDIENTE"
-    factura.calcular_montos
-    return factura 
-  end 
+  #def self.factura_nueva(params)
+  #  factura = new(params)
+  #  factura.fecha = Date.today 
+  #  factura.estado = "PENDIENTE"
+  #  factura.calcular_montos
+  #  return factura 
+  #end 
 
-  def calcular_montos 
-    sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
-    self.base = sum.round(2)   
-    self.total = (sum.round(2) + sum.round(2) * impuesto.porcentaje).round(2)
-    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
-    self.porcentaje = impuesto.porcentaje
-    self.saldo = self.total 
-  end 
-
-  def agregar(producto)
-    sum = 0.0
-    self.detalles.each do |detalle|
-      sum += detalle.precio
-      if detalle.producto_id == producto.id 
-        return 
-      end 
-    end 
-    self.base = sum     
-    self.total = sum + sum * impuesto.porcentaje
-    self.saldo = self.total 
-    self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2)
-    self.porcentaje = impuesto.porcentaje
-    detalles << Detalle.new( producto: producto, 
-        cantidad: 0.0,
-        precio_unitario: producto.precio,
-        precio: 0.0 )
-  end 
-
+  #def calcular_montos 
+  #  sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
+  #  self.base = sum.round(2)   
+  #  self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
+  #  self.total = (sum.round(2) + self.monto_impuesto).round(2)
+  ##  self.porcentaje = impuesto.porcentaje
+  #  self.saldo = self.total 
+  #end 
 
   def anular()
-    if self.estado == "PENDIENTE" and self.libro.nil?
+    if anulable?
       self.estado = "ANULADA"
       self.base   = 0
       self.total  = 0
@@ -123,31 +102,35 @@ class Factura < ApplicationRecord
     return self.errors.empty?
   end 
 
-  def pendiente?
-    self.estado == "PENDIENTE"
-  end 
+  enum  estado: {
+    pendiente: "PENDIENTE",
+    cancelada: "CANCELADA",
+    anulada:   "ANULADA"
+  }    
 
-  def cancelada?
-    self.estado == "CANCELADA"
-  end 
+  before_validation :factura_nueva, on: :create
 
-  def anulada?
-    self.estado == "ANULADA"
-  end 
+  private
+
+    def factura_nueva
+      self.fecha = Date.today 
+      self.estado = "PENDIENTE"
+      self.impuesto = Impuesto.iva  if self.impuesto.nil?
+      sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
+      self.base = sum.round(2)   
+      self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
+      self.total = (sum.round(2) + self.monto_impuesto).round(2)
+      self.porcentaje = impuesto.porcentaje
+      self.saldo = self.total 
+      self.cliente_fiscal.direccion = self.direccion
+      self.cliente_fiscal.telefono = self.telefono
+      self.cliente_fiscal.save()
+    end 
 
   def anulable?
     pendiente? and libro.nil?
   end 
 
-  validates :base,      
-    presence: { message: 'Ingrese Base.' }
-  
-  validates :total,
-    presence: { message: 'Ingrese Total.'}
-  
-  validates :saldo,
-    presence: { message: 'Ingrese Saldo'}
-  
   validates :direccion,
    presence: { message: 'Ingrese Estado'}
 

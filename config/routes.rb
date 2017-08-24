@@ -47,7 +47,7 @@ Rails.application.routes.draw do
 
   resources :facturas, only: [:show,:new,:create,:index] do 
     get "productos", action: "productos", on: :collection ,defaults: { format: :json }, constraints: { :format => '(json)' }  
-    post "agregar", action: "agregar", on: :collection  ,defaults: { format: :js }, constraints: { :format => '(js)' }  
+    #post "agregar", action: "agregar", on: :collection  ,defaults: { format: :js }, constraints: { :format => '(js)' }  
     delete "anular", action: "anular"
     get  "imprimir", action: "imprimir"
     resources :recibos, only: [:new,:create,:show] do 
