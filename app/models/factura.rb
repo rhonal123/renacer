@@ -7,8 +7,18 @@ class Factura < ApplicationRecord
   has_many :recibos, inverse_of: :factura
 
   accepts_nested_attributes_for :detalles 
-  #accepts_nested_attributes_for :detalles #, :reject_if => lambda { |a| puts("--->",a) } 
-  #before_validation :remove_whitespaces
+
+  enum  estado: {
+    pendiente: "PENDIENTE",
+    cancelada: "CANCELADA",
+    anulada:   "ANULADA"
+  }    
+
+  before_validation :factura_nueva, on: :create
+
+  before_save :actualizar_cliente, on: :create
+
+
   def detalles_attributes=(detalles)
     detalles.values.each do |detalle|
       d = Detalle.new(detalle)
@@ -69,69 +79,6 @@ class Factura < ApplicationRecord
   	where(fecha..desde,fecha..hasta)
   end 
 
-  #def self.factura_nueva(params)
-  #  factura = new(params)
-  #  factura.fecha = Date.today 
-  #  factura.estado = "PENDIENTE"
-  #  factura.calcular_montos
-  #  return factura 
-  #end 
-
-  #def calcular_montos 
-  #  sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
-  #  self.base = sum.round(2)   
-  #  self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
-  #  self.total = (sum.round(2) + self.monto_impuesto).round(2)
-  ##  self.porcentaje = impuesto.porcentaje
-  #  self.saldo = self.total 
-  #end 
-
-  def anular()
-    if anulable?
-      self.estado = "ANULADA"
-      self.base   = 0
-      self.total  = 0
-      self.saldo  = 0
-      self.monto_impuesto = 0
-      self.porcentaje = 0
-      save()
-    else
-      self.errors.add(:estado,"No Puedes Anular esta Factura se encuenta #{self.estado}") if self.estado != "PENDIENTE"
-      self.errors.add(:estado,"No Puedes Anular esta Factura pertenece al libro del mes #{self.libro.mes}") unless self.libro.nil?
-    end 
-    return self.errors.empty?
-  end 
-
-  enum  estado: {
-    pendiente: "PENDIENTE",
-    cancelada: "CANCELADA",
-    anulada:   "ANULADA"
-  }    
-
-  before_validation :factura_nueva, on: :create
-
-  before_save :actualizar_cliente, on: :create
-
-  private
-
-    def factura_nueva
-      self.fecha = Date.today 
-      self.estado = "PENDIENTE"
-      self.impuesto = Impuesto.iva  if self.impuesto.nil?
-      sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
-      self.base = sum.round(2)   
-      self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
-      self.total = (sum.round(2) + self.monto_impuesto).round(2)
-      self.porcentaje = impuesto.porcentaje
-      self.saldo = self.total 
-    end 
-
-    def actualizar_cliente
-      self.cliente_fiscal.direccion = self.direccion
-      self.cliente_fiscal.telefono = self.telefono
-      self.cliente_fiscal.save()
-    end 
-
   def anulable?
     pendiente? and libro.nil?
   end 
@@ -159,9 +106,29 @@ class Factura < ApplicationRecord
 
   validates :telefono,
       length: { maximum: 35, too_long:"%{count} caracteres es el maximo"}
-
-
+  validates_with AnularFacturaValidator, on: :anular
   validates_associated :detalles
+  
   self.per_page = 12 
+
+  private
+
+    def factura_nueva
+      self.fecha = Date.today 
+      self.estado = "PENDIENTE"
+      self.impuesto = Impuesto.iva  if self.impuesto.nil?
+      sum = self.detalles.inject(0.0) {|s,e| s + e.precio }
+      self.base = sum.round(2)   
+      self.monto_impuesto = (sum.round(2) * impuesto.porcentaje).round(2) if impuesto.id == 1 
+      self.total = (sum.round(2) + self.monto_impuesto).round(2)
+      self.porcentaje = impuesto.porcentaje
+      self.saldo = self.total 
+    end 
+
+    def actualizar_cliente
+      self.cliente_fiscal.direccion = self.direccion
+      self.cliente_fiscal.telefono = self.telefono
+      self.cliente_fiscal.save()
+    end 
 
 end

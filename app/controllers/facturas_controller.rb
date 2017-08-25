@@ -1,5 +1,5 @@
 class FacturasController < ApplicationController
-  before_action :set_factura, only: [:show, :edit, :update, :destroy]
+  before_action :set_factura, only: [:show, :edit, :update, :destroy , :anular]
   before_action :authenticate_usuario!
 
   # GET /facturas
@@ -19,7 +19,7 @@ class FacturasController < ApplicationController
     @search = @search[:value] if @search.instance_of?(ActionController::Parameters)    
     @start =  params[:start]
     @length = params[:length]
-    @productos = Producto.search(@start,@length,@search,params[:sort])
+    @productos = Producto.search_factura(@start,@length,@search,params[:sort])
     @draw = params[:draw].to_i 
   end 
 
@@ -43,8 +43,8 @@ class FacturasController < ApplicationController
   end
 
   def anular
-    @factura = Factura.find(params[:factura_id])
-    if @factura.anular()
+    FacturaService.new(@factura).anular 
+    if @factura.anulada?
       redirect_to @factura, notice: 'Factura anulada correctamente.'
     else
       flash[:error] = @factura.errors.full_messages
@@ -61,7 +61,7 @@ class FacturasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_factura
-      @factura = Factura.detalle.find(params[:id])
+      @factura = Factura.detalle.find(params[:id] || params[:factura_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

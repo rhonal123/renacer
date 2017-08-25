@@ -7,7 +7,16 @@ class FacturaService
   end
 
   def anular
-
+    if @factura.valid? :anular 
+      Factura.transaction do
+ 	 			@factura.update estado: "ANULADA",
+ 	 				base: 0,
+      		total: 0,
+      		saldo: 0,
+      		monto_impuesto: 0,
+      		porcentaje: 0
+      end 
+    end 
   end 
 
 #  def self.crear(params)
