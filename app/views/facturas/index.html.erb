@@ -3,9 +3,15 @@
 <div class="panel-body2">
     <div class="row">
         <div class="col-sm-4 col-md-4" >
-          <%= link_to 'Nuevo', new_factura_path,
-            class: "btn btn-default btn-sm"  %>
-          <%= link_to 'Nuevo(IVA)', new_factura_path(impuesto_id:2 ), class: "btn btn-default btn-sm"  %>
+
+        <%= form_tag(new_factura_path, method: :GET, class: "form-inline") do %>
+          <div class="form-group">
+            <%= select_tag(:impuesto_id,
+              options_from_collection_for_select(Impuesto.all, :id, :descripcion),
+              class: "form-control") %>
+          </div>
+          <%= submit_tag "Nuevo" ,  class: "btn btn-default btn-sm"  %>
+        <% end %>
         </div>
         <div class="col-md-8" align="right">
           <%= buscar_rango_fecha(facturas_path,["cliente","estado"]) %>
@@ -24,20 +30,36 @@
     <%= paginador(@facturas,controller: :facturas, action: :index ) %>
 </div>
 <script type="text/javascript">
-   $('#form_buscar #desde').datepicker({
-      autoclose: true,
-      format: "dd/mm/yyyy",
-      todayBtn: "linked",
-      startView: 1,
-      language: 'es'
-    });
 
-   $('#form_buscar #hasta').datepicker({
-      autoclose: true,
-      format: "dd/mm/yyyy",
-      todayBtn: "linked",
-      startView: 1,
-      language: 'es'
-    });
+
+$(document).ready(function(){
+  
+  if(localStorage.getItem("impuesto_id") != undefined){
+    $('#impuesto_id').val(localStorage.getItem("impuesto_id"));
+  }
+
+  $('#impuesto_id').change(function() {
+    localStorage.setItem("impuesto_id",$("#impuesto_id option:selected").val())
+  });
+
+  $('#form_buscar #desde').datepicker({
+    autoclose: true,
+    format: "dd/mm/yyyy",
+    todayBtn: "linked",
+    startView: 1,
+    language: 'es'
+  });
+
+  $('#form_buscar #hasta').datepicker({
+    autoclose: true,
+    format: "dd/mm/yyyy",
+    todayBtn: "linked",
+    startView: 1,
+    language: 'es'
+  });
+});
+
+ 
+
 
 </script>

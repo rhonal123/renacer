@@ -1,11 +1,7 @@
 class Impuesto < ApplicationRecord
 
-
-
-
 	def self.iva id 
-		id ||= 1 
-		find(id)
+		find(id || 1 )
 	end 
 
 end
