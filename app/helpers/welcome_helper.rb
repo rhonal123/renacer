@@ -57,16 +57,17 @@ module WelcomeHelper
           e.append(nav_link("Clientes",clientes_path,"clientes"))
           e.append(nav_link("Clientes Fiscales",clientes_fiscales_path,"clientes_fiscales"))
         end 
-        nav.append(clientes) 
-        
+        nav.append clientes 
         nav.append(nav_link("Planes",planes_path,"planes"))
         nav.append(nav_link("Contratos",contratos_path,"contratos"))
         nav.append(nav_link("Cobradores",cobradores_path,"cobradores"))
-
         nav.append(nav_link("Prodcutos",productos_path,"productos"))
-        nav.append(nav_link("Facturas",facturas_path,"facturas"))
-        nav.append(nav_link("Libro ventas",libros_path,"libros"))
-
+        facturacion = sub_menu "Facturacion" do |e|
+          e.append nav_link("Facturas",facturas_path,"facturas") 
+          e.append nav_link("Libro ventas",libros_path,"libros")
+          e.append nav_link("Impuestos",impuestos_path,"impuestos") 
+        end 
+        nav.append facturacion 
         nav.append(nav_link("Cuentas por Cobrar", cuenta_por_cobrar_index_path ,"cuenta_por_cobrar"))
       end 
     end 

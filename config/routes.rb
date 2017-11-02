@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :clientes_fiscales
   resources :productos
   resources :clientes
-
+  resources :impuestos
   resources :cuenta_por_cobrar, only: [:index,:show] do 
     get "estado", action: "estado"
   end 

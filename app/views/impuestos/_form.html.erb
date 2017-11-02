@@ -1,0 +1,44 @@
+<%= form_for(impuesto,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+
+
+
+  <div class="form-group form-group-sm <%= "has-error" if impuesto.errors.has_key?(:descripcion)  %>">
+   <%= f.label :descripcion,"Descripción", class:"col-md-2 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :descripcion, class: "form-control input-sm" %>
+     <% if impuesto.errors.has_key?(:descripcion) %>
+     <span class="help-block"><%= impuesto.errors.messages[:descripcion].join(',') %></span>
+     <% end %>
+   </div>
+  </div>
+
+  <div class="form-group form-group-sm <%= "has-error" if impuesto.errors.has_key?(:porcentaje)  %>">
+   <%=f.label :porcentaje,class:"col-md-2 control-label" %>
+   <div class="col-md-2">
+     <%= f.number_field :porcentaje, class: "form-control input-sm", min: 0, max: 1, step: 0.01 %>
+     <% if impuesto.errors.has_key?(:porcentaje) %>
+     <span class="help-block"><%= impuesto.errors.messages[:porcentaje].join(',') %></span>
+     <% end %>
+   </div> 
+    <label id="lbl-porcentaje" class="col-md-1 control-label" > 
+      <%= "#{impuesto.porcentaje.to_f * 100} %" %>
+     </label>
+ </div>
+
+  <div class="form-group form-group-sm">
+    <div class="col-md-5 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+<% end %>
+
+ 
+
+
+
+
+  
+
+ 
+

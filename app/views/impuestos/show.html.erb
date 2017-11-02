@@ -1,0 +1,11 @@
+<%= titulo("Impuesto  #{@impuesto.id}") %> 
+<div class="panel-body2"  >
+  <%= link_to 'Regresar', impuestos_path, class: "btn btn-default" %>
+  <%= link_to 'Editar', edit_impuesto_path(@impuesto), class: "btn btn-default"  %> 
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
+  <%= detalle "Descripción : ", @impuesto.descripcion %>
+  <%= detalle "% : ", @impuesto.porcentaje * 100  %>
+</div>
+ 
