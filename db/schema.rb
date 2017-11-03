@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818193103) do
+ActiveRecord::Schema.define(version: 20171103123731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bancos", force: :cascade do |t|
+    t.string   "banco"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "beneficiarios", force: :cascade do |t|
     t.string   "identidad",       limit: 16
@@ -72,6 +78,14 @@ ActiveRecord::Schema.define(version: 20170818193103) do
     t.index ["plan_id"], name: "index_contratos_on_plan_id", using: :btree
   end
 
+  create_table "cuentas", force: :cascade do |t|
+    t.text     "cuenta"
+    t.integer  "banco_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cuenta"], name: "index_cuentas_on_cuenta", unique: true, using: :btree
+  end
+
   create_table "detalles", force: :cascade do |t|
     t.integer  "factura_id"
     t.integer  "producto_id"
@@ -116,14 +130,18 @@ ActiveRecord::Schema.define(version: 20170818193103) do
     t.string   "referencia", limit: 50
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.integer  "cuenta_id"
+    t.index ["cuenta_id"], name: "index_forma_pagos_on_cuenta_id", using: :btree
     t.index ["recibo_id"], name: "index_forma_pagos_on_recibo_id", using: :btree
   end
 
   create_table "impuestos", force: :cascade do |t|
     t.string   "descripcion"
     t.float    "porcentaje"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "activo",      default: false
+    t.index ["activo"], name: "index_impuestos_on_activo", unique: true, where: "(activo IS TRUE)", using: :btree
   end
 
   create_table "libros", force: :cascade do |t|
@@ -208,11 +226,13 @@ ActiveRecord::Schema.define(version: 20170818193103) do
   add_foreign_key "contratos", "clientes"
   add_foreign_key "contratos", "cobradores"
   add_foreign_key "contratos", "planes"
+  add_foreign_key "cuentas", "bancos"
   add_foreign_key "detalles", "facturas"
   add_foreign_key "detalles", "productos"
   add_foreign_key "facturas", "clientes_fiscales"
   add_foreign_key "facturas", "impuestos"
   add_foreign_key "facturas", "libros"
+  add_foreign_key "forma_pagos", "cuentas"
   add_foreign_key "forma_pagos", "recibos"
   add_foreign_key "pagos", "cobradores"
   add_foreign_key "pagos", "contratos"

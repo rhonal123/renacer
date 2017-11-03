@@ -21,6 +21,7 @@
    inflect.irregular 'cobrador', 'cobradores'
    inflect.irregular 'clienteFiscal', 'clientesFiscales'
    inflect.irregular 'cliente_fiscal', 'clientes_fiscales'
+   inflect.irregular 'cuenta', 'cuentas'
  end
 
 

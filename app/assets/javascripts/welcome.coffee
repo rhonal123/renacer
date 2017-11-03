@@ -157,4 +157,5 @@ class MontosPago
 
 class @Format
   @Money: (n)->
+    n = parseFloat(n)
     return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+ " Bs";

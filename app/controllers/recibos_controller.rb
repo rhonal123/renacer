@@ -70,7 +70,7 @@ class RecibosController < ApplicationController
       params.require(:recibo).permit(
           :fecha,
           :concepto,
-           pagos_attributes:[:fecha,:monto,:tipo,:referencia])
+           pagos_attributes:[:fecha,:monto,:tipo,:referencia,:cuenta_id])
     end
 end
  

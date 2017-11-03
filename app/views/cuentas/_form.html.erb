@@ -1,0 +1,37 @@
+<%= form_for(cuenta,remote: false,html: {class:'form-horizontal', role:'form'}) do |f| %>
+ 
+  <div class="form-group form-group-sm <%= "has-error" if cuenta.errors.has_key?(:cuenta)  %>">
+   <%= f.label :cuenta, class:"col-md-2 control-label" %>
+   <div class="col-md-3">
+     <%= f.text_field :cuenta, class: "form-control input-sm" %>
+     <% if cuenta.errors.has_key?(:cuenta) %>
+     <span class="help-block"><%= cuenta.errors.messages[:cuenta].join(',') %></span>
+     <% end %>
+   </div>
+   <%=f.label :banco_id,class:"col-md-2 control-label" %>
+   <div class="col-md-5">
+     <%= f.select :banco_id,options_for_select(Banco.all.collect { |u| [u[:banco],u[:id]] }) ,class: "form-control input-sm"  %>
+     <% if cuenta.errors.has_key?(:banco_id) %>
+     <span class="help-block"><%= cuenta.errors.messages[:banco_id].join(',') %></span>
+     <% end %>
+   </div>
+ </div>
+
+
+  <div class="form-group form-group-sm">
+    <div class="col-md-12 " align="right">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+    </div>
+  </div>
+
+<% end %>
+
+ 
+
+
+
+
+  
+
+ 
+

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :cuentas
   resources :cobradores do
     get "planilla/liquidacion", action: "planilla_liquidacion", as: :planilla_liquidacion 
   end 

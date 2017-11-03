@@ -1,0 +1,30 @@
+<%= titulo("cuenta  #{@cuenta.id}") %> 
+<div class="panel-body2"  >
+  <%= link_to 'Regresar', cuentas_path, class: "btn btn-default" %>
+  <%= link_to 'Editar', edit_cuenta_path(@cuenta), class: "btn btn-default"  %> 
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
+  <%= detalle "Cuenta : ", @cuenta.cuenta %>
+  <%= detalle "Banco : ", @cuenta.banco.banco %>
+  <% ahora = Time.new(Time.now.year,Time.now.month,1) %>
+
+
+  <div class="col-md-12">
+  <h4 class="page-header">Ultimos 3 Meses </h4>
+  <%= detalle "#{meses_libro(ahora.month)},#{ahora.year}: ",
+  		@cuenta.monto_acumuado(ahora.month,ahora.year) %>
+
+  <% ahora = ahora - 1.month %>
+
+  <%= detalle "#{meses_libro(ahora.month)},#{ahora.year}: ",
+  		@cuenta.monto_acumuado(ahora.month,ahora.year) %>
+
+  <% ahora = ahora - 1.month %>
+
+  <%= detalle "#{meses_libro(ahora.month)},#{ahora.year}: ",
+  		@cuenta.monto_acumuado(ahora.month,ahora.year) %>
+
+  </div>
+</div>
+ 

@@ -66,6 +66,7 @@ module WelcomeHelper
           e.append nav_link("Facturas",facturas_path,"facturas") 
           e.append nav_link("Libro ventas",libros_path,"libros")
           e.append nav_link("Impuestos",impuestos_path,"impuestos") 
+          e.append nav_link("Cuentas Bancarias",cuentas_path,"cuentas") 
         end 
         nav.append facturacion 
         nav.append(nav_link("Cuentas por Cobrar", cuenta_por_cobrar_index_path ,"cuenta_por_cobrar"))

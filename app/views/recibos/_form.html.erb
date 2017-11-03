@@ -1,7 +1,6 @@
 <%= form_for(recibo,
   url:  factura_recibos_path(factura),
   html: {
-    class:'form-horizontal',
     role:'form',
     class:'form-horizontal formulario-recibo',
   }) do |f| %>
@@ -52,16 +51,16 @@
     %>
 
     <table class="table table-body" >
-      <thead><tr><th>FECHA</th><th>MONTO</th><th>TIPO</th><th>REFERENCIA</th><th></th></tr></thead>
+      <thead><tr><th style="width: 100px;">FECHA</th><th style="width: 160px;">MONTO</th><th style="width: 140px;">TIPO</th><th>CUENTA BANCARIA</th><th>REFERENCIA</th><th style="width: 60px;" ></th></tr></thead>
       <tbody id="pagos" style="height: 200px;">
         <%= f.fields_for :pagos do |pago_fields| %>
           <tr class="pagos">
-          <th>
+          <th style="width: 100px;" >
             <%= pago_fields.text_field :fecha, 
                 value: pago_fields.object.fecha.strftime("%d/%m/%Y"),
                 class: "fecha form-control input-sm" %>
           </th>
-          <th>
+          <th  style="width: 160px;">
             <%= pago_fields.number_field :monto,
             class: "form-control input-sm monto",
             onkeyup: "formRecibo.calcularMontos()",
@@ -72,12 +71,16 @@
               <span class="help-block"><%= pago_fields.object.errors.messages[:monto].join(',') %></span>
             <% end %>
           </th>
-          <th><%= pago_fields.select :tipo, 
+          <th style="width: 140px;"><%= pago_fields.select :tipo, 
               ["TRANSFERENCIA","EFECTIVO","DEPOSITO","CHEQUE","PUNTO"] ,{},
               class: "form-control input-sm"  %>
           </th>
+          <th><%= pago_fields.select :cuenta_id, 
+              opciones_cuentas_bancarias,{},
+              class: "form-control input-sm"  %>
+          </th>
           <th><%= pago_fields.text_field :referencia, class: "form-control input-sm" %></th>
-          <th><%= button_tag "Quitar",
+          <th style="width: 60px;" ><%= button_tag "Quitar",
                 class: "btn btn-danger btn-sm",
                 type: "button",
                 onClick: "formRecibo.quitar(event);"

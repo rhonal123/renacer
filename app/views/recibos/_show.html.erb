@@ -6,13 +6,14 @@
   <div  class="form-group form-group-sm">
     <div class="col-md-12 ">
       <table class="table table-body" >
-        <thead><tr><th>FECHA</th><th>MONTO</th><th>TIPO</th><th>REFERENCIA</th></tr></thead>
+        <thead><tr><th>FECHA</th><th>MONTO</th><th>TIPO</th><th>CUENTA</th><th>REFERENCIA</th></tr></thead>
         <tbody id="pagos" style="height: 200px;">
           <% recibo.pagos.each do |pago| %>
             <tr>
   	          <td><%= pago.fecha %></td>	
     	        <td><%= moneda_venezuela(pago.monto) %></td>	
   	          <td><%= pago.tipo %></td>	
+              <td><%= "#{pago.cuenta.banco.banco} #{pago.cuenta.cuenta} " unless  pago.cuenta.nil? %></td>
   	          <td><%= pago.referencia %></td>	
             </tr>
           <% end %>

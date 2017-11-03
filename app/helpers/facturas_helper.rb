@@ -17,4 +17,13 @@ module FacturasHelper
 	    type: "button",
 	    onClick: "formFactura.quitarProducto(#{producto.id})"
 	end 
+
+
+	def opciones_cuentas_bancarias 
+  	cuentas = Cuenta.all.collect{ |c| ["#{c.banco.banco} #{c.cuenta}",c.id] } 
+		cuentas.insert(0,["EFECTIVO",nil])
+		options_for_select(cuentas)
+	end 
+
+
 end
