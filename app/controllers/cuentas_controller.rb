@@ -1,5 +1,5 @@
 class CuentasController < ApplicationController
-  before_action :set_cuenta, only: [:show, :edit, :update, :destroy]
+  before_action :set_cuenta, only: [:show, :edit, :update, :destroy,:reporte]
 
   # GET /cuenta
   # GET /cuenta.json
@@ -61,10 +61,15 @@ class CuentasController < ApplicationController
     end
   end
 
+  def reporte
+    pdf = CuentaPdf.new @cuenta, params[:mes], params[:ano]
+    send_data pdf.render,filename: "cuenta_#{@cuenta.cuenta}", type: 'application/pdf',disposition: 'inline'
+  end 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_cuenta
-      @cuenta = Cuenta.find(params[:id])
+      @cuenta = Cuenta.find(params[:id] || params[:cuenta_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

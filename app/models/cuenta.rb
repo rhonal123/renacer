@@ -25,6 +25,12 @@ class Cuenta < ApplicationRecord
     forma_pagos.where(created_at: inicio..fin).sum(:monto)
   end 
 
+  def pagos mes, ano 
+    inicio = Date.new ano, mes, 1 
+    fin = inicio.end_of_month
+    forma_pagos.where(created_at: inicio..fin)
+  end 
+
 
   validates :cuenta, 
       presence: {message: 'Ingrese Numero de cuenta'},
