@@ -1,6 +1,8 @@
 <%= nuevo_titulo %> 
 <div class="panel-body2">
 	<%= link_to 'Regresar', facturas_path, class: "btn btn-default btn-sm" %>
+  <%= proximo_valor %>
+  </h3>
 </div>
 <div class="panel-body2"  style="height: 95%; padding-top: 10px;">
 	<%= render 'form', factura: @factura, iva: @iva %>

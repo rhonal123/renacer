@@ -18,6 +18,13 @@ module FacturasHelper
 	    onClick: "formFactura.quitarProducto(#{producto.id})"
 	end 
 
+	def proximo_valor 
+    content_tag :label, 
+    	"Numero asignar: #{codigo_factura(Factura.proxima_factura)}",
+    	class: "label label-info pull-right",
+    	style: "font-size: 125%;" 
+	end 
+
 
 	def opciones_cuentas_bancarias 
   	cuentas = Cuenta.all.collect{ |c| ["#{c.banco.banco} #{c.cuenta}",c.id] } 
