@@ -1,0 +1,65 @@
+<%= titulo("Cobrador  #{@cobrador.id}") %> 
+<div class="panel-body2"  >
+  <%= link_to 'Regresar', @cobrador, class: "btn btn-default btn-sm" %>
+  <%= seleccionar_fecha_cobrador(@cobrador, @fecha) %>
+</div>
+
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+	<%= render partial: "/shared/flash_messages", flash: flash %> 
+  <div class="col-md-8">
+    <div class="table-responsive" style="height: 450px;overflow: scroll; display: block;">
+      <table class="table  table-condensed" >
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Contrato</th>
+          <th>Semana</th>
+          <th>Plan</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cobrador.pagos.where(fecha_pago: @fecha).each do |pago| %>
+          <tr>
+            <td><%= pago.ano %></td>
+            <td><%= codigo_contrato pago.contrato_id %></td>
+            <td><%= pago.semana %></td>
+            <td><%= pago.plan.nombre unless pago.plan.nil? %></td>
+            <td><%= moneda_venezuela(pago.monto) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      </table>
+    </div>
+    <div class="col-md-12" style="text-align: right;">
+      <p><strong> Monto :</strong> <%= monto_cobrado_diario(@cobrador,@fecha) %></p>
+      <p><strong> 30% Monto :</strong> <%= monto_cobrado_diario_30(@cobrador,@fecha) %></p>
+    </div>
+  </div>
+  <div class="col-md-4" style="height: 500px; padding-top: 10px; overflow: scroll;">
+    <ul id="lista-contratos-cobrador"  class="list-group">
+      <% @cobrador.contratos.includes(:cliente).where(estado: 'activo').each do |contrato| %>
+        <li data-id-contrato="<%= contrato.id %>"  class="list-group-item">
+           <%= " #{codigo_contrato(contrato.id)} #{contrato.cliente.nombre_corto } "%>
+          <%= link_to 'selecionar', cobrador_seleccionar_contrato_path(@cobrador.id,contrato.id,{ fecha: @fecha }), class: "badge" %>
+        </li>
+      <% end %>       
+    </ul>
+  <div>
+</div>
+
+<script type="text/javascript">
+  
+    $('#cagar_fecha_cobrador #fecha').datepicker({
+      autoclose: true,
+      format: "yyyy-mm-dd",
+      todayBtn: "linked",
+      startView: 1,
+      language: 'es'
+    }).datepicker( "setDate" , '<%= @fecha %>' )
+
+    $(document).on('change', '#cagar_fecha_cobrador #fecha', function(e){
+      $("#cagar_fecha_cobrador").submit();
+    });
+
+</script>

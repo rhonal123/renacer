@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   resources :cobradores do
     get "planilla/liquidacion", action: "planilla_liquidacion", as: :planilla_liquidacion 
+    get :pagar
+    get  "pagar/seleccionar/:idcontrato", action: "seleccionar_contrato", as: :seleccionar_contrato
+    patch "pagar/:pago_id" ,action: "pagar_pago", as: :pagar_pago
   end 
 
   root 'welcome#index'

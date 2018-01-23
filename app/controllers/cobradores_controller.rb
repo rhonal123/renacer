@@ -1,5 +1,5 @@
 class CobradoresController < ApplicationController
-  before_action :set_cobrador, only: [:show, :edit, :update, :destroy,:planilla_liquidacion]
+  before_action :set_cobrador, only: [:show, :edit, :update, :destroy,:planilla_liquidacion,:pagar,:seleccionar_contrato,:pagar_pago]
   before_action :authenticate_usuario!
 
   # GET /cobradors
@@ -55,6 +55,31 @@ class CobradoresController < ApplicationController
     end
   end
 
+  def pagar
+    @fecha = params[:fecha]
+    @fecha = Date.today if @fecha.nil? 
+    @fecha = @fecha.to_date
+  end 
+
+  def pagar_pago  
+    @pago = Pago.find(params[:pago_id])
+    @fecha = params[:fecha]
+    @ano  = params[:ano]
+    if  PagoService.new(@pago).pagar() 
+      redirect_to  cobrador_seleccionar_contrato_path(@cobrador.id,@pago.contrato_id,{ fecha: @fecha, ano: @ano }), notice: 'Contrato Actualizado'
+    else
+      flash[:error] = @pago.errors.full_messages
+      redirect_to  cobrador_seleccionar_contrato_path(@cobrador.id,@pago.contrato_id,{ fecha: @fecha, ano: @ano }), notice: 'Error '
+    end
+  end 
+
+  def seleccionar_contrato
+    @contrato = @cobrador.contratos.find(params[:idcontrato])
+    @ano = params[:ano]
+    @ano = Date.today.year if @ano.nil?
+    @fecha = params[:fecha]
+  end 
+
   def planilla_liquidacion
     #@totalizar_pagados = Pago.totalizar_pagos_pagados(params[:cobrador_id],params[:desde],params[:hasta])
     #@totalizar = Pago.totalizar_pagos(params[:cobrador_id],params[:desde],params[:hasta])
@@ -65,6 +90,7 @@ class CobradoresController < ApplicationController
       type: 'application/pdf',
       disposition: 'inline'
   end 
+
 
 
   private

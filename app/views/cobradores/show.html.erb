@@ -1,7 +1,8 @@
 <%= titulo("Cobrador  #{@cobrador.id}") %> 
 <div class="panel-body2"  >
-  <%= link_to 'Regresar', cobradores_path, class: "btn btn-default" %>
-  <%= link_to 'Editar', edit_cobrador_path(@cobrador), class: "btn btn-default"  %> 
+  <%= link_to 'Regresar', cobradores_path, class: "btn btn-default btn-sm" %>
+  <%= link_to 'Editar', edit_cobrador_path(@cobrador), class: "btn btn-default btn-sm"  %> 
+  <%= link_to 'Realizar Pagos', cobrador_pagar_path(@cobrador), class: "btn btn-default btn-sm"  %> 
   <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#reporteModal">
     Reporte Pagos
   </button>

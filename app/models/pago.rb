@@ -1,5 +1,5 @@
 class Pago < ApplicationRecord
-  belongs_to :contrato , inverse_of: :pagos, validate: true
+  belongs_to :contrato , inverse_of: :pagos #, validate: true
   belongs_to :plan, optional: true   
   belongs_to :cobrador, required: false
 

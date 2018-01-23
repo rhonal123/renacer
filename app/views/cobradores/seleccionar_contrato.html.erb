@@ -1,16 +1,21 @@
-<%
-  activeClass ||= ""
-%>
-<div role="tabpanel" class="tab-pane fade in pagosContrato <%= activeClass %>" id="pagos">
+<%= titulo("Cobrador  #{@cobrador.id}") %> 
+<div class="panel-body2"  >
+  <%= link_to 'Regresar', cobrador_pagar_path(@cobrador), class: "btn btn-default btn-sm" %>
+</div>
+  <%= render partial: "/shared/flash_messages", flash: flash %> 
+
+<div role="tabpanel">
   <div align="left">
     <div class="panel-body">
       <label for="">Año</label>
-      <%= seleccionar_pagos_por_ano(contrato,ano) %>
+      <%= seleccionar_pagos_por_ano_cobradorees(@cobrador,@contrato,@fecha,@ano) %>
+
     </div>
   </div>
+
   <div class="table-responsive" >
-    <% if contrato.pagos.por_ano(ano).empty? %>
-      <h2>No hay Pagos Registrados para este año <%= ano %></h2>
+    <% if @contrato.pagos.por_ano(@ano).empty? %>
+      <h2>No hay Pagos Registrados para este año <%= @ano %></h2>
     <% else %>
       <table class="table table-body" >
       <thead>
@@ -25,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <% contrato.pagos.por_ano(ano).each do |pago| %>
+        <% @contrato.pagos.por_ano(@ano).each do |pago| %>
           <tr>
             <td><%= pago.ano %></td>
             <td><%= pago.semana %></td>
@@ -34,28 +39,28 @@
             <td><%= pago.cobrador.nombre unless pago.cobrador.nil? %></td>
             <td><%= pago.estado %></td>
             <td><%= button_to('Pagar',
-                contrato_pagar_path(contrato,pago),
+                cobrador_pagar_pago_path(@cobrador.id,pago.id,{ fecha: @fecha, ano: @ano }),
                 method: "patch",
-                remote: true,
                 class:"btn btn-sm btn-info",
                 data: {
                   confirm: "Quieres Pagar la semana Nro #{pago.semana}" 
-                }) if (contrato.activo? or  Date.today.year != pago.ano ) and pago.pendiente? %></td>
+                }) if (@contrato.activo? or  Date.today.year != pago.ano ) and pago.pendiente? %>
+            </td>
           </tr>
         <% end %>
       </tbody>
       <tfoot>
         <tr>
           <td align="right" style="width: 70%;"><strong>Monto Semanal :</strong></td>      
-          <td><label id="plan_monto"><%= moneda_venezuela(contrato.pagos.ultimo_monto(ano)) %></label></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(@contrato.pagos.ultimo_monto(@ano)) %></label></td>      
         </tr>
         <tr>
           <td  align="right" style="width: 70%;"><strong>Monto Pendiente :</strong></td>      
-          <td><label id="plan_monto"><%= moneda_venezuela(contrato.pagos.monto_pendiente(ano)) %></label></td>      
+          <td><label id="plan_monto"><%= moneda_venezuela(@contrato.pagos.monto_pendiente(@ano)) %></label></td>      
         </tr>
         <tr>
           <td  align="right" style="width: 70%;"><strong>Total Contrato :</strong></td>      
-          <td><label id="plan_mensual"><%= moneda_venezuela(contrato.pagos.total_ano(ano) )  %></label></td>      
+          <td><label id="plan_mensual"><%= moneda_venezuela(@contrato.pagos.total_ano(@ano) )  %></label></td>      
         </tr>
       </tfoot>
       </table>

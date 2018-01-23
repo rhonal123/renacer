@@ -67,12 +67,18 @@ class ContratosController < ApplicationController
 
   def pagar 
     @pago = @contrato.pagos.find(params[:pago_id])
-    if PagoService.new(@pago).pagar() 
-      redirect_to @contrato, notice: 'Contrato Actualizado'
-    else
-      flash[:error] = @pago.errors.full_messages
-      redirect_to @contrato 
-    end 
+    @response = PagoService.new(@pago).pagar() 
+    respond_to do |format|
+      format.html do
+        if @response
+          redirect_to @contrato, notice: 'Contrato Actualizado'
+        else
+          flash[:error] = @pago.errors.full_messages
+          redirect_to @contrato 
+        end 
+      end 
+      format.js
+    end
   end 
 
   def activar 

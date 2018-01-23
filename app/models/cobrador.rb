@@ -41,7 +41,7 @@ class Cobrador < ApplicationRecord
   def pendiente_por_cobrar(plan_id)
     contratos.joins(:pagos).where(
       pagos: { 
-        fecha_pago: nil,
+        #fecha_pago: nil,
         estado: "pendiente"
       },
       plan_id: plan_id

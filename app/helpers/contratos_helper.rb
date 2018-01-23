@@ -10,6 +10,8 @@ module ContratosHelper
     })
   end 
 
+
+
 	def codigo_contrato(id)
 		s = "000000#{id}" 
 		s[s.size-6, s.size]

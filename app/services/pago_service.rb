@@ -12,8 +12,9 @@ class PagoService
           estado: Pago.estados[:pagado],
           cobrador: pago.contrato.cobrador,
           fecha_pago: Date.today)
-        pago.contrato.update!( monto: pago.contrato.pagos.monto_pendiente )
+        pago.contrato.update!( monto: pago.contrato.pagos.monto_pendiente ) if  Date.today.year == pago.ano
+        true
       end 
-    end 
+    end  
   end   
 end 
