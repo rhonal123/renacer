@@ -71,6 +71,10 @@ class Factura < ApplicationRecord
     })
   end 
 
+  def self.proxima_factura
+    Factura.connection.select_value("select last_value as value from facturas_id_seq") + 1
+  end 
+
   def self.detalle 
     eager_load(:cliente_fiscal,:impuesto)
   end 

@@ -29,9 +29,9 @@ class Cobrador < ApplicationRecord
   def totalizar_pagos(plan_id,desde,hasta,estado = "pagado")
     self.pagos.
     where(
-      fecha_pago: desde..hasta,
       estado: estado,
       plan_id: plan_id).
+    where("fecha_pago >= ? and fecha_pago <= ?",desde,hasta).
     pluck(
       Pago.arel_table[:id].count,
       Pago.arel_table[:monto].sum
