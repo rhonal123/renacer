@@ -75,7 +75,7 @@ class Contrato < ApplicationRecord
   validates :cliente_id, presence: {message: 'Seleccione'}
   validates :desde, presence: {message: 'Ingrese'}
   validates :plan_id, presence: {message: 'Seleccione'}
-  validate :fecha_valida? , on: [:create, :update]
+  #validate :fecha_valida? , on: [:create, :update]
 
   validates_with AnularContratoValidator, on: :anular
   validates_with ActivarContratoValidator, on: :activar
@@ -96,11 +96,11 @@ class Contrato < ApplicationRecord
   end 
   
   private 
-  def fecha_valida?
-    if !desde.nil? and desde.year != Date.today.year 
-      errors.add :desde,"Error el año debe ser el año actual." 
-    end 
-    errors.empty?
-  end
+  #def fecha_valida?
+  #  if !desde.nil? and desde.year != Date.today.year 
+  #    errors.add :desde,"Error el año debe ser el año actual." 
+  #  end 
+  #  errors.empty?
+  #end
 
 end
