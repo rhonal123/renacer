@@ -1,5 +1,17 @@
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: [:show, :edit, :update, :destroy,:pagar,:pagos, :activar, :plan,:plan_edit,:generar_pagos]
+  before_action :set_contrato, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy,
+    :pagar,
+    :pagos,
+    :activar,
+    :inactivar,
+    :plan,
+    :plan_edit,
+    :generar_pagos
+  ]
   before_action :authenticate_usuario!
   include ContratosHelper
 
@@ -8,6 +20,29 @@ class ContratosController < ApplicationController
   def index
     @contratos = Contrato.search(params[:page], params[:search], params[:sort])
   end
+
+    # GET /contratos
+  # GET /contratos.json
+  def activos
+    @contratos = Contrato.where(estado: :activo).search(params[:page], params[:search], params[:sort])
+  end
+
+      # GET /contratos
+  # GET /contratos.json
+  def inactivos
+    @contratos = Contrato.where(estado: :inactivo).search(params[:page], params[:search], params[:sort])
+  end
+
+  def creados
+    @contratos = Contrato.where(estado: :creado).search(params[:page], params[:search], params[:sort])
+  end
+    
+  def anulados
+    @contratos = Contrato.where(estado: :anulado).search(params[:page], params[:search], params[:sort])
+  end
+    
+  
+
 
   # GET /contratos/1
   # GET /contratos/1.json
@@ -91,6 +126,17 @@ class ContratosController < ApplicationController
     end 
   end 
 
+  def inactivar 
+    ContratoService.new(@contrato).inactivar 
+    if @contrato.inactivo?
+      redirect_to @contrato, notice: 'Contrato Inactivo'
+    else 
+      flash[:error] = @contrato.errors.full_messages
+      redirect_to @contrato, notice: 'Error al inactivar el contrato'
+    end 
+  end 
+
+
   def cobrador
     @contrato = Contrato.find(params[:contrato_id])
     if @contrato.update(cobrador_params)
@@ -152,7 +198,13 @@ class ContratosController < ApplicationController
   def catulina 
     @contrato = Contrato.find params[:contrato_id]
     @monto = @contrato.plan.monto
-    pdf = CartulinaPdf.new @contrato
+    @type  = params[:type]
+    pdf    = nil 
+    if @type == 'year'  then 
+      pdf = CartulinaAnoPdf.new @contrato
+    else
+      pdf = CartulinaPdf.new @contrato
+    end 
     send_data pdf.render,filename: "contrato_nro_#{@contrato.id}", type: 'application/pdf',disposition: 'inline'
   end 
 

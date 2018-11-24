@@ -3,12 +3,14 @@ class CartulinaPdf < Prawn::Document
   include ContratosHelper
   include ApplicationHelper
 
-  def initialize(contrato, _width =453.5433 , _height = 555.2755)
+  def initialize(contrato, _width = 453.5433 , _height = 555.2755)
     super(page_size: [_width,_height], margin: 10)
     font_size 10
     @height = _height
     @width = _width
     @contrato = contrato
+    @rows = 20 
+    @columns = 6 
     grid_cobrado
     start_new_page
     grid_pendiente
@@ -16,7 +18,7 @@ class CartulinaPdf < Prawn::Document
   
  
   def grid_cobrado
-    define_grid(:columns => 6, :rows => 20, :gutter => 0)
+    define_grid(:columns => @columns, :rows => @rows, :gutter => 0)
     #grid.show_all
     grid([0, 0], [0, 2]).bounding_box do
       _texto = "Nombres y Apellidos: #{@contrato.cliente.nombre_corto}"
@@ -65,7 +67,7 @@ class CartulinaPdf < Prawn::Document
   end 
 
   def grid_pendiente
-    define_grid(:columns => 6, :rows => 20, :gutter => 0)
+    define_grid(:columns => @columns, :rows => @rows, :gutter => 0)
     #grid.show_all
     grid([0,0], [0,5]).bounding_box do
       _texto = "Observaciones: "
@@ -83,7 +85,7 @@ class CartulinaPdf < Prawn::Document
       stroke_bounds
     end
     year = Time.now.year
-    meses = meses_semanas(year)
+    meses =(year)
     semana = 1
     (1..9).each do |row|
       _r = (10-row) * 2 
@@ -104,7 +106,20 @@ class CartulinaPdf < Prawn::Document
   end 
 
   def meses_semanas(year)
-    meses = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIMEBRE"]
+    meses = [ 
+      "ENERO",
+      "FEBRERO",
+      "MARZO",
+      "ABRIL",
+      "MAYO",
+      "JUNIO",
+      "JULIO",
+      "AGOSTO",
+      "SEPTIEMBRE",
+      "OCTUBRE",
+      "NOVIEMBRE",
+      "DICIMEBRE"
+    ]
     lista = ["ENERO"]
     (1..12).each do |n|
       fecha = Date.new(year,n,1)

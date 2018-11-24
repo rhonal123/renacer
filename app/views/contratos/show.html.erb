@@ -9,13 +9,7 @@
     class:"btn btn-default btn-sm form-inline",
     data: { confirm: "Quieres Generar los pagos para el año #{Date.today.year} " },
     form: {style: 'display:inline-block;'} ) if @contrato.desde.year < Date.today.year %>
-
-  <%= button_to('Activar', contrato_activar_path(@contrato),
-      method: "patch",
-      class:"btn btn-default btn-sm form-inline",
-      data: { confirm: "Quieres ACTIVAR el contrato Nro #{@contrato.id }" },
-     form: {style: 'display:inline-block;'} )  if @contrato.creado?  %>
-
+ 
   <%  if @contrato.activo? %>
     <div class="btn-group ">
       <button type="button" class="btn btn-default btn-sm dropdown-toggle" 
@@ -67,6 +61,10 @@
         <%= link_to 'Cartulina', contrato_catulina_path(@contrato),target: "_blank"  %>
       </li>
       <li>
+        <%= link_to 'Cartulina por año', contrato_catulina_path(@contrato, type: :year),target: "_blank"  %>
+      </li>
+
+      <li>
         <%= link_to 'Carnet', contrato_carnet_path(@contrato),target: "_blank"  %>
       </li>
       <li>
@@ -75,6 +73,22 @@
     </ul>
   </div>
   <% end %>
+
+
+  <%= button_to('Activar', contrato_activar_path(@contrato),
+      method: "patch",
+      form_class: "pull-right",
+      class:"btn btn-default btn-sm form-inline btn-info",
+      data: { confirm: "Quieres ACTIVAR el contrato Nro #{@contrato.id }" },
+      form: {style: 'display:inline-block;'} )  if @contrato.creado? or @contrato.inactivo?  %>
+
+
+  <%= button_to('INACTIVAR', contrato_inactivar_path(@contrato),
+      method: "patch",
+      form_class: "pull-right",
+      class:"btn btn-default btn-sm form-inline btn-danger pull-right",
+      data: { confirm: "Quieres INACTIVAR el contrato Nro #{@contrato.id }" },
+      form: {style: 'display:inline-block;'} )  if @contrato.activo?  %>
 
 </div>
 
@@ -129,7 +143,9 @@
       </div>
     </div>
     <!-- Fin Beneficiarios -->
-  </div>
+
+
+    </div>
 </div>
 
 <div class="modal fade" id="beneficiarioModal" tabindex="-1" role="dialog" aria-labelledby="beneficiarioModal">

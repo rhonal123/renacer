@@ -19,6 +19,13 @@ class ContratoService
     @contrato.activo! if @contrato.valid? :activar     
   end 
 
+
+  def inactivar  
+    @contrato.inactivo! # if @contrato.valid? :activar     
+  end 
+
+
+
   def generar_pagos_proximo_periodo
     if @contrato.valid? :pagos_proximo_periodo 
       year = Date.today.year 

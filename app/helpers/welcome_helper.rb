@@ -59,7 +59,17 @@ module WelcomeHelper
         end 
         nav.append clientes 
         nav.append(nav_link("Planes",planes_path,"planes"))
-        nav.append(nav_link("Contratos",contratos_path,"contratos"))
+        #nav.append(nav_link("Contratos",contratos_path,"contratos"))
+
+        contratos = sub_menu "Contratos" do |e|
+          e.append nav_link("CREADOS",creados_contratos_path,"creados") 
+          e.append nav_link("ACTIVOS",activos_contratos_path,"activos") 
+          e.append nav_link("INACTIVOS",inactivos_contratos_path,"inactivo")
+          e.append nav_link("ANULADOS",anulados_contratos_path,"anulado")
+          e.append nav_link("HISTORICO",contratos_path,"historico") 
+        end 
+        nav.append contratos
+
         nav.append(nav_link("Cobradores",cobradores_path,"cobradores"))
         nav.append(nav_link("Prodcutos",productos_path,"productos"))
         facturacion = sub_menu "Facturacion" do |e|

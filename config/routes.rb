@@ -30,6 +30,14 @@ Rails.application.routes.draw do
 
   resources :contratos do 
     get   "catulina"       ,action: "catulina",       as: :catulina
+
+    get   "activos/all"       ,action: "activos",       as: :activos, on: :collection
+    get   "inactivos/all"       ,action: "inactivos",       as: :inactivos, on: :collection
+    get   "creados/all"       ,action: "creados",       as: :creados, on: :collection
+    get   "anulados/all"       ,action: "anulados",       as: :anulados, on: :collection
+
+    
+
     get   "contrato"       ,action: "contrato",       as: :contrato
     get   "carnet"         ,action: "carnet",         as: :carnet
     get   "cobrador"       ,action: "cobrador_edit" 
@@ -39,6 +47,7 @@ Rails.application.routes.draw do
     post  "generar_pagos"  ,action: "generar_pagos",  as: :generar_pagos 
     patch "pagar/:pago_id" ,action: "pagar",          as: :pagar
     patch "activar"        ,action: "activar",        as: :activar
+    patch "inactivar"      ,action: "inactivar",        as: :inactivar
    
     get "fecha_registro"   ,action: "fecha_registro_edit" ,as: :fecha_registro
     post "fecha_registro"   ,action: "fecha_registro"

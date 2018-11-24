@@ -28,7 +28,8 @@ class Contrato < ApplicationRecord
     creado: "CREADO",
     activo: "ACTIVO",
     anulado: "ANULADO",
-    vencido: "VENCIDO"
+    vencido: "VENCIDO",
+    inactivo: "INACTIVO"
   }    
 
   before_update do 

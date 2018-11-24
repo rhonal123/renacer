@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103123731) do
+ActiveRecord::Schema.define(version: 20181122020521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,12 @@ ActiveRecord::Schema.define(version: 20171103123731) do
   create_table "cobradores", force: :cascade do |t|
     t.string   "identidad",  limit: 16
     t.string   "nombre",     limit: 35
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  create_table "configuracions", force: :cascade do |t|
+    t.string   "telefono",   limit: 50
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
@@ -131,17 +137,15 @@ ActiveRecord::Schema.define(version: 20171103123731) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.integer  "cuenta_id"
-    t.index ["cuenta_id"], name: "index_forma_pagos_on_cuenta_id", using: :btree
+    t.index ["cuenta_id"], name: "index_forma_pagos_on_cuentas_id", using: :btree
     t.index ["recibo_id"], name: "index_forma_pagos_on_recibo_id", using: :btree
   end
 
   create_table "impuestos", force: :cascade do |t|
     t.string   "descripcion"
     t.float    "porcentaje"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.boolean  "activo",      default: false
-    t.index ["activo"], name: "index_impuestos_on_activo", unique: true, where: "(activo IS TRUE)", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "libros", force: :cascade do |t|
