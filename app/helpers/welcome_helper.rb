@@ -69,7 +69,6 @@ module WelcomeHelper
           e.append nav_link("HISTORICO",contratos_path,"historico") 
         end 
         nav.append contratos
-
         nav.append(nav_link("Cobradores",cobradores_path,"cobradores"))
         nav.append(nav_link("Prodcutos",productos_path,"productos"))
         facturacion = sub_menu "Facturacion" do |e|
@@ -80,6 +79,7 @@ module WelcomeHelper
         end 
         nav.append facturacion 
         nav.append(nav_link("Cuentas por Cobrar", cuenta_por_cobrar_index_path ,"cuenta_por_cobrar"))
+        nav.append(nav_link("Configuracion",configuracion_path,"configuracion"))
       end 
     end 
   end 
@@ -91,5 +91,7 @@ module WelcomeHelper
   def element &block
     capture(&block)
   end 
+
+
 
 end

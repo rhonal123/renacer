@@ -9,8 +9,8 @@ default: &default
   encoding: unicode
   pool: 5
   timeout: 5000
-  username: postgres
-  password: 1234
+  username: renacer
+  password: renacer
   host: localhost
   port: 5432
 
@@ -20,8 +20,8 @@ development:
   pool: 5
   timeout: 5000
   database: renacer
-  username: postgres
-  password: 1234
+  username: renacer
+  password: renacer
   host: localhost
   port: 5432
 

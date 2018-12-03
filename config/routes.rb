@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     get :reporte
   end 
 
+  get  'configuracion' => 'welcome#configuracion_edit'
+  post 'configuracion' => 'welcome#configuracion'
+
   resources :cobradores do
     get "planilla/liquidacion", action: "planilla_liquidacion", as: :planilla_liquidacion 
     get :pagar

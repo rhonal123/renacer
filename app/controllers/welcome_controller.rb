@@ -9,6 +9,20 @@ class WelcomeController < ApplicationController
     @porCobrar = View::CuentaPorCobrar.sum(:porcobrar)
   end
 
+  def configuracion_edit
+    @configuracion = Configuracion::first
+  end 
+
+  def configuracion
+    @configuracion =  @configuracion = Configuracion::first
+    if @configuracion.update(configuracion_params)
+     	redirect_to root_path, notice: 'Configuracion Actualizada'
+    else
+      @error = "los datos no son validos."
+      render :configuracion_edit   
+    end
+  end 
+
   def cambiar_contrasena_edit
      @usuario = Usuario.new
   end
@@ -29,7 +43,11 @@ class WelcomeController < ApplicationController
     def cambiar_contrasena_params
       params.require(:usuario).permit(:password,:password_confirmation)
     end
-
+	  
+    def configuracion_params
+      params.require(:configuracion).permit(:telefono)
+    end
+	  
 
 end
  

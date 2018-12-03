@@ -1,0 +1,38 @@
+
+
+
+<%= editar_titulo %> 
+<div class="panel-body2">
+	<h1>Editar Configuracion </h1>
+</div>
+<div class="panel-body2"  style="height: 95%; padding-top: 10px;">
+
+<div class="col-md-12">
+  <%= form_for(@configuracion,url: configuracion_path, method: :post,
+          html: {class:'form-horizonta', role:'form'}) do |f| %>
+  <div class="form-group form-group-sm">
+
+    <div class="col-md-7">
+      <%=f.label :telefono,"Telefono :", class:"control-label" %>
+      <%= f.text_field :telefono,
+        placeholder: "telefono",
+        class: "form-control input-sm",
+        maxlength:"30",
+        autocomplete: "off" %>
+    </div>
+  </div>
+
+  <div class="col-md-7" align="right" style="margin-top: 15px">
+      <%= submit_tag "Guardar" , class: "btn btn-primary btn-sm"  %>
+  </div>  
+
+    </div>
+    <%= content_tag(:div,
+      content_tag(:label,@error,class: "label label-danger",style: "font-size: 12px;"),
+      style: "margin: 10px;") %>
+  <% end %>
+</div 
+
+</div>
+
+
